@@ -1,0 +1,203 @@
+<div class="box box-default">
+    <div class="box-body">
+        <form [formGroup]="staffForm" class="form-horizontal">
+            <div class="row">
+                <form>
+                    <div class="col-sm-3">
+                        <div *ngIf="staffDetail?.staff?.staff_photo && !url">
+                            <img src="{{ imageUrl }}/{{ staffDetail.staff.staff_photo }}" width="200" height="200" />
+                        </div>
+                        <img *ngIf="!staffDetail?.staff?.staff_photo || url" [src]="
+                url ? url : '../../../../../../assets/images/profile_img.jpg'
+              " width="200" height="200" />
+
+                        <br />
+                        <input style="display: none" #fileInput type="file" (change)="onFileSelect($event)" />
+
+                        <div style="margin-left: 50px">
+                            <button class="btn btn-success btn-xs" (click)="fileInput.click()" style="margin-top: 10px; border-radius: 20px; padding: 5px 10px">
+                Upload Image
+              </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- form start -->
+
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">First Name<sup>*</sup></label
+                  >
+
+                  <div class="col-sm-8">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="First Name"
+                      formControlName="first_name"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"
+                    >Last Name<sup>*</sup></label
+                  >
+
+                  <div class="col-sm-8">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Last Name"
+                      formControlName="last_name"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">Mobile</label>
+
+                                    <!-- <div class="col-sm-3">
+                        <select
+                          class="form-control"
+                          (change)="onSelection($event.target.value)"
+                          formControlName="mobile_code"
+                        >
+                          <option
+                            *ngFor="let country of countryList"
+                            [value]="country.phone_code"
+                          >
+                            {{ country.country_name }}
+                          </option>
+                        </select>
+                      </div> -->
+
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="Mobile No." class="form-control" formControlName="mobile" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <!-- form start -->
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Middle Name</label>
+
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" placeholder="Middle Name" formControlName="middle_name" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Email Address</label>
+
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" placeholder="Valid Email" formControlName="email_address" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-user mr-2"></i><strong>Address Details</strong>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-sm-6">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Address Line1</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Permanent Address Line 1" formControlName="address_line1" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Address Line2</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Permanent Address Line 2" formControlName="address_line2" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">City</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" placeholder="City" formControlName="city" aria-autocomplete="none" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="state" class="col-sm-4 control-label">State</label
+                    >
+
+                    <div class="col-sm-8">
+                      <input
+                        class="form-control"
+                        placeholder="State"
+                        formControlName="state"
+                        id="state"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-4 control-label">Zip Code</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Zip Code" formControlName="zip_code" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="country" class="col-sm-4 control-label">Country</label
+                    >
+
+                    <div class="col-sm-8">
+                      <ng-select
+                        appearance="outline"
+                        labelForId="country"
+                        [searchable]="true"
+                        formControlName="country_id"
+                        placeholder="Select Country"
+                      >
+                        <ng-option disabled value="">Select Country</ng-option>
+                        <ng-option
+                          *ngFor="let list of countryList"
+                          [value]="list.country_id"
+                          >{{ list.country_name }}</ng-option
+                        >
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- end of permanent address -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- <div (click)="updateStaffDetails()" class="btn btn-primary btn-oval">Save</div> -->
+<button class="btn btn-primary btn-oval mr-2" type="button" (click)="updateStaffDetails()">
+  Save
+</button>
+<button class="btn btn-danger btn-oval" type="button" (click)="onCancel()">
+  Cancel
+</button>

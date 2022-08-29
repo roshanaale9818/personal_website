@@ -1,0 +1,184 @@
+<div *ngIf="nullRow" style="color: red; font-style: italic">
+    <p style="margin-left: 40%">No attendance data to show!! </p>
+</div>
+<div *ngIf="!nullRow">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col" style="font-weight: bold">Client Name</th>
+                <th scope="col" style="font-weight: bold">In Date Time</th>
+                <th scope="col" style="font-weight: bold">In Message</th>
+                <th scope="col" style="font-weight: bold">Out Date Time</th>
+                <th scope="col" style="font-weight: bold">Out Message</th>
+                <th scope="col" style="font-weight: bold">Message</th>
+                <th scope="col" style="font-weight: bold">W. Hours</th>
+                <th scope="col" style="font-weight: bold">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of userAttendance">
+                <td>{{ item.clinet_name }}</td>
+                <td>
+                    <!-- {{ item.checkin_datetime | date: "medium" }} -->
+                    <!-- {{item.checkin_datetime}} -->
+                    <ng-container *ngIf="this.datePickerFormat == 'E'">
+                        <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+                      {{ item.checkin_datetime | date: "MM/dd/yyyy" }}
+                    </span>
+                        <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+                      {{ item.checkin_datetime | date: "yyyy/MM/dd" }}
+                    </span>
+                    </ng-container>
+
+                    <ng-container *ngIf="this.datePickerFormat == 'N'">
+                        <span>
+                       {{ item.checkin_datetime.substring(0,10) | nepaliDatePipe:this.dateFormat}}
+                     </span>
+                    </ng-container>
+                    <!-- {{item.checkin_datetime | date:"mediumDate"}} -->
+                    <ng-container *ngIf="item.checkin_datetime !== '00:00'">
+                        <span *ngIf="timeFormat == '12'">{{
+              item.checkin_datetime !== null
+                ? (item.checkin_datetime | date: "shortTime")
+                : null
+            }}</span>
+                        <span *ngIf="timeFormat == '24'">{{
+              item.checkin_datetime !== null
+                ? (item.checkin_datetime | date: "HH:mm")
+                : null
+            }}</span>
+                    </ng-container>
+                    <ng-container *ngIf="item.checkin_datetime == '00:00'">
+                        {{ item.checkin_datetime }}
+                    </ng-container>
+                    <br />
+
+                    <span style="color: red" *ngIf="item.status == 'Lunch In'">
+            (Lunch Out)
+          </span>
+                    <span *ngIf="item.status == 'Check In'" style="color: red">
+            ({{ item.status }})
+          </span>
+                </td>
+
+                <td>
+                    {{ item.checkout_message }}
+                </td>
+
+                <td>
+                    <ng-container *ngIf="this.datePickerFormat == 'E'">
+                        <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+                  {{ item.checkin_datetime | date: "MM/dd/yyyy" }}
+                </span>
+                        <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+                  {{ item.checkin_datetime | date: "yyyy/MM/dd" }}
+                </span>
+                    </ng-container>
+
+                    <ng-container *ngIf="this.datePickerFormat == 'N'">
+                        <span>
+                   {{ item.checkin_datetime.substring(0,10) | nepaliDatePipe:this.dateFormat}}
+                 </span>
+                    </ng-container>
+                    <!-- {{item.checkout_datetime | date:"mediumDate"}} -->
+                    <ng-container *ngIf="item.checkout_datetime !== '00:00'">
+                        <span *ngIf="timeFormat == '12'">{{
+              item.checkout_datetime !== null
+                ? (item.checkout_datetime | date: "shortTime")
+                : null
+            }}</span>
+                        <span *ngIf="timeFormat == '24'">{{
+              item.checkout_datetime !== null
+                ? (item.checkout_datetime | date: "HH:mm")
+                : null
+            }}</span>
+                    </ng-container>
+                    <ng-container *ngIf="item.checkout_datetime == '00:00'">
+                        {{ item.checkout_datetime }}
+                    </ng-container>
+                    <br />
+                    <span style="color: red" *ngIf="item.status_out == 'Lunch Out'">
+            (Lunch In)
+          </span>
+                    <span *ngIf="item.status_out == 'Check Out'" style="color: red">({{ item.status_out }})</span
+          >
+        </td>
+
+        <td>
+          {{ item.message }}
+        </td>
+
+        <td>
+          {{ item.message }}
+        </td>
+
+        <td>
+          {{ item.tot_work }}
+        </td>
+
+        <td>
+          <span class="mr-3" *ngIf="authService.currentUserRoleValue !=='staff'">
+            <a
+              tooltip="Force Change"
+              class="btn"
+              (click)="openForceChangeModal(ForceChangeRef, item)"
+            >
+              <i class="fa fa-edit"></i>
+            </a>
+          </span>
+                    <span *ngIf="authService.currentUserRoleValue !=='staff'">
+            <a
+              tooltip="Delete"
+              (click)="openConfirmationDialogue(item)"
+              class="btn"
+            >
+              <i class="fa fa-trash"> </i>
+            </a>
+          </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- (cellClick)="cellClickHandler($event)"  On each cell click it is used....................-->
+
+<ng-template #ForceChangeRef>
+    <form [formGroup]="forceChangeForm">
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">Review</h3>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label *ngIf="selectedAttendance.status == 'Lunch In'">Lunch Out</label>
+                <label *ngIf="selectedAttendance.status == 'Check In'">{{
+          selectedAttendance.status
+        }}</label>
+
+                <app-custom-datetimelocal-picker [controlName]="'checkin_datetime'" [formGroup]="forceChangeForm" [datepickerSetting]="customDateTimeLocalPickerSettingsForCheckIn" (valueOnChanges)="onCheckInValue($event)"></app-custom-datetimelocal-picker>
+                <!-- <input class="form-control" type="datetime-local" style="width: 100%" formControlName="checkin_datetime" /> -->
+            </div>
+            <div class="form-group">
+                <label *ngIf="selectedAttendance.status_out == 'Lunch Out'">Lunch In</label
+        >
+        <label *ngIf="selectedAttendance.status_out == 'Check Out'">{{
+          selectedAttendance.status_out
+        }}</label>
+                <app-custom-datetimelocal-picker [controlName]="'checkout_datetime'" [formGroup]="forceChangeForm" [datepickerSetting]="customDateTimeLocalPickerSettingsForCheckOut"></app-custom-datetimelocal-picker>
+                <!-- <input class="form-control" type="datetime-local" style="width: 100%" formControlName="checkout_datetime" /> -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="submit" (click)="onSubmitForceChange()">
+        Submit
+      </button>
+            <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+        </div>
+    </form>
+</ng-template>

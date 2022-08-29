@@ -1,0 +1,206 @@
+<div class="box box-default box-shadow">
+    <div class="box-header with-border" style="background-color: #eee">
+        <button class="btn btn-success btn-oval" (click)="openAddModal(fundTypeModal)">
+          <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+      <b>Add Fund Type</b>
+    </button>
+    </div>
+
+    <div class="box-body">
+        <kendo-grid [data]="gridView" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="fundTypeList.length > state.take" [filterable]="true" (dataStateChange)="dataStateChange($event)" [loading]="loading">
+            <kendo-grid-column title="#" [width]="50">
+                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                    <p>{{ rowIndex + 1 }}</p>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column title="Title" field="title"> </kendo-grid-column>
+            <kendo-grid-column title="Apply From" field="tax_apply"> </kendo-grid-column>
+            <kendo-grid-column title="Details" field="details"> </kendo-grid-column>
+
+            <kendo-grid-column title="Status" field="status">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <span *ngIf="dataItem.status == 'Active'" class="badge bg-green-gradient">
+            Active</span
+          >
+          <span
+            *ngIf="dataItem.status == 'Inactive'"
+            class="badge bg-red-gradient"
+          >
+            Inactive
+          </span>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="150">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <a tooltip="View" class="btn" (click)="openViewModal(fundTypeViewModal, dataItem)">
+                        <i class="fa fa-eye"></i
+          ></a>
+          <a
+            tooltip="Update"
+            class="btn"
+            (click)="openEditModal(dataItem, fundTypeModal)"
+            ><i class="fa fa-edit"></i
+          ></a>
+          <flexyear-delete-confirmation-modal
+            [data]="dataItem"
+            [title]="dataItem.title"
+            [action]="'delete'"
+            (onConfirm)="deleteFundType(dataItem)"
+          >
+          </flexyear-delete-confirmation-modal>
+          <!-- <a
+            tooltip="Delete"
+            class="btn"
+            (click)="openConfirmationDialogue(dataItem)"
+            ><i class="fa fa-trash"></i
+          ></a> -->
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- Fund Type Modal -->
+<ng-template #fundTypeModal>
+  <form [formGroup]="fundTypeForm">
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="employeetype">Fund Type<sup>*</sup></label>
+            <input
+              type="text"
+              class="form-control"
+              id="employeetype"
+              placeholder="Enter Fund Type"
+              formControlName="title"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Apply From</label>
+            <select class="form-control" formControlName="tax_apply" appFormControlValidationMsg>
+              <option value="" selected>Select Apply From</option>
+              <option value="gross">Gross Salary</option>
+              <option value="net">Net Salary</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="exampleFormControlTextarea2"
+              >Description<sup>*</sup></label
+            >
+            <textarea
+              class="form-control rounded-0"
+              id="exampleFormControlTextarea2"
+              rows="3"
+              placeholder="Enter Description"
+              formControlName="details"
+              appFormControlValidationMsg
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" formControlName="status">
+              <option value="" selected>Select Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- modal body -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-success"
+        type="submit"
+        (click)="onSubmitEmployeeType()"
+        appFormSubmitValidationMsg
+        [validationControl]="fundTypeForm"
+      >
+        {{ submitButton }}
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- Fund type view modal -->
+<ng-template #fundTypeViewModal>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">View Fund Type</h3>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">Fund Type</th>
+          <td>{{ selectedViewFundType.title }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Description</th>
+          <td>{{ selectedViewFundType.details }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Status</th>
+          <td>
+            <span
+              *ngIf="selectedViewFundType.status == 'Active'"
+              class="badge bg-green-gradient-gradient"
+              >{{ selectedViewFundType.status }}</span
+            >
+            <span
+              *ngIf="selectedViewFundType.status == 'Inactive'"
+              class="badge bg-red-gradient"
+              >{{ selectedViewFundType.status }}</span
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

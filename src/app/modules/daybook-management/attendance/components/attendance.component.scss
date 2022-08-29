@@ -1,0 +1,57 @@
+.check-btns {
+    button {
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+    .check-out-btns {
+        padding: 7px;
+    }
+}
+
+.timeDate-display-box {
+    width: 300px;
+    height: 140px;
+    text-align: center;
+}
+
+.list-inline li::after {
+    display: none;
+}
+
+// @media screen and (max-width: 488px) {
+//   .out-break-btn {
+//     margin-left: 32px;
+//   }
+// }
+@media screen and (max-width: 480px) {
+    .timeDate-display-box {
+        width: auto;
+        height: auto;
+    }
+}
+
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.list-inline {
+    display: block;
+    li {
+        display: inline-block;
+    }
+    li:after {
+        content: "|";
+        margin: 0 10px;
+    }
+}
+
+.flex-group {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    .flex-item {
+        margin-top: 10px;
+    }
+}

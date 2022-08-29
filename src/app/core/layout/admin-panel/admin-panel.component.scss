@@ -1,0 +1,87 @@
+.content-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content-breadcrumb {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title-panel {
+  // background-color: white;
+  // padding: 0px 0px 8px 0px;
+  margin-bottom: 10px;
+}
+
+// for chat
+
+// * Button used to open the chat form - fixed at the bottom of the page */
+.open-button {
+  background-color: #117bb8;
+  color: rgb(233, 233, 233);
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 1;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  // width: 280px;
+  border-radius: 50%;
+  font-size: large;
+}
+
+.chat-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+.show-chat-popup {
+  display: block;
+}
+.hide-chat-popup {
+  display: block;
+}
+.form-container {
+  max-width: 300px;
+  // padding: 10px;
+  background-color: rgb(235, 235, 235);
+}
+
+.flex-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+  margin-bottom: 10px;
+
+  .flex-item {
+    margin-right: 10px;
+    margin-top: 8px;
+
+    .quick-message {
+      border-color: #3c8dbc;
+      border-radius: 20px;
+      background-color: white;
+
+      &:hover {
+        background-color: #3c8dbc;
+        color: white;
+      }
+    }
+  }
+}
+
+.direct-chat-messages {
+  .sender-message-body {
+    background-color: cornflowerblue;
+  }
+}
+
+.button-wrapper {
+  display: flex;
+}

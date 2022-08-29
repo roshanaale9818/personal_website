@@ -1,0 +1,7 @@
+<div class="pagination mt-2">
+    <span *ngIf="totalItems">Showing {{startCount}} to {{endCount}} of {{totalItems}} records</span>
+    
+    <pagination-controls autoHide="true" (pageChange)="onPageChange($event)"></pagination-controls>
+</div>
+
+

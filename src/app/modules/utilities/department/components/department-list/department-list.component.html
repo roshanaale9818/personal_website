@@ -1,0 +1,147 @@
+<div class="box box-default box-shadow">
+    <button class="btn btn-success btn-oval" (click)="openAddModal(departmentModal)">
+  <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+    <b>
+      Add Department
+    </b>
+  </button>
+    <div class="box-body mt-3">
+        <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="limit" [skip]="skip" [pageable]="
+        gridView ? (gridView.total <= pageLimit ? false : true) : false
+      " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" [loading]="listLoading" (dataStateChange)="dataStateChange($event)">
+            <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="50" [minResizableWidth]="30">
+                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                    <p>{{ rowIndex + 1 }}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Department Name" field="department_name" [headerStyle]="{ 'font-weight': 'bold' }" [width]="180">
+            </kendo-grid-column>
+            <kendo-grid-column title="Description" field="description" [headerStyle]="{ 'font-weight': 'bold' }" [width]="360"></kendo-grid-column>
+            <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="120">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <a tooltip="View" class="btn" (click)="openViewModal(departmentViewModal, dataItem)">
+                        <i class="fa fa-eye"></i
+          ></a>
+          <a
+            tooltip="Update"
+            class="btn"
+            (click)="openEditModel(dataItem, departmentModal)"
+            ><i class="fa fa-edit"></i
+          ></a>
+          <a
+            tooltip="Delete"
+            class="btn"
+            (click)="openConfirmationDialogue(dataItem)"
+            ><i class="fa fa-trash"></i
+          ></a>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- open modal -->
+
+<form [formGroup]="departmentForm">
+  <ng-template #departmentModal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">{{ modalTitle }}</h4>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="title">Department Name <sup>*</sup></label>
+
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              placeholder="Enter Department Name"
+              formControlName="department_name"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="exampleFormControlTextarea2"
+              >Description<sup>*</sup></label
+            >
+            <textarea
+              class="form-control rounded-0"
+              id="exampleFormControlTextarea2"
+              rows="3"
+              name="description"
+              formControlName="description"
+              appFormControlValidationMsg
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- modal body -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-success"
+        type="submit"
+        (click)="onSubmitDepartment()"
+        appFormSubmitValidationMsg
+        [validationControl]="departmentForm"
+      >
+        {{ submitButton }}
+      </button>
+    </div>
+  </ng-template>
+</form>
+<!-- department view modal -->
+
+<ng-template #departmentViewModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Department Detail</h4>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">Department Name</th>
+          <td>{{ departmentDetail.department_name }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Description</th>
+          <td>{{ departmentDetail.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

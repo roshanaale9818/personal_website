@@ -1,0 +1,16 @@
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    label {
+        margin-right: 8px;
+    }
+}
+
+.block {
+    display: inline-flex;
+}
+
+.displayNone {
+    display: none;
+}

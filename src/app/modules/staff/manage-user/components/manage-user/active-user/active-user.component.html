@@ -1,0 +1,359 @@
+<div class="panel panel-primary mt-4">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <b>
+        <i class="fa fa-rocket" aria-hidden="true"></i>
+        View Active Users</b
+      >
+    </h3>
+  </div>
+  <div class="panel-body">
+    <div style="padding: 5px">
+      <button
+        class="btn btn-default btn-oval"
+        type="buton"
+        (click)="isCollapsed = !isCollapsed"
+        [attr.aria-expanded]="!isCollapsed"
+        arial-controls="collapseEvent"
+      >
+        <b><i class="fa fa-search"></i>&nbsp;&nbsp;{{ collapseButton }}</b>
+            </button>
+            <ng-container *ngIf="companyId == 1 || companyId =='1'">
+                <button class="btn btn-default btn-ova ml-3" (click)="openWFHModal(workFromHomeModal)" tooltip="Work From Home">
+        <b><i class="fa fa-map-pin"></i>&nbsp;Bulk Edit WFH</b>
+      </button>
+            </ng-container>
+            <div id="collapseEvent" [isAnimated]="true" [collapse]="isCollapsed" (collapsed)="collapsed()" (expanded)="expanded()">
+                <div class="well mt-4">
+                    <form [formGroup]="activeSearchForm">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="staff">Employee Name</label>
+                                    <ng-select [appendTo]="'body'" [dropdownPosition]="'bottom'" (change)="changeEmp()" [searchable]="true" placeholder="Select Employee" formControlName="staff_id">
+                                        <ng-option value="" selected>Select Employee</ng-option>
+                                        <ng-option *ngFor="let list of staffList" [value]="list.staff_id">
+                                            {{ list.emp_id }} - {{ list.last_name }}&nbsp;{{ list.middle_name ? list.middle_name : "" }}&nbsp;{{ list.first_name }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <!-- User Name -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="user">User Name</label>
+                                    <ng-select [appendTo]="'body'" [dropdownPosition]="'bottom'" (change)="changeEmp()" [searchable]="true" formControlName="username">
+                                        <ng-option value="" selected>Select Username</ng-option>
+                                        <ng-option *ngFor="let list of userLists" [value]="list.username">
+                                            {{ list.username }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Buttons -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <button class="btn btn-success  btn-oval" type="button" (click)="onSearchStaff()">
+                    <b><i class="fa fa-search"></i></b>&nbsp;Search
+                  </button>
+                                    <button class="btn btn-danger  btn-oval ml-3" type="button" (click)="onCancel()">
+                    <b><i class="fa fa-remove"></i></b>&nbsp;Clear
+                  </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+    <div id="active" class="tab-pane fade in active">
+        <div class="box-body">
+            <kendo-grid [data]="userList" [resizable]="true" [pageSize]="limit" [loading]="listLoading" [skip]="skip" [pageable]="
+            userList ? (userList.total <= pageLimit ? false : true) : false
+          " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" (dataStateChange)="dataStateChange($event)">
+                <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="50" [minResizableWidth]="30">
+                    <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                        <p>{{ rowIndex + 1 }}</p>
+                    </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column title="Full Name" field="first_name" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="250">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <div class="flex-container cursor-pointer" (click)="navigateToStaffDetail(dataItem)">
+                            <div class="flex-item">
+                                <ngx-avatar size="40" name="{{ dataItem?.first_name }}"></ngx-avatar>
+                            </div>
+                            <div class="flex-item">
+                                {{ dataItem.emp_id }} - {{dataItem.first_name |name :dataItem.last_name:dataItem.middle_name}}
+                                <!-- {{ dataItem.last_name }}&nbsp;{{ dataItem.middle_name ? dataItem.middle_name : "" }}&nbsp;{{ dataItem.first_name }} -->
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column title="User Name" field="username" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="180"></kendo-grid-column>
+                <!-- //work from home option only for bentray -->
+                <ng-container *ngIf="companyId == 1 || companyId == '1'">
+                    <kendo-grid-column title="Work From Home" [headerStyle]="{ 'font-weight': 'bold' }" [filterable]="false" field="wfh" [width]="120">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                            <kendo-switch [checked]="dataItem.wfh == '1' ? true : false" [offLabel]="' '" [onLabel]="' '" (valueChange)="changeWFH($event, dataItem)"></kendo-switch>
+                        </ng-template>
+                    </kendo-grid-column>
+                </ng-container>
+                <kendo-grid-column title="Status" [headerStyle]="{ 'font-weight': 'bold' }" [filterable]="false" field="status" [width]="100">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                        <kendo-switch [checked]="dataItem.status == '10' ? true : false" [offLabel]="' '" [onLabel]="' '" (valueChange)="changeStatus($event, dataItem)"></kendo-switch>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <a type="button" class="btn" [popover]="popTemplate" [popoverContext]="context" [outsideClick]="true" (click)="setData(dataItem)">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </a>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- role assign modal -->
+<ng-template #assignRoleModal>
+    <app-assign-role></app-assign-role>
+</ng-template>
+
+<ng-template #popTemplate>
+    <a class="btn" data-toggle="tooltip" tooltip="Assign Role" (click)="navigateToRoleAssign(selectedData)">
+        <i class="fa fa-user-plus"></i
+  ></a>
+  <!-- <a
+    class="btn"
+    data-toggle="tooltip"
+    tooltip="Add Device Id"
+    (click)="navigateToAddDeviceId(selectedData)"
+  >
+    <i class="fa fa-plus"></i
+  ></a> -->
+  <a
+    class="btn"
+    (click)="openEditModal(selectedData, userCredentialsModal)"
+    data-toggle="tooltip"
+    tooltip="Edit User Credentials"
+    ><i class="fa fa-edit"></i
+  ></a>
+  <a
+    class="btn"
+    (click)="openConfirmationDialogue(selectedData)"
+    data-toggle="tooltip"
+    tooltip="Delete User Credentials"
+    ><i class="fa fa-trash"></i
+  ></a>
+  <!-- <a
+    class="btn"
+    (click)="openConfirmationDialogues(selectedData)"
+    data-toggle="tooltip"
+    tooltip="Archive User Credentials"
+    ><i class="fa fa-archive"></i
+  ></a> -->
+</ng-template>
+
+<!-- user credentials modal -->
+<ng-template #userCredentialsModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ modalTitle }}</h4>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="userCredentialsForm">
+    <div class="modal-body">
+      <div class="row">
+        <div *ngIf="!editMode">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="user1">Employee Name</label>
+              <ng-select
+                appearance="outline"
+                #agreeSelect
+                labelForId="user"
+                [searchable]="true"
+                formControlName="staff_id"
+                placeholder="Select Employee"
+                appFormControlValidationMsg
+              >
+                <ng-option
+                  *ngFor="let item of staffList"
+                  [value]="item.staff_id"
+                >
+                  {{ item.full_name }}
+                </ng-option>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="editMode">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <!-- disabled -->
+            <input
+              aria-autocomplete="none"
+              type="text"
+              id="username"
+              class="form-control"
+              formControlName="username"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password1"
+              class="form-control"
+              formControlName="password"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="password">Verify Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              formControlName="verify_password"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+      </div>
+      <!-- modal body -->
+    </div>
+  </form>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+    <button
+      class="btn btn-success btn-oval"
+      type="submit"
+      (click)="onCreate()"
+      appFormSubmitValidationMsg
+      [validationControl]="userCredentialsForm"
+    >
+      Save
+    </button>
+  </div>
+</ng-template>
+
+<!-- //bulk work from home edit form   -->
+<form [formGroup]="workFromHomeForm">
+  <ng-template #workFromHomeModal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Edit Work From Home</h4>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="user1">Employee Name</label>
+            <ng-select
+              appearance="outline"
+              #agreeSelect
+              labelForId="user"
+              [searchable]="true"
+              [multiple]="true"
+              formControlName="user_id"
+              placeholder="Select Employee"
+              appFormControlValidationMsg
+            >
+            <ng-template ng-header-tmp>
+              <button class="btn btn-xs btn-primary mr-4 mt-3 ml-2" (click)="onSelectAll()">
+                Select All
+              </button>
+                              <button class="btn btn-xs btn-danger mr-2 mt-3" (click)="onClearAll()">
+                Clear All
+              </button>
+              </ng-template>
+
+              <ng-option value="" selected>Select Employee</ng-option>
+
+              <ng-option *ngFor="let item of staffListForWFH" [value]="item.user_id">
+                {{ item.full_name }}
+              </ng-option>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label
+            >Type
+          </label>
+        <div>
+          <input type="hidden" name="type" type="radio" value="add"  formControlName="type" /> Add
+          <input type="hidden" name="type" type="radio" value="remove"  formControlName="type" /> Remove
+        </div>
+
+        </div>
+        <!-- </div> -->
+      </div>
+    </div>
+    <!-- </div> -->
+
+    <div class="modal-footer">
+      <button
+        class="btn btn-danger btn-oval"
+        type="button"
+        (click)="modalRef.hide()"
+      >
+        Cancel
+      </button>
+      <button
+        class="btn btn-success btn-oval"
+        type="submit"
+        (click)="changeWFHBulk()"
+        [validationControl]="workFromHomeForm"
+        appFormSubmitValidationMsg
+      >
+        Save
+      </button>
+    </div>
+
+    <!-- modal body -->
+  </ng-template>
+</form>

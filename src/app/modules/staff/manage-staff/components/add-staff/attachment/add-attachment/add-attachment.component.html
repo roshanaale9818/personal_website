@@ -1,0 +1,56 @@
+<ng-template #addAttachment>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Attachment</h4>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="closeModal()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label>Qualification<sup>*</sup></label>
+          <input class="form-control" />
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label>Passing Year<sup>*</sup></label>
+          <input class="form-control" />
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label>Institute Name<sup>*</sup></label>
+          <input class="form-control" />
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label>Result<sup>*</sup></label>
+          <input class="form-control" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-primary"
+      class="btn btn-primary"
+      (click)="addWorkingExperience()"
+    >
+      Save
+    </button>
+    <button class="btn btn-danger" type="button" (click)="closeModal()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,257 @@
+<div class="box box-default">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <b><i class="fa fa-hand-o-left" aria-hidden="true"></i> Create Leave
+          Request</b
+        >
+      </h3>
+    </div>
+
+    <div class="panel-body">
+      <div class="box-body">
+        <div class="col-md-12">
+          <form [formGroup]="createRequestForm">
+            <div *ngIf="role !== 'staff'">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="staff">Employee</label>
+                    <ng-select
+                      appearance="outline"
+                      #agreeSelect
+                      labelForId="user"
+                      [searchable]="true"
+                      formControlName="user_id"
+                      placeholder="Select Employee"
+                    >
+                      <ng-option
+                        *ngFor="let item of staffList"
+                        [value]="item.user_id"
+                      >
+                        <!-- {{ item.full_name }} -->
+                        {{ item.emp_id }} -
+                         <!-- {{ item.last_name }}&nbsp;{{
+                          item.middle_name ? item.middle_name : ""
+                        }}&nbsp;{{ item.first_name }} -->
+                        {{item.first_name| name:item.last_name:item.middle_name}}
+                         - ({{ item.username }})
+                      </ng-option>
+                    </ng-select>
+
+                    <span
+                      class="form-error-msg"
+                      style="color: red"
+                      *ngIf="
+                        (createRequestForm.controls?.user_id?.invalid &&
+                          createRequestForm.controls?.user_id?.touched) ||
+                        (createRequestForm.controls?.user_id?.invalid &&
+                          submitted)
+                      "
+                    >
+                      Employee is required
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="leave-type">Leave Type <sup>*</sup></label>
+                  <select
+                    formControlName="leave_type"
+                    id="leave-type"
+                    class="form-control"
+                    appFormControlValidationMsg
+                  >
+                    <option value="" selected>Select Leave Type</option>
+                    <option
+                      *ngFor="let listLeave of listleaveType"
+                      [value]="listLeave.leave_type_id"
+                    >
+                      {{ listLeave.title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <!-- english date picker -->
+                <div *ngIf="dateLang == 'E'">
+                  <label>Date From<sup>*</sup> </label>
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="date-from"
+                      formControlName="date_from"
+                      bsDatepicker
+                      (ngModelChange)="setDateTo($event)"
+                      [bsConfig]="datePickerConfig"
+                      appFormControlValidationMsg
+                    />
+                    <!-- (change)="onDateFromChange($event.target.value)" -->
+                  </div>
+                </div>
+
+                <!-- nepali date-picker -->
+                <div *ngIf="dateLang == 'N'">
+                  <label>Date From<sup>*</sup> </label>
+                  <!-- <np-datepicker
+                    formControlName="date_from"
+                    inputClass="form-control"
+                    language="en"
+                    [dateFormatter]="dateFormatter"
+                    appFormControlValidationMsg
+                  ></np-datepicker> -->
+                  <!-- [disableBefore]="disableBeforeForFrom" -->
+                  <nepali-date-picker
+                    name="nepaliDateFrom"
+                    #nepalifrom
+                    [id]="'nepaliDatefrom'"
+
+                    (change)="changeDate($event.detail.value, 'dateFrom')"
+                    [label]="this.datePickerConfig.dateInputFormat"
+                    formControlName="date_from"
+                    [nepaliDatePickerSettings]="
+                      nepaliDatePickerSettingsForDateFrom
+                    "
+                  >
+                  </nepali-date-picker>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <!-- english date picker -->
+                  <div *ngIf="dateLang == 'E'">
+                    <label>Date To<sup>*</sup> </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="date-To"
+                      formControlName="date_to"
+                      bsDatepicker
+                      autocomplete="off"
+                      [bsConfig]="datePickerConfigForTo"
+                      appFormControlValidationMsg
+                    />
+                  </div>
+                  <!-- nepali date-picker -->
+                  <div *ngIf="dateLang == 'N'">
+                    <label>Date To<sup>*</sup> </label>
+                    <!-- <np-datepicker
+                      formControlName="date_to"
+                      inputClass="form-control"
+                      language="en"
+                      [dateFormatter]="dateFormatter"
+                      appFormControlValidationMsg
+                    ></np-datepicker> -->
+                    <nepali-date-picker
+                    name="nepaliDateTo"
+                    #nepalifrom
+                    [id]="'nepaliDateTo'"
+                    (change)="changeDate($event.detail.value, 'dateTo')"
+                    [label]="this.datePickerConfig.dateInputFormat"
+                    formControlName="date_to"
+                    [disableBefore]="disableBefore"
+                    [nepaliDatePickerSettings]="
+                      nepaliDatePickerSettingsForDateTo
+                    "
+                  >
+                  </nepali-date-picker>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="is_half_day">
+                      <input
+                        type="checkbox"
+                        id="is_half_day"
+                        [checked]="createRequestForm.value.is_half_day == '1'"
+                        formControlName="is_half_day"
+                      />
+                      <span class="badge bg-green-gradient">Half day</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="createRequestForm.value.is_half_day == '1'">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="from-time" style="margin-right: 5px"
+                    >Time From</label
+                  >
+                  <input
+                    class="form-control"
+                    type="time"
+                    formControlName="from_time"
+                  />
+                  <!-- <kendo-timepicker
+                    [format]="'HH:mm:ss'"
+                    [value]="currentDate"
+                    id="kendo-time-picker"
+                    formControlName="from_time"
+                  ></kendo-timepicker> -->
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="to-time" style="margin-right: 5px">
+                    Time To
+                  </label>
+                  <input
+                    class="form-control"
+                    id="to_time"
+                    type="time"
+                    formControlName="to_time"
+                  />
+                  <!-- <kendo-timepicker
+                    [format]="'HH:mm:ss'"
+                    [value]="currentDate"
+                    id="kendo-time-picker"
+                    formControlName="to_time"
+                  ></kendo-timepicker> -->
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="desc">Description</label>
+                  <textarea
+                    formControlName="description"
+                    class="form-control"
+                    rows="6"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="btn btn-success btn-oval"
+              type="submit"
+              (click)="onCreateRequestFormSubmit()"
+              appFormSubmitValidationMsg
+              [validationControl]="createRequestForm"
+            >
+              <b>Submit</b>
+                </button>
+
+                <ng-container *ngIf="this.selectedLeaveRequest">
+                    <button class="btn btn-danger btn-oval ml-2" type="button" (click)="onResetForm()">
+                <b>Reset</b>
+              </button>
+                </ng-container>
+                </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>

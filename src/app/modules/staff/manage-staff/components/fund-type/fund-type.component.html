@@ -1,0 +1,290 @@
+<div class="box-body mt-3">
+    <div class="box-header with-border">
+        <button class="btn btn-success btn-oval" (click)="openMultipleModal(addFundMultiple)">
+<b>
+<i class="fa fa-plus-circle"></i> Add Fund
+</b>
+                          </button>
+    </div>
+    <div class="tablewrap mt-4">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="1" style="padding: 10px;width:35%; background-color: #eee">Fund Type</th>
+                    <!-- <th colspan="1" style="padding: 10px; background-color: #eee">Flat
+                    </th> -->
+                    <th colspan="1" style="padding: 10px; background-color: #eee;width:23%">Percent
+                    </th>
+                    <!-- <th colspan="1" style="padding: 10px; background-color: #eee">Apply From</th> -->
+                    <th colspan="1" style="padding: 10px; background-color: #eee">Status</th>
+                    <th colspan="1" style="padding: 10px; background-color: #eee">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of assignedFundList">
+                    <td>
+                        {{item.title}}
+                    </td>
+                    <td>
+                        {{item.fund_percent}}
+                    </td>
+                    <!-- <td>
+
+                        <span *ngIf="item.tax_apply_from =='gross'">
+                          Gross Salary
+                        </span>
+                        <span *ngIf="item.tax_apply_from =='net'">
+                          Net Salary
+                        </span>
+                    </td> -->
+
+                    <td>
+                        <!-- {{item.status}} -->
+                        <p style="font-weight: bold" *ngIf="item.status == 'InActive'">
+                            <span class="badge bg-red">InActive</span>
+                        </p>
+                        <p class="ml-2" style="font-weight: bold" *ngIf="item.status == 'Active'">
+                            <span class="badge bg-green-gradient">Active</span>
+                        </p>
+                    </td>
+
+                    <td>
+                        <div class="flex-item">
+                            <a class="btn" tooltip="Update" (click)="openEdit(item,addFundTypeModal)"><i class="fa fa-edit"></i
+                  ></a>
+                            <!-- [data]="dataItem" -->
+                            <flexyear-delete-confirmation-modal [title]="item.title" [action]="'delete'" (onConfirm)="deleteFundType(item)">
+                            </flexyear-delete-confirmation-modal>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="assignedFundList.length == 0">
+                    <td colspan="4">
+                        <div class="text-center">
+                            No any fund
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <!-- Add Attachment Modal -->
+    <ng-template #addFundTypeModal>
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">
+                {{ selectedFund ? "Edit" : "Add" }} Fund Type
+            </h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+<span aria-hidden="true">&times;</span>
+</button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="addfundTypeForm">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Fund Type<sup>*</sup></label>
+                            <select class="form-control" formControlName="fund_type_id">
+                              <option value="">
+
+                              </option>
+                              <option *ngFor="let item of fundTypeList" [value]="item.fund_id">{{item.title}}</option>
+
+                            </select>
+                            <!-- <ng-select appearance="outline" #agreeSelect labelForId="user" [searchable]="true" [multiple]="true" formControlName="fund_type_id" placeholder="Select Employee">
+                                <ng-option *ngFor="let item of fundTypeList" [value]="item.fund_id">
+                                    {{item.title}}
+                                </ng-option>
+
+                            </ng-select> -->
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <input formControlName="isFlat" type="checkbox">
+                            <label class="ml-2">is Flat</label>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Percent<sup>*</sup></label>
+                            <input formControlName="percent" type="number" class="form-control" min="0">
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Tax Apply From<sup>*</sup></label>
+                            <select class="form-control" formControlName="tax_apply_from">
+                          <option value="">Select Apply From</option>
+                          <option value="gross">Gross Salary</option>
+                          <option value="net">Net Salary</option>
+                          </select>
+                        </div>
+                    </div> -->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Status<sup>*</sup></label>
+                            <select class="form-control" formControlName="status">
+                            <option value=""></option>
+                            <option value="Active">Active</option>
+                            <option value="InActive">InActive</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+
+            <!-- <button *ngIf="!selectedFund" class="btn btn-primary" class="btn btn-primary" (click)="saveFundType()">
+Save
+</button> -->
+            <button *ngIf="selectedFund" class="btn btn-primary" class="btn btn-primary" [disabled]="isSaving" (click)="updateFundType()">
+Update
+</button>
+            <button class="btn btn-danger" type="button" (click)="closeModal()">
+Cancel
+</button>
+        </div>
+    </ng-template>
+
+
+    <ng-template #addFundMultiple>
+        <form [formGroup]="fundTypeForm">
+            <div class="modal-header">
+                <h3 class="modal-title pull-left">Add Fund</h3>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <ng-container>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="flex-item">
+                                <div class="flex-content">
+                                    <label>Add Fund Type</label>
+                                    <button class="btn btn-success btn-xs ml-3" tooltip="Add" (click)="addFundType()">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                        Fund Type <sup>*</sup>
+                                                    </th>
+                                                    <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                        Type
+                                                    </th>
+                                                    <th colspan="1" style="padding: 10px; background-color: #eee;width:20%">
+                                                        <span *ngIf="activatedFundType == 'true'">
+                                                        Amount
+                                                       </span>
+                                                        <span *ngIf="activatedFundType == 'false'">
+                                                        Percent(%)
+                                                       </span> <sup>*</sup>
+                                                    </th>
+                                                    <!-- <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                        Apply From <sup>*</sup>
+                                                    </th> -->
+                                                    <!-- <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                        isFlat
+                                                    </th> -->
+                                                    <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                        Status <sup>*</sup>
+                                                    </th>
+                                                    <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody formArrayName="fund" *ngFor="
+                          let fund of fundTypeForm.get('fund')[
+                            'controls'
+                          ];
+                          let i = index
+                        ">
+                                                <tr [formGroupName]="i">
+                                                    <td>
+                                                        <div class="form-group">
+
+                                                            <select class="form-control" formControlName="fund_type_id" (change)="onFundTypeChange($event.target.value,i)">
+                                                            <option value="">Select Fund</option>
+                                                            <option *ngFor="let item of fundTypeList" [value]="item.fund_id">{{item.title}}</option>
+                              </select>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <!-- <input type="checkbox" formControlName="isFlat" /> -->
+                                                        <input type="radio" formControlName="isFlat" value="true" (change)="onFlatOrPercentChange($event.target.value)" /> Flat
+                                                        <input type="radio" formControlName="isFlat" value="false" (change)="onFlatOrPercentChange($event.target.value)">Percent
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control" [placeholder]="this.activatedFundType == 'true'? 'Amount':'Percent' " formControlName="percent" [min]="0" [max]="100" />
+                                                    </td>
+                                                    <!-- <td>
+                                                        <div class="form-group">
+
+                                                            <select class="form-control" formControlName="tax_apply_from">
+                                                        <option value=""></option>
+                                                        <option value="gross">Gross Salary</option>
+                                                        <option value="net">Net Salary</option>
+                                                        </select>
+                                                        </div>
+                                                    </td> -->
+                                                    <!-- <td>
+                                                        <input type="checkbox" formControlName="isFlat" />
+                                                    </td> -->
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <select class="form-control" formControlName="status">
+                                                          <option value="">Select status</option>
+                                                          <option  value="Active">Active</option>
+                                                          <option  value="InActive">InActive</option>
+                            </select>
+                                                            <!-- </div> -->
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="flex-item" *ngIf="i !== 0">
+                                                            <div class="flex-content"></div>
+                                                            <div class="flex-content">
+                                                                <a tooltip="Remove" style="color: red" (click)="removeFundTypeFormArray(i,fund)" class="btn">
+                                                                    <i class="fa fa-remove"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <!-- </tr> -->
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- modal body -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+                  Cancel
+                </button>
+                <button class="btn btn-success" type="button" appSingleClick (onClick)="onSaveMultiple()">
+            Save
+          </button>
+            </div>
+        </form>
+    </ng-template>

@@ -1,0 +1,16 @@
+.flex-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+  .flex-item {
+    margin-right: 10px;
+  }
+}
+
+.k-switch-on:hover .k-switch-container {
+  background-color: #387350 !important;
+}
+
+.k-switch-on .k-switch-container {
+  background-color: #4f9c6e !important;
+}

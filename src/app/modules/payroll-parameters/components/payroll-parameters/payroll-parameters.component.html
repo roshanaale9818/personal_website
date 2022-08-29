@@ -1,0 +1,218 @@
+<div class="box-body">
+    <button class="btn btn-success btn-oval mb-2" (click)="openAddModal(addParameter, 'parameter')">
+    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+    <b> Add Parameter </b>
+    <!-- <i class="fa fa-plus"></i> -->
+  </button>
+    <kendo-grid [data]="gridView" [loading]="loading" [resizable]="true" [pageSize]="limit" [loading]="listLoading" [skip]="skip" [pageable]="gridView ? (gridView.total <= pageLimit ? false : true) : false" [filterable]="false" [filter]="state.filter" [sortable]="true"
+        [sort]="sort" [selectable]="false" (dataStateChange)="onDataStateChange($event)">
+        <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="10">
+            <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                <p>{{ rowIndex + 1 }}</p>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column title="Title" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p>
+                    {{ dataItem.title }}
+                </p>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column title="Type" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p>
+                    {{ dataItem.type }}
+                </p>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column title="Start" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <ng-container [ngSwitch]="dataItem.type">
+                    <ng-container *ngSwitchCase="'monthly'">
+                        <p>Day {{dataItem.month_day}} of every month</p>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'yearly'">
+                        <p>Day {{dataItem.select_day}} of every {{dataItem ? (dataItem?.select_month|monthPipe: this.datePickerFormat == "E"?'eng':'nep'):null}}
+
+                        </p>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'weekly'">
+                        <p>Day {{dataItem.week_day}} of every week</p>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault></ng-container>
+
+                </ng-container>
+
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <a tooltip="Assign Employees" (click)="openAddModal(assignEmployees, 'assignEmployees',dataItem)" class="btn">
+                    <i class="fa fa-plus"></i
+        ></a>
+        <a  class="btn" tooltip="Update" (click)="openAddModal(addParameter,'parameter',dataItem,'edit')"><i class="fa fa-edit"></i></a>
+                <a tooltip="View" class="btn" (click)="openAddModal(addParameter, 'parameter',dataItem,'view')"> <i class="fa fa-eye"></i></a>
+                <flexyear-delete-confirmation-modal [title]="dataItem.title" [action]="'delete'" [showConfirmationInput]="true" (onShowConfirmation)="setConfirmationDialogMethods($event)" [data]="dataItem" (onConfirm)="deleteParameter($event)"></flexyear-delete-confirmation-modal>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+</div>
+
+<!-- add parameter template starts here  -->
+<ng-template #addParameter>
+    <form [formGroup]="parameterForm">
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">Add Parameter</h3>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="title">Title<sup>*</sup></label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title" formControlName="title" appFormControlValidationMsg />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="title">Type</label>
+                        <select class="form-control" formControlName="type" (change)="onParameterTypeChange($event.target.value)" appFormControlValidationMsg>
+              <option value="">Select Type</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- if daily starts here -->
+                    <ng-container>
+                        <div class="form-group row" [ngSwitch]="type">
+                            <ng-container *ngSwitchCase="'monthly'">
+                                <div class="col-md-3" style="padding-right:0px">
+                                    <label for="start day" class=" pt-8">Starting Day</label>
+                                </div>
+                                <div class="col-md-3" style="padding-left:0px">
+                                    <input type="number" formControlName="month_day" min=0 class="form-control">
+                                    <!-- <select class="form-control" ></select> -->
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="everymonth" class="pt-8">
+                          Of Every Month.
+                        </label>
+                                </div>
+                            </ng-container>
+                            <!-- weekly starts here  -->
+                            <ng-container *ngSwitchCase="'weekly'">
+                                <div class="col-md-2">
+                                    <label for="start day" class=" pt-8">Starting</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" formControlName="week_day">
+                            <option value="">Select Day</option>
+                            <option *ngFor="let item of weekDays" [value]="item.day">
+                              {{item.day}}
+                            </option>
+                          </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="everymonth" class="pt-8">
+                          Of Every Week.
+                        </label>
+                                </div>
+                            </ng-container>
+
+                            <!-- yearly starts here   -->
+                            <ng-container *ngSwitchCase="'yearly'">
+                                <div class="col-md-4">
+                                    <label for="start day" class=" pt-8">Starting Day</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <!-- <input type="number" formControlName="year_day" class="form-control"> -->
+                                    <select formControlName="year_day" class="form-control">
+                                      <option value=0>Select day</option>
+                                      <option *ngFor="let item of monthDays" [value]="item.day">
+                                        {{item.day}}
+                                      </option>
+
+                                    </select>
+                                </div>
+                                <div class="col-md-6" style="
+                                display: flex">
+                                    <label for="everymonth" class="pt-8">
+                        Of
+                      </label>
+                                    <select class="form-control " formControlName="year_month" (change)="onMonthChange($event.target.value)" style="
+                                        margin-left: 22px
+                                    ">
+                        <option value="">Select Month</option>
+                        <option *ngFor="let item of month" [value]="item.value">
+                          {{item.month}}
+                        </option>
+                      </select>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchDefault></ng-container>
+                        </div>
+                    </ng-container>
+
+
+
+
+                    <!-- if daily ends here  -->
+                </div>
+            </div>
+
+            <!-- modal body -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Close
+      </button>
+            <ng-container *ngIf="mode !== 'view'">
+                <button class="btn btn-success" appSingleClick (onClick)="onSave()" appFormSubmitValidationMsg [validationControl]="parameterForm" type="submit">
+              <!-- (click)="onSave()" -->
+        Save
+      </button>
+            </ng-container>
+        </div>
+    </form>
+</ng-template>
+<!-- add parameter template ends here  -->
+
+<!-- assign employees starst here   -->
+<ng-template #assignEmployees>
+    <form [formGroup]="assignEmployeesForm">
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">Add Employees
+                <ng-container *ngIf="selectedPayrollParameter">
+                    ({{selectedPayrollParameter.title}})
+                </ng-container>
+            </h3>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <app-assign-employees [parameter]="selectedPayrollParameter" [departmentList]="departmentList" [shiftList]="shiftList" (onSavingCancel)="modalRef.hide()">
+            </app-assign-employees>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        <!-- Cancel -->
+        Close
+      </button>
+            <!-- <button class="btn btn-success" type="submit">
+        Save
+      </button> -->
+        </div>
+    </form>
+</ng-template>
+<!-- assign employees ends here  -->

@@ -1,0 +1,31 @@
+.error-tab a,
+.error-tab a:hover {
+  background-color: #ff6767 !important;
+  color: #fff;
+}
+
+.tab-container {
+  padding: 15px;
+}
+
+.m-b-15 {
+  margin-bottom: 15px;
+}
+
+.m-t-15 {
+  margin-top: 15px;
+}
+
+.temp-flex-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+  .temp-flex-item {
+    margin-right: 10px;
+  }
+}
+
+.flex-container {
+  display: flex;
+  justify-content: flex-start;
+}

@@ -1,0 +1,387 @@
+<ng-container>
+    <div class="box box-default box-shadow">
+        <div class="head">
+            <h3><b>Flexyear</b></h3>
+        </div>
+
+        <div class="row backgrnd">
+            <div class="col-md-3 col-xs-6">
+                <p style="text-align: center">
+                    <a [routerLink]="['/reports/monthly-chart']">
+                        <img class="flexicon" src="../../../../../../assets/images/report.png" alt tooltip="Attendance" style="width: 120px; height: 120px" data-toggle="tooltip" />
+                    </a>
+                </p>
+                <p></p>
+                <p style="
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 60px;
+            margin-top: -60px;
+            padding-top: 50px;
+          ">
+                    <b>Reports</b>
+                </p>
+            </div>
+
+            <div class="col-md-3 col-xs-6">
+                <p style="text-align: center">
+                    <a [routerLink]="['/reports/monthly-chart']">
+                        <img class="flexicon" src="../../../../../../assets/images/absence.png" alt tooltip="Attendance Correction" style="width: 120px; height: 120px" />
+                    </a>
+                </p>
+                <p></p>
+                <p style="
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 60px;
+            margin-top: -60px;
+            padding-top: 50px;
+          ">
+                    <b>Absences</b>
+                </p>
+            </div>
+
+            <div class="col-md-3 col-xs-6">
+                <p style="text-align: center">
+                    <a [routerLink]="['/']">
+                        <img class="flexicon" src="../../../../../../assets/images/error.png" alt tooltip="Leave Request" style="width: 120px; height: 120px" data-toggle="tooltip" />
+                    </a>
+                </p>
+                <p></p>
+                <p style="
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 60px;
+            margin-top: -60px;
+            padding-top: 50px;
+            font-size: 13px;
+          ">
+                    <b>Punch Errors</b>
+                </p>
+            </div>
+
+            <div class="col-md-3 col-xs-6">
+                <p style="text-align: center">
+                    <a [routerLink]="['/']">
+                        <img class="flexicon" src="../../../../../../assets/images/clock.png" alt tooltip="User Report" style="width: 120px; height: 120px" data-toggle="tooltip" />
+                    </a>
+                </p>
+                <p></p>
+                <p style="
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 40px;
+            margin-top: -60px;
+            padding-top: 50px;
+            font-size: 13px;
+          ">
+                    <b>{{ todayDate }}</b>
+                </p>
+            </div>
+        </div>
+
+        <div class="row backgrnd">
+            <div class="col-md-3 col-xs-6">
+                <p style="text-align: center">
+                    <a [routerLink]="['/setting/holiday-management']">
+                        <img class="flexicon" src="../../../../../../assets/images/time.png" alt tooltip="Attendance" style="width: 120px; height: 120px" data-toggle="tooltip" />
+                    </a>
+                </p>
+                <p></p>
+                <p style="
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 60px;
+            margin-top: -60px;
+            padding-top: 50px;
+          ">
+                    <b>Time Off</b>
+                </p>
+            </div>
+
+            <div class="col-md-3 col-xs-6">
+                <p style="text-align: center">
+                    <a [routerLink]="['/reports/timecard']">
+                        <img class="flexicon" src="../../../../../../assets/images/schedule.png" alt tooltip="Attendance Correction" style="width: 120px; height: 120px" />
+                    </a>
+                </p>
+                <p></p>
+                <p style="
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 60px;
+            margin-top: -60px;
+            padding-top: 50px;
+          ">
+                    <b>Schedule</b>
+                </p>
+            </div>
+
+            <div class="col-md-3 col-xs-6">
+                <p style="text-align: center">
+                    <a [routerLink]="['/setting/department']">
+                        <img class="flexicon" src="../../../../../../assets/images/dep.png" alt tooltip="Leave Request" style="width: 120px; height: 120px" data-toggle="tooltip" />
+                    </a>
+                </p>
+                <p></p>
+                <p style="
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 60px;
+            margin-top: -60px;
+            padding-top: 50px;
+            font-size: 13px;
+          ">
+                    <b>Departments</b>
+                </p>
+            </div>
+
+            <div class="col-md-3 col-xs-6">
+                <p style="text-align: center">
+                    <a [routerLink]="['/message']">
+                        <img class="flexicon" src="../../../../../../assets/images/message.png" alt tooltip="User Report" style="width: 120px; height: 120px" data-toggle="tooltip" />
+                    </a>
+                </p>
+                <p></p>
+                <p style="
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 60px;
+            margin-top: -60px;
+            padding-top: 50px;
+            font-size: 13px;
+          ">
+                    <b>Messages</b>
+                </p>
+            </div>
+        </div>
+
+        <div class="row backgrnd" style="padding-top: 15px; border-bottom: 1px solid #efe8e8">
+            <div class="col-md-6">
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="box box-success">
+                        <div class="box-header">
+                            <i class="fa fa-paper-plane-o"></i>
+                            <h3 class="box-title">
+                                <a [routerLink]="['/']">Leave Request Messages
+                  <span
+                    data-toggle="tooltip"
+                    title="6 Leave Request Pending"
+                    class="badge bg-yellow"
+                  >
+                    {{leaveRequest && leaveRequest.length ? leaveRequest.length:0}}
+                  </span>
+                </a>
+                            </h3>
+                        </div>
+                        <div style="border-bottom: 1px solid #00a65a"></div>
+                        <div class="box-body chat no-padding" id="chat-box">
+                            <!-- chat item -->
+                            <div class="item" style="overflow: scroll; height: 400px">
+                                <div class="col-sm-12" style="color: #555;">
+                                    <div id="lvrQ" data-pjax-container="" data-pjax-push-state="" data-pjax-timeout="1000">
+                                        <div id="w0" class="grid-view is-bs3 hide-resize" data-krajee-grid="kvGridInit_fbc824b4" data-krajee-ps="ps_w0_container">
+                                            <!-- <div class="rc-handle-container" style="width: 458px">  -->
+                                            <!-- <div class="rc-handle" style="left: 58px; height: 36.6667px"></div>
+                                                <div class="rc-handle" style="left: 242px; height: 36.6667px"></div>
+                                                <div class="rc-handle" style="left: 386.667px; height: 36.6667px"></div> -->
+                                            <!-- </div> -->
+                                            <div id="w0-container" class="table-responsive kv-grid-container">
+                                                <table class="kv-grid-table table kv-table-wrap">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-col-seq="0">
+                                                                Staff
+                                                            </th>
+                                                            <th data-col-seq="1">
+                                                                <a>Message Description</a
+                                  >
+                                </th>
+                                <th>
+                                  <a>Requested Date</a
+                                  >
+                                </th>
+                                <th data-col-seq="3">
+                                  <span style="color: #3c8dbc">Status</span>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <ng-container *ngIf="leaveRequest && leaveRequest.length>0">
+                                <tr *ngFor="let item of leaveRequest">
+                                  <td>
+                                      {{item.staffname}}
+                                  </td>
+                                  <td>
+                                    {{item.description}}
+                                  </td>
+                                  <td>
+                                    {{item.requested_date}}
+                                  </td>
+                                  <td>
+                                    <span
+                                    *ngIf="item.is_approved == '1'"
+                                    class="badge bg-green-gradient"
+                                    >Approved</span
+                                  >
+                                  <span
+                                    *ngIf="item.is_approved == '2'"
+                                    class="badge bg-red-gradient"
+                                    >Declined</span
+                                  >
+                                  <span
+                                    *ngIf="item.is_approved == '0'"
+                                    class="badge bg-yellow-gradient"
+                                    >Pending</span
+                                  >
+
+                                  </td>
+                                  </tr>
+
+
+                              </ng-container>
+                            <ng-container *ngIf="!leaveRequest && leaveRequest.length == 0">
+                              <tr>
+                                <td colspan="4">
+                                  <div class="empty text-center">No results found.</div>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            </tbody>
+                          </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.chat -->
+                        <div class="box-footer"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+
+            <div class="col-md-6">
+                <!-- small box -->
+                <div class="box box-warning direct-chat direct-chat-warning backgrnd">
+                    <div class="box-header with-border">
+                        <i class="fa fa-check-square"></i>
+                        <h3 class="box-title">
+                            <a [routerLink]="['/']">Attendance / Correction</a>
+                                                                </h3>
+                                                                <div class="box-tools pull-right">
+                                                                    <span data-toggle="tooltip" title="0 Staff Present" class="badge bg-yellow">
+                              {{correctionAttendanceList ? correctionAttendanceList.length:0}}
+                              </span>
+
+                                                                </div>
+                                            </div>
+                                            <!-- /.box-header -->
+                                            <div class="box-body">
+                                                <!-- Conversations are loaded here -->
+
+
+                                                <div class="direct-chat-messages" style="overflow: scroll; height: 400px">
+                                                    <!-- Message. Default to the -->
+                                                    <ng-container *ngFor="let item of correctionAttendanceList">
+                                                        <div class="row" style="margin-top: 10px;border: 1px solid #ccc;border-radius: 4px;">
+                                                            <div class="col-md-2" style="padding-top:5px">
+                                                                <ngx-avatar size="40" *ngIf="!item?.staff_photo" name="{{ item?.first_name }}"></ngx-avatar>
+                                                            </div>
+                                                            <div class="col-md-3" style="padding-top: 10px;">
+                                                                {{item.emp_id}} {{item.first_name |name:item.last_name:item.middle_name}}
+                                                            </div>
+                                                            <div class="col-md-3"></div>
+                                                            <div class="col-md-7 text-right pr-0">
+                                                                <div class="wrap d-flex">
+                                                                    <div class="date-wrap">
+                                                                        {{item.checkin_datetime}}
+                                                                    </div>
+                                                                    <button class="btn btn-primary ml-2" (click)="onChangeCheckin(checkInForm,item)">Change</button>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <!-- <div id="modal" class="fade modal" role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        ×
+                      </button>
+                                            <h4>Make Change</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="modalContent"></div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                                                </div>
+                                                <!--/.direct-chat-messages-->
+                                            </div>
+                                            <!-- /.box-body -->
+                                        </div>
+                                        <!--/.direct-chat -->
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                            </div>
+</ng-container>
+
+<ng-container *ngIf="!originalTheme">
+    <app-admin-dashboard></app-admin-dashboard>
+</ng-container>
+
+
+
+<!-- template for change checkin popup  -->
+
+
+<!-- Attendance Correction Modal -->
+<ng-template #checkInForm>
+    <form [formGroup]="checkinForm">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">Correct Attendance</h4>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="row title">
+                <h2 *ngIf="selectedData">
+                    {{selectedData.first_name|name:selectedData.last_name:selectedData.middle_name}}
+                </h2>
+            </div>
+
+            <div class="row m-0">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Checkin Datetime</label>
+                        <input type="datetime-local" class="form-control" formControlName="checkin_datetime" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Comment</label>
+                        <textarea type="text" class="form-control" formControlName="checkin_msg">
+                          </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+            <button class="btn btn-success" (click)="onCheckInSave()">Submit</button>
+        </div>
+    </form>
+</ng-template>

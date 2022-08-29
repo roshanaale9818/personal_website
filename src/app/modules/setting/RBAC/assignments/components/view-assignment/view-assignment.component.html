@@ -1,0 +1,74 @@
+<div class="box box-default box-shadow">
+  <div class="card shadow mb-4">
+    <div class="card-header">
+      <div class="head">
+        <h3><b>View Assignments</b></h3>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-5">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Name"
+            [(ngModel)]="fieldSearchTerm"
+          />
+          <label for="box1"> Field </label>
+          <div id="box1">
+            <ul style="list-style-type: none">
+              <li></li>
+            </ul>
+            <span *ngIf="listLoading">Loading</span>
+            <span *ngIf="noResult">No Result</span>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <!-- Button goes here -->
+          <div class="button-area">
+            <div class="buttons">
+              <button type="button" class="btn btn-success btn-md">>></button>
+            </div>
+            <div class="buttons">
+              <button type="button" class="btn btn-secondary btn-sm">></button>
+            </div>
+            <div class="buttons">
+              <button type="button" class="btn btn-secondary btn-sm"><</button>
+            </div>
+            <div class="buttons">
+              <button type="button" class="btn btn-danger btn-md"><<</button>
+            </div>
+            <div class="buttons">
+              <button type="button" class="btn btn-secondary btn-md">
+                Move Up
+              </button>
+            </div>
+            <div class="buttons">
+              <button type="button" class="btn btn-secondary btn-md">
+                Move Down
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Name"
+            [(ngModel)]="selectedSearchTerm"
+          />
+          <label for="box2">Selected</label>
+          <div id="box2">
+            <ul style="list-style-type: none">
+              <li></li>
+            </ul>
+            <span *ngIf="candidatePoolLoading">Loading</span>
+            <span *ngIf="noResult">NoResult</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

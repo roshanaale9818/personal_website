@@ -1,0 +1,243 @@
+<div class="box box-default">
+  <div class="container">
+    <div class="flex-item">
+      <button class="btn btn-success" (click)="openModal(MessageAccessModal)">
+        Create Message Access
+      </button>
+    </div>
+    <div class="flex-item">
+      <button
+        type="button"
+        class="btn btn-success"
+        [popover]="contactTemplate"
+        popoverTitle="Select Contacts To Chat"
+        placement="right"
+        #pop="bs-popover"
+        [outsideClick]="true"
+      >
+        Open Chat
+      </button>
+    </div>
+  </div>
+
+  <div class="box-body">
+    <h4 style="font-weight: 600;">Message Access List</h4>
+    <kendo-grid [data]="gridData" [loading]="loading" [resizable]="true">
+      <kendo-grid-column
+        title="S.N"
+        [width]="50"
+        [minResizableWidth]="30"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+          <p>{{ rowIndex + 1 }}</p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="From"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        field="from"
+        [width]="270"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="To"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        field="to"
+        [width]="270"
+      ></kendo-grid-column>
+      <kendo-grid-column
+        title="Action"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        [width]="100"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+          <a class="btn"><i class="fa fa-edit"></i></a>
+          <a class="btn"><i class="fa fa-trash"></i></a>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- Message Access Modal -->
+<ng-template #MessageAccessModal>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">Create Message Access</h3>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="from">From</label>
+          <select class="form-control" id="from">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+          <!-- <span
+                  class="form-error-msg"
+                  *ngIf="formErrors.department_name && submitted"
+                  >{{ formErrors.department_name }}</span
+                > -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="from">To</label>
+          <select class="form-control" id="from">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+          <!-- <span
+                            class="form-error-msg"
+                            *ngIf="formErrors.department_name && submitted"
+                            >{{ formErrors.department_name }}</span
+                          > -->
+        </div>
+      </div>
+    </div>
+
+    <!-- modal body -->
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+    <button class="btn btn-success" type="submit" (click)="onSave()">
+      Save
+    </button>
+  </div>
+</ng-template>
+
+<!-- chat modal -->
+<ng-template #chatModal>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">{{ messageTitle }}</h3>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- modal body starts here -->
+
+    <!-- Conversations are loaded here -->
+    <div class="direct-chat-messages">
+      <!-- Message. Default to the left -->
+      <div *ngFor="let item of allMessage">
+        <div
+          class="direct-chat-msg"
+          [ngClass]="{ right: staff_id == item.sender_id }"
+        >
+          <div class="direct-chat-info clearfix">
+            <div class="direct-chat-name">
+              <span
+                [ngClass]="
+                  staff_id == item.sender_id ? 'pull-right' : 'pull-left'
+                "
+                >{{ item.sender_id }}</span
+              >
+            </div>
+          </div>
+          <!-- /.direct-chat-info -->
+          <img
+            class="direct-chat-img"
+            src="../../../../assets/dist/img/user2-160x160.jpg"
+            alt="Message User Image"
+          /><!-- /.direct-chat-img -->
+          <div
+            class="direct-chat-text"
+            [ngClass]="{ 'sender-message-body': staff_id == item.sender_id }"
+          >
+            {{ item.message_content }}
+          </div>
+          <!-- /.direct-chat-text -->
+        </div>
+      </div>
+
+      <!-- /.direct-chat-msg -->
+
+      <!-- /.direct-chat-msg -->
+    </div>
+    <!--/.direct-chat-messages-->
+
+    <!-- modal body ends here -->
+  </div>
+  <div class="modal-footer">
+    <form [formGroup]="messageForm">
+      <div class="input-group">
+        <input
+          type="text"
+          name="message"
+          placeholder="Type Message ..."
+          class="form-control"
+          formControlName="message"
+        />
+        <span class="input-group-btn">
+          <button
+            type="submit"
+            class="btn btn-primary btn-flat"
+            (click)="onSendMessage()"
+          >
+            Send
+          </button>
+        </span>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #contactTemplate>
+  <ul class="contacts-list">
+    <li *ngFor="let item of contactList">
+      <a
+        style="cursor: pointer;"
+        (click)="openChatModal(chatModal, item)"
+        (click)="pop.hide()"
+      >
+        <img
+          *ngIf="!item?.staff_photo"
+          class="contacts-list-img"
+          src="{{ defaultImagePath }}/user2-160x160.jpg"
+          alt="User Image"
+        />
+        <img
+          *ngIf="item?.staff_photo"
+          src="{{ imageUrl }}{{ item?.staff_photo }}"
+          class="contacts-list-img"
+          alt="User Image"
+        />
+
+        <div class="contacts-list-info">
+          <span class="contacts-list-name">
+            {{ item.first_name }}
+            {{ item.middle_name }}
+            {{ item.last_name }}
+          </span>
+        </div>
+      </a>
+    </li>
+  </ul>
+</ng-template>

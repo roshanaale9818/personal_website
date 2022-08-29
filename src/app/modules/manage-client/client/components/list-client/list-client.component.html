@@ -1,0 +1,323 @@
+<!-- grid for admin and superadmin starts here -->
+<ng-container *ngIf="authService.currentUserRoleValue =='Admin'
+|| authService.currentUserRoleValue =='Super Admin' ;
+">
+    <div class="box box-default box-shadow">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <b>
+          <button
+            class="btn btn-success btn-oval"
+            type="button"
+            (click)="addClientModal(addClient)"
+          >
+            <i class="fa fa-plus-circle mr-2"></i> <b>Create Client</b>
+                    </button>
+                    </b>
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="box-body">
+                    <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="state.take" [skip]="state.skip" [pageable]="clientList.length > state.take" [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="state.sort" [loading]="listLoading" (dataStateChange)="dataStateChange($event)">
+                        <kendo-grid-column title="S.N" [width]="40" [minResizableWidth]="30" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }">
+                            <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                                <p>{{ rowIndex + 1 }}</p>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column title="Client Name" field="client_code" [width]="230" [headerStyle]="{ 'font-weight': 'bold' }">
+                            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                <div class="flex-container">
+                                    <div class="flex-items">
+                                        <ngx-avatar name="{{ dataItem?.client_code }}" size="40">
+                                        </ngx-avatar>
+                                    </div>
+                                    <div class="flex-items">
+                                        <ng-container *ngIf="dataItem.client_code">({{ dataItem.client_code }})</ng-container><strong> - </strong> {{ dataItem?.name }}
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <!-- <kendo-grid-column
+            title="Client Name"
+            field="name"
+            [width]="110"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column> -->
+
+                        <kendo-grid-column title="Email" field="email" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                        </kendo-grid-column>
+
+                        <kendo-grid-column title="Phone" field="phone" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                        </kendo-grid-column>
+
+                        <kendo-grid-column title="Address" field="address" [width]="120"></kendo-grid-column>
+
+                        <kendo-grid-column title="City" [filterable]="false" field="city" [width]="100"></kendo-grid-column>
+                        <!-- <kendo-grid-column title="Post Code" field="post_code" [width]="60"></kendo-grid-column> -->
+
+                        <kendo-grid-column [filterable]="false" title="Status" [width]="60" [resizable]="false" field="status" [headerStyle]="{ 'font-weight': 'bold' }">
+                            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                <span *ngIf="dataItem.status == '1'" class="badge bg-green-gradient">Active</span
+              >
+              <span *ngIf="dataItem.status == '0'" class="badge bg-red"
+                >InActive</span
+              >
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Action"
+            width="75"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <a
+                class="btn"
+                tooltip="View"
+                (click)="navigateToClientDetailView(dataItem)"
+              >
+                <i class="fa fa-eye"></i
+              ></a>
+
+              <a
+                class="btn"
+                tooltip="Delete"
+                (click)="openConfirmationDialogue(dataItem)"
+                ><i class="fa fa-trash"></i
+              ></a>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+</ng-container>
+<!-- grid for admin and superadmin ends here   -->
+
+<!-- grid for others starts here  -->
+<ng-container *ngIf="
+authService.currentUserRoleValue !=='Admin' &&
+ authService.currentUserRoleValue !=='Super Admin'">
+  <div class="box box-default box-shadow">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <b>
+                  Client List
+          <!-- <button
+            class="btn btn-success btn-oval"
+            type="button"
+            (click)="addClientModal(addClient)"
+          >
+            <i class="fa fa-plus-circle mr-2"></i> <b>Create Client</b>
+                </button> -->
+                </b>
+            </h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="box-body">
+                <kendo-grid [data]="gridViewForView" [resizable]="true" [pageSize]="state.take" [skip]="state.skip" [pageable]="clientListArray.length > state.take" [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="state.sort" [loading]="listLoading" (dataStateChange)="dataStateChangeForView($event)">
+                    <kendo-grid-column title="S.N" [width]="40" [minResizableWidth]="30" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                            <p>{{ rowIndex + 1 }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Client Name" field="name" [width]="230" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <div class="flex-container">
+                                <div class="flex-items">
+                                    <ngx-avatar name="{{ dataItem?.name }}" size="40">
+                                    </ngx-avatar>
+                                </div>
+                                <div class="flex-items">
+                                    <!-- ({{ dataItem.client_code }}) -->
+                                    <strong> - </strong> {{ dataItem?.name }}
+                                </div>
+                            </div>
+                        </ng-template>
+                    </kendo-grid-column>
+
+
+                    <!-- <kendo-grid-column title="Email" field="email" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column> -->
+
+                    <!-- <kendo-grid-column title="Phone" field="phone" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column> -->
+
+                    <!-- <kendo-grid-column title="Address" field="address" width="120"></kendo-grid-column> -->
+
+                    <!-- <kendo-grid-column title="City" field="city" width="60"></kendo-grid-column> -->
+                    <!-- <kendo-grid-column title="Post Code" field="post_code" width="60"></kendo-grid-column> -->
+
+                    <kendo-grid-column [filterable]="false" title="Status" [width]="60" [resizable]="false" field="status" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span *ngIf="dataItem.status == '1'" class="badge bg-green-gradient">Active</span
+              >
+              <span *ngIf="dataItem.status == '0'" class="badge bg-red"
+                >InActive</span
+              >
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Action"
+            width="75"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <a
+                class="btn"
+                tooltip="View"
+                (click)="navigateToClientDetailView(dataItem)"
+              >
+                <i class="fa fa-eye"></i
+              ></a>
+
+              <!-- <a
+                class="btn"
+                tooltip="Delete"
+                (click)="openConfirmationDialogue(dataItem)"
+                ><i class="fa fa-trash"></i
+              ></a> -->
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+  </div>
+</ng-container>
+<!-- grid for others ends here -->
+
+
+
+<form [formGroup]="clientCreateForm">
+  <div class="button-wrapper">
+    <ng-template #addClient>
+      <div class="modal-header">
+        <h3 class="modal-title pull-left">Create Client</h3>
+
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="modalRef.hide()"
+        >
+          <span aria-hidden="true">&times;</span>
+                                </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Client Code">Client Code<sup>*</sup></label>
+                                <input type="text" id="post_code" class="form-control" formControlName="client_code" appFormControlValidationMsg />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="client_name">Client Name <sup>*</sup></label>
+                                <input type="text" id="client_name" class="form-control" formControlName="name" appFormControlValidationMsg />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">Phone<sup>*</sup></label>
+                                <input type="text" id="phone" class="form-control" formControlName="phone" [textMask]="phoneMask" appFormControlValidationMsg />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email">Email<sup>*</sup></label>
+                                <input type="text" id="email" class="form-control" formControlName="email" appFormControlValidationMsg />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="address">Address 1<sup>*</sup></label>
+                                <input type="text" id="address" class="form-control" formControlName="address" appFormControlValidationMsg />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="city">City<sup>*</sup></label>
+                                <input type="text" id="city" class="form-control" formControlName="city" appFormControlValidationMsg />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="state">State<sup>*</sup></label>
+                                <input type="text" id="state" class="form-control" formControlName="state" appFormControlValidationMsg />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="branch">Branch<sup>*</sup></label>
+
+                                <select id="branch" class="form-control" formControlName="client_branch_id" appFormControlValidationMsg (change)="onChange($event.target.value)">
+              <option value="">Select Branch</option>
+                                  <option
+                  *ngFor="let branch of clientBranchList"
+                  value="{{ branch.client_branch_id }}"
+                >
+                  {{ branch.title }}
+                </option>
+              </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="post_code">Post Code</label>
+                                <input type="text" id="post_code" class="form-control" formControlName="post_code" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <select id="location" class="form-control" formControlName="client_location_id">
+
+               <option value="">Select Location</option>
+                                  <option
+                  *ngFor="let location of clientBranchLocation"
+                  value="{{ location.client_location_id }}"
+                >
+                  {{ location.name }}
+                </option>
+              </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+                    <button class="btn btn-success" type="submit" (click)="onCreateClient()" appFormSubmitValidationMsg [validationControl]="clientCreateForm">
+          Submit
+        </button>
+                </div>
+                </ng-template>
+            </div>
+            </form>

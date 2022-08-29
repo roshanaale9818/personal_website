@@ -1,0 +1,100 @@
+<div class="box box-default box-shadow">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <b><i class="fa fa-history" aria-hidden="true"></i> Audit Logs </b>
+            </h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="box-body grid-wrapper">
+                <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="limit" [skip]="skip" [pageable]="
+                gridView ? (gridView.total <= pageLimit ? false : true) : false
+              " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" [loading]="listLoading" (dataStateChange)="dataStateChange($event)">
+                    <kendo-grid-column title="# " [width]="40 ">
+                        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex ">
+                            <p>{{ rowIndex + 1 }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Datetime" field="datetime" [filterable]="false" [width]="120">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- <p>{{ dataItem.datetime | date: "MM/dd/yyyy" }}</p> -->
+                            <p>{{ dataItem.datetime | date: "medium" }}</p>
+                            <!-- <p>{{ dataItem.datetime | date: "shortTime" }}</p> -->
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Type" field="type" [filterable]="false"></kendo-grid-column>
+
+                    <kendo-grid-column title="IP Address" field="ip_address" [filterable]="false" [width]="120"></kendo-grid-column>
+
+                    <kendo-grid-column title="Module" [width]="120" field="module"></kendo-grid-column>
+
+                    <kendo-grid-column title="User " [width]="140" field="user"></kendo-grid-column>
+
+                    <kendo-grid-column [width]="450" title="Description" field="description"></kendo-grid-column>
+
+                    <kendo-grid-command-column title="Action" width="100">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <div style="text-align: center ">
+                                <!-- Start of View Audit Log -->
+                                <a class="btn " tooltip="View" (click)="openViewModal(ViewAuditLogRef, dataItem)">
+                                    <i class="fa fa-eye "></i>
+                                </a>
+                            </div>
+                        </ng-template>
+                    </kendo-grid-command-column>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #ViewAuditLogRef>
+    <div class="modal-header ">
+        <h4 class="modal-title pull-left ">
+            <b>Audit Log Details</b>
+        </h4>
+
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+      <span aria-hidden="true ">&times;</span>
+    </button>
+    </div>
+
+    <div class="modal-body ">
+        <table id="w0 " class="table table-striped table-bordered detail-view ">
+            <tbody>
+                <tr>
+                    <th>Date</th>
+                    <td>
+                        {{ auditLog.datetime | date: "medium" }}
+                        <!-- {{ auditLog.datetime | date: "shortTime " }} -->
+                    </td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ auditLog.type }}</td>
+                </tr>
+                <tr>
+                    <th>IP Address</th>
+                    <td>{{ auditLog.ip_address }}</td>
+                </tr>
+                <tr>
+                    <th>Module</th>
+                    <td>{{ auditLog.module }}</td>
+                </tr>
+                <tr>
+                    <th>User</th>
+                    <td>{{ auditLog.user }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Close
+      </button>
+    </div>
+</ng-template>

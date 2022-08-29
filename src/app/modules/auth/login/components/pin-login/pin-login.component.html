@@ -1,0 +1,35 @@
+<div style="margin-top: 20px">
+    <form id="main-form " [formGroup]="loginByPinForm">
+        <div class="form-group field-loginform-username">
+            <div class="icon-wrapper">
+                <label for="exampleInputEmail1">Enter your pin</label>
+                <img [ngClass]=" (loginByPinForm.controls?.pin?.invalid &&
+                loginByPinForm.controls?.pin?.touched) ||
+              (loginByPinForm.controls?.pin?.invalid && submitted) ? 'errorTop':null" src="/assets/images/login/padlock.svg" alt="" />
+                <input style="height: 40px; border: 2px solid #a29e9e; padding-left: 11%" type="number" id="pin" class="form-control mt-1" name="pin" placeholder="Pin cannot exceed 6 characters" formControlName="pin" [textMask]="pinMask" />
+                <span class="form-error-msg" style="color: red;" *ngIf="
+            (loginByPinForm.controls?.pin?.invalid &&
+              loginByPinForm.controls?.pin?.touched) ||
+            (loginByPinForm.controls?.pin?.invalid && submitted)
+          ">
+          Pin is required
+        </span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- <button
+  class="btn btn-primary btn-block btn-login"
+  style="text-align: center"
+  [disabled]="loginButtonClick"
+  (click)="login()"
+  appFormSubmitValidationMsg
+  [validationControl]="loginByPinForm"
+>
+  Login
+</button> -->
+
+<button hidden class="btn btn-primary btn-block btn-login" [disabled]="loginButtonClick" style="text-align: center" (click)="login()">
+  Submit
+</button>

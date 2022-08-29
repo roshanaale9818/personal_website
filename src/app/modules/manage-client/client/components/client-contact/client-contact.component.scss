@@ -1,0 +1,27 @@
+.client-contact-wrap {
+  display: flex;
+}
+.mid-line {
+  background-color: #eee;
+  width: 3px;
+  height: 56rem;
+}
+.inner-contents {
+  position: relative;
+  margin-left: 11px;
+  margin-bottom: 30px;
+}
+.line-icon i {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  font-size: 15px;
+  line-height: 30px;
+  color: #666;
+  background: #d2d6de;
+  background-color: rgb(210, 214, 222);
+  border-radius: 50%;
+  text-align: center;
+  top: 1px;
+  left: -42px;
+}

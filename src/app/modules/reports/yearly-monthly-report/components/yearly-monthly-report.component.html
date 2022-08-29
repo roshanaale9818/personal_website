@@ -1,0 +1,164 @@
+<div class="box box-default">
+    <div class="box-header">
+        <form [formGroup]="yearlyReportForm">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="user1234">User</label>
+                        <!-- <select class="form-control" id="user1234" formControlName="id">
+              <option
+                *ngFor="let staff of staffList"
+                value="{{ staff.user_id }}"
+              >
+                {{ staff.first_name }}
+                {{ staff.middle_name ? staff.middle_name : "" }}
+                {{ staff.last_name }} ({{ staff.username }})</option
+              >
+            </select> -->
+                        <ng-select appearance="outline" #agreeSelect labelForId="staff" bindLabel="first_name" [searchable]="true" [dropdownPosition]="'bottom'" formControlName="id" placeholder="Select Client">
+                            <ng-option value="" selected>Select Staff</ng-option>
+                            <ng-option *ngFor="let staff of staffList" [value]="staff.user_id">
+                                {{staff.first_name |name:staff.last_name:staff.middle_name}}
+                                <!-- {{ staff.first_name }} {{ staff.middle_name ? staff.middle_name : "" }} {{ staff.last_name }} ({{ staff.username }}) -->
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <!-- <select
+              class="form-control"
+              id="year"
+              formControlName="year"
+              (change)="OnYearChange($event.target.value)"
+            >
+              <option *ngFor="let item of yearList" value="{{ item.year }}">{{
+                item.year
+              }}</option>
+            </select> -->
+                        <input name="yearFrom" type="text" class="form-control" [bsConfig]="datePickerConfig" name="dateFrom" id="dateFrom" formControlName="year" (ngModelChange)="OnYearChange($event)" bsDatepicker />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-success" id="search-button" (click)="searchReport()">
+            Search
+          </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="text-center">
+                    <strong>User Attendance Report <span *ngIf="username">
+                      ({{username}})
+                    </span> For Year {{ params.year }}</strong>
+                </h4>
+            </div>
+        </div>
+
+        <!-- kendo table -->
+        <!-- <div *ngIf="loading" class="k-i-loading"></div> -->
+        <div *ngFor="let monthlyreport of yearlyReportList; let i = index">
+            <kendo-grid [data]="row" [loading]="loading" [resizable]="true">
+                <ng-template kendoGridToolbarTemplate>
+                    <strong>{{ monthlyreport.month }}</strong>
+                </ng-template>
+                <kendo-grid-column title="Status" [headerStyle]="{
+            'font-weight': 'bold',
+            'background-color': '#666',
+            color: '#fff'
+          }" [style]="{ 'background-color': 'rgb(203, 221, 236)' }" width="100" [locked]="true">
+                    <ng-template kendoGridCellTemplate>
+                        <strong>In</strong> <br /><br />
+                        <strong>Out</strong> <br />
+                        <br />
+                        <strong>Total(Hrs</strong>
+                    </ng-template>
+                </kendo-grid-column>
+                <div *ngFor="let item of monthlyreport.data.attendance; let i = index">
+                    <kendo-grid-column title="{{ item.date| dayPipe: dateSetting.GS_DATE :true}} -  {{ item.date | dayNumberPipe: dateSetting.GS_DATE:'twoDigit' }}" [headerStyle]="{ 'font-weight': 'bold' }" width="80" class="no-padding">
+                        <ng-template kendoGridCellTemplate>
+                            <span class="whole-cell" [style.backgroundColor]="colorCode(item)">
+                <div *ngIf="item.weekend !== ''">
+                  <p>WD</p>
+                </div>
+                <div *ngIf="item.attendance == '00:00' && item.weekend == ''">
+                  <p>A</p>
+                </div>
+
+                <div *ngIf="item.attendance !== '00:00'">
+                  <p>{{ item.in }}</p>
+                  <p>{{ item.out }}</p>
+                  <p>{{ item.attendance }}</p>
+                </div>
+              </span>
+                        </ng-template>
+                    </kendo-grid-column>
+                </div>
+                <kendo-grid-column title="Holidays" [headerStyle]="{ 'font-weight': 'bold' }" width="100">
+                    <ng-template kendoGridCellTemplate>
+                        <strong>{{ monthlyreport.data.summary.offday }}</strong>
+                    </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column title="Present" [headerStyle]="{ 'font-weight': 'bold' }" width="100">
+                    <ng-template kendoGridCellTemplate>
+                        <strong>{{ monthlyreport.data.summary.present }}</strong>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column title="Leave" [headerStyle]="{ 'font-weight': 'bold' }" width="100">
+                    <ng-template kendoGridCellTemplate>
+                        <strong>{{ monthlyreport.data.summary.leavetot }}</strong>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column title="Absent" [headerStyle]="{ 'font-weight': 'bold' }" width="100">
+                    <ng-template kendoGridCellTemplate>
+                        <strong>{{ monthlyreport.data.summary.absent }}</strong>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column title="Work Days" [headerStyle]="{ 'font-weight': 'bold' }" width="100">
+                    <ng-template kendoGridCellTemplate>
+                        <strong>{{ monthlyreport.data.summary.workingdays }}</strong>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column title="Total(hrs)" [headerStyle]="{ 'font-weight': 'bold' }" width="100">
+                    <ng-template kendoGridCellTemplate>
+                        <strong>{{
+              monthlyreport.data.summary.total | hoursAndMinutesPipe
+            }}</strong>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+
+        <!-- table for colour information -->
+        <div class="table-responsive text-nowrap" style="margin-top: 20px;">
+            <table class="table border">
+                <thead>
+                    <tr>
+                        <th scope="col">Color</th>
+                        <th style="background-color: #9bc4db;"></th>
+                        <th style="background-color: rgba(123, 240, 154, 0.68);"></th>
+                        <th style="background-color: #fff;"></th>
+                        <th style="background-color: rgb(228, 91, 91);"></th>
+                        <th style="background-color: rgb(255, 255, 123);"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Notification</th>
+                        <td>Holiday</td>
+                        <td>Meet Work Hrs</td>
+                        <td>Absent</td>
+                        <td>Dosen't Meet Work Hrs</td>
+                        <td>Leave</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

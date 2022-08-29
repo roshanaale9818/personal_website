@@ -1,0 +1,2414 @@
+<div class="box box-default box-shadow mt-3" *ngIf="role !== 'staff'">
+    <!-- Report Form -->
+    <div class="box-header">
+        <form [formGroup]="reportForm">
+            <div class="row">
+                <div class="col-md-3" *ngIf="clientList && clientList.length > 0">
+                    <div class="form-group">
+                        <label for="client">Client</label>
+                        <ng-select appearance="outline" #agreeSelect labelForId="client" [searchable]="true" [dropdownPosition]="'bottom'" formControlName="client_id" placeholder="Select Client" appFormControlValidationMsg (change)="clientChange()">
+                            <ng-option value="" selected>Select Client</ng-option>
+
+                            <ng-option *ngFor="let item of clientList" [value]="item.client_id">{{ item.name }}</ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select (change)="changeEmployeeForm($event.target.value)" class="form-control" formControlName="types">
+              <option value="" disabled selected>Select Report Type</option>
+              <option value="1">Monthly</option>
+              <option value="2">Daily</option>
+              <option value="3">Weekly</option>
+              <option value="4">Custom</option>
+            </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Attendance Type</label>
+                        <select class="form-control" formControlName="type">
+              <option value="" selected>Select Attendance Type</option>
+              <option value="Absent">Absent List</option>
+              <option value="Present">Present List</option>
+              <option value="All">All</option>
+            </select>
+                    </div>
+                </div>
+                <!-- </div> -->
+
+                <!-- row -->
+                <!-- <div class="wrap"> -->
+                <!-- Employee List -->
+
+                <div class="col-md-3" *ngIf="reportForm.value.types == 3 || reportForm.value.types == 2">
+                    <div class="form-group">
+                        <label for="user">Employee</label>
+                        <ng-select appearance="outline" #agreeSelect labelForId="user" [multiple]="true" [dropdownPosition]="'bottom'" [searchable]="true" formControlName="user" placeholder="Select Employee" (change)="getStaffId($event)" appFormControlValidationMsg>
+                            <ng-option value="" selected>Select Employee</ng-option>
+
+                            <ng-option *ngFor="let list of staffList" [value]="list.user_id">
+                                {{ list.emp_id }} - {{ list.last_name }}&nbsp;{{ list.middle_name ? list.middle_name : "" }}&nbsp;{{ list.first_name }} - ({{ list.username }})
+                            </ng-option>
+
+                            <ng-template ng-header-tmp>
+                                <div>
+                                    <label>
+                    <input
+                      type="radio"
+                      checked="checked"
+                      name="employeeType"
+                      value="allEmp"
+                      (change)="allEmployees($event)"
+                    />
+                    All
+                  </label>
+                                    <label style="margin-left: 8px">
+                    <input
+                      type="radio"
+                      name="employeeType"
+                      value="activeEmp"
+                      (change)="activeEmployees($event)"
+                    />
+                    Active
+                  </label>
+                                    <label style="margin-left: 8px">
+                    <input
+                      type="radio"
+                      name="employeeType"
+                      value="archiveEmp"
+                      (change)="archiveEmployees($event)"
+                    />
+                    Archived
+                  </label>
+                                </div>
+
+                                <button class="btn btn-xs btn-primary mr-4 mt-3 ml-2" (click)="onSelectedAll()">
+                  Select All
+                </button>
+                                <button class="btn btn-xs btn-danger mr-2 mt-3" (click)="onClearableAll()">
+                  Clear All
+                </button>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <!-- Employee List -->
+                <div class="col-md-3" *ngIf="reportForm.value.types == 1 ||  reportForm.value.types == 4">
+                    <div class="form-group">
+                        <label for="user">Employee</label>
+                        <ng-select appearance="outline" #agreeSelect labelForId="user" [dropdownPosition]="'bottom'" [searchable]="true" formControlName="user" placeholder="Select Employee" (change)="getStaffId($event)" appFormControlValidationMsg>
+                            <ng-option value="" selected>Select Employee</ng-option>
+                            <ng-option *ngFor="let list of staffList" [value]="list.user_id">
+                                {{ list.emp_id }} - {{ list.last_name }}&nbsp;{{ list.middle_name ? list.middle_name : "" }}&nbsp;{{ list.first_name }} - ({{ list.username }})
+                            </ng-option>
+
+                            <ng-template ng-header-tmp>
+                                <div>
+                                    <label>
+                    <input
+                      type="radio"
+                      checked="checked"
+                      name="employeeType"
+                      value="allEmp"
+                      (change)="allEmployees($event)"
+                    />
+                    All
+                  </label>
+                                    <label style="margin-left: 8px">
+                    <input
+                      type="radio"
+                      name="employeeType"
+                      value="activeEmp"
+                      (change)="activeEmployees($event)"
+                    />
+                    Active
+                  </label>
+                                    <label style="margin-left: 8px">
+                    <input
+                      type="radio"
+                      name="employeeType"
+                      value="archiveEmp"
+                      (change)="archiveEmployees($event)"
+                    />
+                    Archived
+                  </label>
+                                </div>
+
+                                <!-- <button
+                  class="btn btn-xs btn-primary mr-4 mt-3 ml-2"
+                  (click)="onSelectedAll()"
+                >
+                  Select All
+                </button>
+                <button
+                  class="btn btn-xs btn-danger mr-2 mt-3"
+                  (click)="onClearableAll()"
+                >
+                  Clear All
+                </button> -->
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <!-- Date -->
+                <div class="col-md-3" *ngIf="reportForm.value.types == 2">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <ng-container *ngIf="datePickerFormat == 'E'">
+                            <input [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" formControlName="date" bsDatepicker />
+                        </ng-container>
+                        <!-- nepali date-picker -->
+                        <ng-container *ngIf="datePickerFormat == 'N'">
+                            <nepali-date-picker #nepalidatepickerForDaily name="nepalidate" [id]="'nepaliDate'" (change)="changeDate($event.detail.value, 'daily')" [label]="'date'" formControlName="date" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDailyDate">
+                            </nepali-date-picker>
+                        </ng-container>
+                        <!-- <input [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" formControlName="date" bsDatepicker /> -->
+
+                    </div>
+                </div>
+
+                <!-- Month -->
+                <div class="col-md-3" *ngIf="reportForm.value.types == 1">
+                    <div class="form-group">
+                        <label for="month1">Month</label>
+                        <ng-container *ngIf="datePickerFormat == 'E'">
+                            <select class="form-control" id="month1" formControlName="month" (change)="getFirstAndLastDayOfMonth($event.target.value)">
+                            <option *ngFor="let month of monthType" value="{{ month.value }}">
+                              {{ month.month }}
+                            </option>
+                          </select>
+                        </ng-container>
+                        <ng-container *ngIf="this.datePickerFormat == 'N'">
+                            <select class="form-control" id="month2" formControlName="month" (change)="onNepaliMonthChange($event.target.value)">
+                          <option value=""></option>
+                          <option *ngFor="let month of nepaliMonths"[value]="month.value">
+                            {{ month.month }}
+                          </option>
+                        </select>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <!-- Week -->
+                <div class="col-md-3" *ngIf="reportForm.value.types == 3">
+                    <div class="form-group">
+                        <label for="input1">From</label>
+                        <ng-container *ngIf="datePickerFormat == 'E'">
+                            <input [placeholder]="datePickerConfig.dateInputFormat" (ngModelChange)="getLastDayOfWeek($event)" class="form-control" id="input1" [bsConfig]="datePickerConfig" formControlName="begDate" bsDatepicker appFormControlValidationMsg />
+                        </ng-container>
+                        <ng-container *ngIf="datePickerFormat == 'N'">
+                            <nepali-date-picker name="nepalidate" [id]="'nepaliWeeklyFrom'" [label]="'date'" formControlName="begDate" (change)="changeDate($event.detail.value, 'weekly')" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForWeeklyDateFrom">
+                            </nepali-date-picker>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <!-- To -->
+                <!-- weekly  -->
+                <div class="col-md-3" *ngIf="reportForm.value.types == 3">
+                    <div class="form-group">
+                        <label for="input2">To</label>
+                        <input [placeholder]="datePickerConfig.dateInputFormat" class="form-control" id="input2" name="input2" readonly formControlName="endDate" appFormControlValidationMsg>
+                        <!-- <ng-container *ngIf="datePickerFormat == 'E'">
+                            <input [placeholder]="datePickerConfig.dateInputFormat" class="form-control" id="input2" name="input2" bsDatepicker [bsConfig]="datePickerConfig" formControlName="endDate" appFormControlValidationMsg />
+                        </ng-container>
+                        <ng-container *ngIf="datePickerFormat == 'N'">
+                            <nepali-date-picker name="weeklydateto" [id]="'nepaliWeeklyDateto'" [label]="'date'" formControlName="endDate" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForMonthlyDateTo">
+                            </nepali-date-picker>
+                        </ng-container> -->
+
+                    </div>
+                </div>
+                <!-- From -->
+                <div class="col-md-3" *ngIf="reportForm.value.types == 1 ||  reportForm.value.types == 4">
+                    <div class="form-group">
+                        <label for="input1">From</label>
+                        <!-- english date picker -->
+                        <ng-container *ngIf="datePickerFormat == 'E'">
+                            <input type="text" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" id="input1" formControlName="date_from" bsDatepicker autocomplete="off" [bsConfig]="datePickerConfig" appFormControlValidationMsg />
+                        </ng-container>
+                        <!-- nepali date picker  -->
+                        <ng-container *ngIf="datePickerFormat == 'N'">
+                            <nepali-date-picker name="nepaliDateFrom" [id]="'nepaliDateFrom'" (change)="changeDate($event.detail.value, 'monthly')" [label]="'monthlyFrom'" formControlName="date_from" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForMonthlyDateFrom">
+                            </nepali-date-picker>
+                        </ng-container>
+                    </div>
+                </div>
+                <!-- To -->
+                <div class="col-md-3" *ngIf="reportForm.value.types == 1 || reportForm.value.types == 4">
+                    <div class="form-group">
+                        <label>To</label>
+                        <ng-container *ngIf="datePickerFormat == 'E'">
+                            <input type="text" class="form-control" [placeholder]="datePickerConfig.dateInputFormat" formControlName="date_to" bsDatepicker [bsConfig]="datePickerConfig" appFormControlValidationMsg />
+                        </ng-container>
+                        <ng-container *ngIf="datePickerFormat == 'N'">
+                            <nepali-date-picker name="nepaliDateTo" [id]="'nepaliDateTo'" [label]="'monthlyDateTo'" formControlName="date_to" [disableBefore]="disableBefore" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForMonthlyDateFrom">
+                            </nepali-date-picker>
+                        </ng-container>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <!-- <div class="row">
+
+            </div> -->
+        </form>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex-container">
+        <div class="flex-item ml-3" *ngIf="reportForm.value.types == 2">
+            <button class="btn btn-success btn-oval" (click)="viewReports('Daily')" appFormSubmitValidationMsg [validationControl]="reportForm">
+        <i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;
+
+        <b>View Daily Report</b>
+      </button>
+        </div>
+
+        <div class="flex-item ml-3" *ngIf="reportForm.value.types == 1">
+            <button class="btn btn-success btn-oval" (click)="viewReports('Monthly')" appFormSubmitValidationMsg [validationControl]="reportForm">
+        <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;
+        <b>View Monthly Report</b>
+      </button>
+        </div>
+
+        <div class="flex-item ml-3" *ngIf="reportForm.value.types == 3">
+            <button class="btn btn-success btn-oval" (click)="viewReports('Weekly')" appFormSubmitValidationMsg [validationControl]="reportForm">
+        <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;
+        <b>View Weekly Report</b>
+      </button>
+        </div>
+
+        <div class="flex-item ml-3" *ngIf="reportForm.value.types == 1">
+            <button class="btn btn-success btn-oval" (click)="clickGraceTime('Monthly')">
+        <i class="fa fa-hourglass" aria-hidden="true"></i>&nbsp;
+        <b>Gracetime Report</b>
+      </button>
+        </div>
+
+        <div class="flex-item ml-3" *ngIf="reportForm.value.types == 2">
+            <button class="btn btn-success btn-oval" (click)="clickGraceTime('Daily')">
+        <i class="fa fa-hourglass" aria-hidden="true"></i>&nbsp;
+        <b>Gracetime Report</b>
+      </button>
+        </div>
+
+        <div class="flex-item ml-3" *ngIf="reportForm.value.types == 3">
+            <button class="btn btn-success btn-oval" (click)="clickGraceTime('Weekly')">
+        <i class="fa fa-hourglass" aria-hidden="true"></i>&nbsp;
+        <b>Gracetime Report</b>
+      </button>
+        </div>
+
+        <div class="flex-item ml-3" *ngIf="reportForm.value.types == 4">
+            <button class="btn btn-success btn-oval" (click)="viewReports('Custom')" appFormSubmitValidationMsg [validationControl]="reportForm">
+      <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;
+      <b>View  Report</b>
+    </button>
+        </div>
+        <div class="flex-item ml-3" *ngIf="reportForm.value.types == 4">
+            <button class="btn btn-success btn-oval" (click)="clickGraceTime('Custom')">
+    <i class="fa fa-hourglass" aria-hidden="true"></i>&nbsp;
+    <b>Gracetime Report</b>
+  </button>
+        </div>
+
+        <div class="flex-item ml-3" *ngIf="showClientList">
+            <button class="btn btn-success btn-oval" (click)="openModal(addAttendanceModal)">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;<b
+          >Add Attendance</b
+        >
+      </button>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <div class="float-right" *ngIf="reportForm.value.types == 1|| reportForm.value.types == 4 || reportForm.value.types == 2">
+            <div class="dropdown">
+                <button type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-bars"></i>
+        </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-item">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                  <input
+                    [checked]="departmentChecked"
+                    (change)="checkDepartment($event)"
+                    style="margin-right: 15px"
+                    type="checkbox"
+                    name="check"
+                  />
+                  Department
+                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-item">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                  <input
+                    [checked]="eeIdChecked"
+                    (change)="checkEmpId($event)"
+                    style="margin-right: 15px"
+                    type="checkbox"
+                  />
+                  EE. ID
+                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-item">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                  <input
+                    [checked]="upLunchChecked"
+                    (change)="checkLunchColumn($event)"
+                    style="margin-right: 15px"
+                    type="checkbox"
+                  />
+                  Lunch Total
+                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- kendo table for Monthly Report -->
+        <div *ngIf="viewMonthly || viewCustomReport">
+            <!-- Export Button Monthly -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <b *ngIf="viewMonthly">
+              <b > <i class="fa fa-calendar mr-2"></i></b> View Monthly Report</b>
+                        <b *ngIf="viewCustomReport == true">
+
+              <b > <i class="fa fa-calendar mr-2"></i></b> View Custom Report</b>
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="flex-content">
+                        <div class="flex-item mb-3">
+                            <button class="btn btn-secondary" (click)="exportMonthlyReport()" appFormSubmitValidationMsg [validationControl]="reportForm">
+                <b> <i class="fa fa-file-excel-o"></i>&nbsp;Export Report</b>
+              </button>
+                        </div>
+                    </div>
+
+                    <ng-container *ngFor="let item of monthlyReportsList">
+                        <kendo-grid [data]="item.attendance" [selectable]="true" [rowClass]="rowCallback" [loading]="loading" [resizable]="true">
+                            <ng-template kendoGridToolbarTemplate>
+                                <strong>{{ item?.summary?.staff_name }}</strong>
+                            </ng-template>
+
+                            <!-- S.N. -->
+                            <kendo-grid-column title="S.N" width="60" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                                    <p style="float: right">{{ rowIndex + 1 }}</p>
+                                </ng-template>
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    Total
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Date -->
+                            <kendo-grid-column title="Date" field="date" [width]="90" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <!-- <p *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'" style="float: right">
+                                        {{ dataItem.date | date: "MM/dd/yyyy" }}
+                                    </p>
+                                    <p *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'" style="float: right">
+                                        {{ dataItem.date | date: "yyyy/MM/dd" }}
+                                    </p> -->
+                                    <ng-container *ngIf="datePickerFormat == 'E'">
+                                        <p *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'" style="float: right">
+                                            {{ dataItem.date | date: "MM/dd/yyyy" }}
+                                        </p>
+                                        <p *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'" style="float: right">
+                                            {{ dataItem.date | date: "yyyy/MM/dd" }}
+                                        </p>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="datePickerFormat == 'N'">
+                                        <p style="float: right">
+
+                                            {{ dataItem.date |nepaliDatePipe:this.datePickerConfig.dateInputFormat }}
+                                        </p>
+                                    </ng-container>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Emp Id -->
+                            <kendo-grid-column *ngIf="showEmpId" title="Emp ID" field="user_id" [width]="90" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <p style="float: right">{{ item?.summary?.emp_id }}</p>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Employee Name -->
+                            <kendo-grid-column title="Employee Name" field="date" [width]="180" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <p>{{ item?.summary?.full_name }}</p>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Day -->
+                            <kendo-grid-column title="Day" field="in" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <p>{{ dataItem.date | dayPipe: dateSetting.GS_DATE }}</p>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Checkin Time -->
+                            <kendo-grid-column title="Time In" [width]="100" field="in" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <!-- <p style="float: right">
+                                        {{ dataItem.in }}
+                                    </p> -->
+                                    <ng-container *ngIf="dataItem.in !== '00:00'">
+                                        <span style="float: right" *ngIf="timeFormat == '12'">{{
+                      dataItem.in !== null
+                        ? (dataItem.date + " " + dataItem.in
+                          | date: "shortTime")
+                        : null
+                    }}</span>
+                                        <span style="float: right" *ngIf="timeFormat == '24'">{{
+                      dataItem.in !== null
+                        ? (dataItem.date + " " + dataItem.in | date: "HH:mm")
+                        : null
+                    }}</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="dataItem.in == '00:00'">
+                                        <p style="float: right">
+                                            {{ dataItem.in }}
+                                        </p>
+                                    </ng-container>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Lunchin Time -->
+                            <kendo-grid-column *ngIf="showLunch" title="Lunch Out" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <!-- <p style="float: right">
+                                        {{ dataItem.lunch_out }}
+                                    </p> -->
+                                    <ng-container *ngIf="dataItem.lunch_out !== '00:00'">
+                                        <span style="float: right" *ngIf="timeFormat == '12'">{{
+                      dataItem.lunch_out !== null
+                        ? (dataItem.date + " " + dataItem.lunch_out
+                          | date: "shortTime")
+                        : null
+                    }}</span>
+                                        <span style="float: right" *ngIf="timeFormat == '24'">{{
+                      dataItem.lunch_out !== null
+                        ? (dataItem.date + " " + dataItem.lunch_out
+                          | date: "HH:mm")
+                        : null
+                    }}</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="dataItem.lunch_out == '00:00'">
+                                        <p style="float: right">
+                                            {{ dataItem.lunch_out }}
+                                        </p>
+                                    </ng-container>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Lunchout Time -->
+                            <kendo-grid-column *ngIf="showLunch" title="Lunch In" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <!-- <p style="float: right">
+                                        {{ dataItem.lunch_in }}
+                                    </p> -->
+                                    <!-- <span *ngIf="timeFormat =='12'">{{  (dataItem.lunch_in  !== null ) ? (dataItem.date +' '+ dataItem.lunch_in+':00' |date: "shortTime"):null }}</span>
+                                    <span *ngIf="timeFormat =='24'">{{  (dataItem.lunch_in  !== null ) ? (dataItem.date +' '+ dataItem.lunch_in+':00'  | date: "HH:mm"):null }}</span> -->
+                                    <ng-container *ngIf="dataItem.lunch_in !== '00:00'">
+                                        <span style="float: right" *ngIf="timeFormat == '12'">{{
+                      dataItem.lunch_in !== null
+                        ? (dataItem.date + " " + dataItem.lunch_in
+                          | date: "shortTime")
+                        : null
+                    }}</span>
+                                        <span style="float: right" *ngIf="timeFormat == '24'">{{
+                      dataItem.lunch_in !== null
+                        ? (dataItem.date + " " + dataItem.lunch_in
+                          | date: "HH:mm")
+                        : null
+                    }}</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="dataItem.lunch_in == '00:00'">
+                                        <p style="float: right">
+                                            {{ dataItem.lunch_in }}
+                                        </p>
+                                    </ng-container>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Checkout Time -->
+                            <kendo-grid-column title="Time Out" [width]="100" field="out" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <!-- <p style="float: right">
+                                        {{ dataItem.out }}
+                                    </p> -->
+                                    <ng-container *ngIf="dataItem.out !== '00:00'">
+                                        <span style="float: right" *ngIf="timeFormat == '12'">{{
+                      dataItem.out !== null
+                        ? (dataItem.date + " " + dataItem.out
+                          | date: "shortTime")
+                        : null
+                    }}</span>
+                                        <span style="float: right" *ngIf="timeFormat == '24'">{{
+                      dataItem.out !== null
+                        ? (dataItem.date + " " + dataItem.out | date: "HH:mm")
+                        : null
+                    }}</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="dataItem.out == '00:00'">
+                                        <p style="float: right">
+                                            {{ dataItem.out }}
+                                        </p>
+                                    </ng-container>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Total Hours -->
+                            <kendo-grid-column title="Total" field="attendance" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }" [resizable]="false">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <p style="float: right">
+                                        {{ dataItem.grand_total }}
+                                    </p>
+                                </ng-template>
+
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    <strong>{{ totalHours }}</strong>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Lunch Total -->
+                            <kendo-grid-column *ngIf="showLunch" title="Lunch" [headerStyle]="{ 'font-weight': 'bold' }">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <p style="float: right">
+                                        {{ dataItem.total_lunch }}
+                                    </p>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <kendo-grid-column *ngIf="showLunch" [width]="70" title="Grand Total" field="attendance">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <p style="float: right">{{ dataItem.attendance }}</p>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- Action Force Change button -->
+                            <kendo-grid-column title="Action" [width]="80">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <ng-container *ngIf="authService.currentUserRoleValue !== 'staff'">
+                                        <a tooltip="Force Change" class="btn" (click)="openForceChangesModal(ForceChangesRef, dataItem)">
+                                            <i style="color: rgb(212, 140, 7)" class="fa fa-edit"></i>
+                                        </a>
+                                    </ng-container>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <!-- to get the data inside + button -->
+                            <ng-template kendoGridDetailTemplate let-dataItem="dataItem">
+                                <section>
+                                    <app-monthly-report-details [details]="dataItem" [userId]="item.summary.staff_id" [clientId]="this.reportForm.value.client_id" (onSubmit)="addItem($event)" [timeFormat]="timeFormat" [dateFormat]="datePickerConfig.dateInputFormat"></app-monthly-report-details>
+                                </section>
+                            </ng-template>
+                        </kendo-grid>
+
+                        <!-- report description section -->
+                        <div class="mt-3">
+                            <div class="row">
+                                <div class="col-md-3">Total No.of Days:</div>
+                                <div class="col-md-3">{{ item?.summary?.totaldays }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">Total No.of Holidays:</div>
+                                <div class="col-md-3">{{ item?.summary?.offday }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">Total No.of Working Days:</div>
+                                <div class="col-md-3">{{ item?.summary?.workingdays }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">Total No.of Present Days:</div>
+                                <div class="col-md-3">{{ item?.summary?.present }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">Total No.of Absent Days:</div>
+                                <div class="col-md-3">{{ item?.summary?.absent }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">Total No.of Requested Leave Days:</div>
+                                <div class="col-md-3">{{ item?.summary?.leavetot }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-3">Total No.of Working Hours:</div>
+                                <div class="col-md-3">
+                                    <strong>{{ item?.summary?.workinghr }}</strong> Hours
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+        <!-- kendo table for Monthly Grace Report -->
+
+        <div *ngIf="viewGraceMonthly">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <b>
+              <i class="fa fa-hourglass mr-2" aria-hidden="true"></i>
+
+              View Monthly Grace Report</b
+            >
+          </h3>
+        </div>
+
+        <div class="panel-body">
+          <div class="flex-content">
+            <div class="flex-item mb-3">
+              <button
+                style="border-radius: 20px"
+                class="btn btn-secondary"
+                (click)="exportMonthlyGraceReport()"
+                appFormSubmitValidationMsg
+                [validationControl]="reportForm"
+              >
+                <b><i class="fa fa-file-excel-o"></i>&nbsp; Export Report </b>
+                        </button>
+                </div>
+            </div>
+
+            <ng-container *ngFor="let item of monthlyReportsList">
+                <kendo-grid [data]="item.attendance" [selectable]="true" [rowClass]="rowCallback" [loading]="loading" [resizable]="true">
+                    <ng-template kendoGridToolbarTemplate>
+                        <strong>{{ item?.summary?.staff_name }}</strong>
+                    </ng-template>
+
+                    <!-- S.N. -->
+                    <kendo-grid-column title="S.N" width="60" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                            <p style="float: right">{{ rowIndex + 1 }}</p>
+                        </ng-template>
+                        <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                            Total
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Date -->
+                    <kendo-grid-column title="Date" [width]="90" field="date" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- <p *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'" style="float: right">
+                                {{ dataItem.date | date: "MM/dd/yyyy" }}
+                            </p>
+                            <p *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'" style="float: right">
+                                {{ dataItem.date | date: "yyyy/MM/dd" }}
+                            </p> -->
+                            <ng-container *ngIf="datePickerFormat == 'E'">
+                                <p *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'" style="float: right">
+                                    {{ dataItem.date | date: "MM/dd/yyyy" }}
+                                </p>
+                                <p *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'" style="float: right">
+                                    {{ dataItem.date | date: "yyyy/MM/dd" }}
+                                </p>
+                            </ng-container>
+
+                            <ng-container *ngIf="datePickerFormat == 'N'">
+                                <p style="float: right">
+
+                                    {{ dataItem.date |nepaliDatePipe:this.datePickerConfig.dateInputFormat }}
+                                </p>
+                            </ng-container>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Emp Id -->
+                    <kendo-grid-column *ngIf="showEmpId" title="Emp ID" field="user_id" [width]="90" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p style="float: right">{{ item?.summary?.emp_id }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Employee Name -->
+                    <kendo-grid-column title="Employee Name" [width]="140" field="date" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p>{{ item?.summary?.full_name }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Day -->
+                    <kendo-grid-column title="Day" field="in" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p>{{ dataItem.date | dayPipe: dateSetting.GS_DATE }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Checkin Time -->
+                    <kendo-grid-column title="Time In" field="in" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- <p style="float: right">
+                                        {{ dataItem.in }}
+                                    </p> -->
+                            <ng-container *ngIf="dataItem.in !== '00:00'">
+                                <span style="float: right" *ngIf="timeFormat == '12'">{{
+                      dataItem.in !== null
+                        ? (dataItem.date + " " + dataItem.in
+                          | date: "shortTime")
+                        : null
+                    }}</span>
+                                <span style="float: right" *ngIf="timeFormat == '24'">{{
+                      dataItem.in !== null
+                        ? (dataItem.date + " " + dataItem.in | date: "HH:mm")
+                        : null
+                    }}</span>
+                            </ng-container>
+                            <ng-container *ngIf="dataItem.in == '00:00'">
+                                <p style="float: right">
+                                    {{ dataItem.in }}
+                                </p>
+                            </ng-container>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Lunchin Time -->
+                    <kendo-grid-column *ngIf="showLunch" title="Lunch Out" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- <p style="float: right">
+                                        {{ dataItem.lunch_out }}
+                                    </p> -->
+                            <ng-container *ngIf="dataItem.lunch_out !== '00:00'">
+                                <span style="float: right" *ngIf="timeFormat == '12'">{{
+                      dataItem.lunch_out !== null
+                        ? (dataItem.date + " " + dataItem.lunch_out
+                          | date: "shortTime")
+                        : null
+                    }}</span>
+                                <span style="float: right" *ngIf="timeFormat == '24'">{{
+                      dataItem.lunch_out !== null
+                        ? (dataItem.date + " " + dataItem.lunch_out
+                          | date: "HH:mm")
+                        : null
+                    }}</span>
+                            </ng-container>
+                            <ng-container *ngIf="dataItem.lunch_out == '00:00'">
+                                <p style="float: right">
+                                    {{ dataItem.lunch_out }}
+                                </p>
+                            </ng-container>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Lunchout Time -->
+                    <kendo-grid-column *ngIf="showLunch" title="Lunch In" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- <p style="float: right">
+                                        {{ dataItem.lunch_in }}
+                                    </p> -->
+                            <!-- <span *ngIf="timeFormat =='12'">{{  (dataItem.lunch_in  !== null ) ? (dataItem.date +' '+ dataItem.lunch_in+':00' |date: "shortTime"):null }}</span>
+                                    <span *ngIf="timeFormat =='24'">{{  (dataItem.lunch_in  !== null ) ? (dataItem.date +' '+ dataItem.lunch_in+':00'  | date: "HH:mm"):null }}</span> -->
+                            <ng-container *ngIf="dataItem.lunch_in !== '00:00'">
+                                <span style="float: right" *ngIf="timeFormat == '12'">{{
+                      dataItem.lunch_in !== null
+                        ? (dataItem.date + " " + dataItem.lunch_in
+                          | date: "shortTime")
+                        : null
+                    }}</span>
+                                <span style="float: right" *ngIf="timeFormat == '24'">{{
+                      dataItem.lunch_in !== null
+                        ? (dataItem.date + " " + dataItem.lunch_in
+                          | date: "HH:mm")
+                        : null
+                    }}</span>
+                            </ng-container>
+                            <ng-container *ngIf="dataItem.lunch_in == '00:00'">
+                                <p style="float: right">
+                                    {{ dataItem.lunch_in }}
+                                </p>
+                            </ng-container>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Checkout Time -->
+                    <kendo-grid-column title="Time Out" field="out" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- <p style="float: right">
+                                        {{ dataItem.out }}
+                                    </p> -->
+                            <ng-container *ngIf="dataItem.out !== '00:00'">
+                                <span style="float: right" *ngIf="timeFormat == '12'">{{
+                      dataItem.out !== null
+                        ? (dataItem.date + " " + dataItem.out
+                          | date: "shortTime")
+                        : null
+                    }}</span>
+                                <span style="float: right" *ngIf="timeFormat == '24'">{{
+                      dataItem.out !== null
+                        ? (dataItem.date + " " + dataItem.out | date: "HH:mm")
+                        : null
+                    }}</span>
+                            </ng-container>
+                            <ng-container *ngIf="dataItem.out == '00:00'">
+                                <p style="float: right">
+                                    {{ dataItem.out }}
+                                </p>
+                            </ng-container>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Total Hours -->
+                    <kendo-grid-column title="Total" field="attendance" [headerStyle]="{ 'font-weight': 'bold' }" [resizable]="false">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p style="float: right">
+                                {{ dataItem.grand_total }}
+                            </p>
+                        </ng-template>
+
+                        <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                            <strong>{{ totalHours }}</strong>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Lunch Total -->
+                    <kendo-grid-column *ngIf="showLunch" title="Lunch" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p style="float: right">
+                                {{ dataItem.total_lunch }}
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column *ngIf="showLunch" [width]="70" title="Grand Total" field="attendance">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p style="float: right">{{ dataItem.attendance }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Action Force Change button -->
+                    <kendo-grid-column title="Action" [width]="80">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <ng-container *ngIf="authService.currentUserRoleValue !== 'staff'">
+                                <a tooltip="Force Change" class="btn" (click)="openForceChangesModal(ForceChangesRef, dataItem)">
+                                    <i style="color: rgb(212, 140, 7)" class="fa fa-edit"></i>
+                                </a>
+                            </ng-container>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- to get the data inside + button -->
+                    <ng-template kendoGridDetailTemplate let-dataItem="dataItem">
+                        <section>
+                            <app-monthly-report-details [details]="dataItem" [userId]="item.summary.staff_id" [clientId]="this.reportForm.value.client_id" (onSubmit)="addItem($event)" [timeFormat]="timeFormat" [dateFormat]="datePickerConfig.dateInputFormat"></app-monthly-report-details>
+                        </section>
+                    </ng-template>
+                </kendo-grid>
+
+                <!-- report description section -->
+                <div class="mt-3">
+                    <div class="row">
+                        <div class="col-md-3">Total No.of Days:</div>
+                        <div class="col-md-3">{{ item?.summary?.totaldays }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Total No.of Holidays:</div>
+                        <div class="col-md-3">{{ item?.summary?.offday }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Total No.of Working Days:</div>
+                        <div class="col-md-3">{{ item?.summary?.workingdays }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Total No.of Present Days:</div>
+                        <div class="col-md-3">{{ item?.summary?.present }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Total No.of Absent Days:</div>
+                        <div class="col-md-3">{{ item?.summary?.absent }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Total No.of Requested Leave Days:</div>
+                        <div class="col-md-3">{{ item?.summary?.leavetot }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">Total No.of Working Hours:</div>
+                        <div class="col-md-3">
+                            <strong>{{ item?.summary?.workinghr }}</strong> Hours
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div class="float-right" *ngIf="reportForm?.value.types == 3">
+    <div class="dropdown">
+        <button tooltip="Click to show or hide" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-item">
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                          <!-- formControlName="unique" -->
+                  <input
+                    [checked]="departmentChecked"
+                    (change)="checkDepartment($event)"
+                    style="margin-right: 15px"
+                    type="checkbox"
+
+                  />
+                  Department
+                </label>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown-item">
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                  <input
+                    [checked]="departmentChecked"
+                    (change)="checkEmpId($event)"
+                    style="margin-right: 15px"
+                    type="checkbox"
+                  />
+                  EE. ID
+                </label>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown-item">
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                  <input
+                    [checked]="departmentChecked"
+                    (change)="checkWeeklyReport($event)"
+                    style="margin-right: 15px"
+                    type="checkbox"
+                  />
+                  Lunch Total
+                </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- kendo table for Weekly Report -->
+<div *ngIf="viewWeekly">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <b>
+              <i class="fa fa-calendar mr-2" aria-hidden="true"></i>
+
+              View Weekly Report</b
+            >
+          </h3>
+        </div>
+        <div class="panel-body">
+          <!-- Export Button Weekly -->
+          <div class="flex-content mb-3">
+            <div class="flex-item">
+              <button
+                class="btn btn-secondary"
+                (click)="exportWeeklyReport()"
+                appFormSubmitValidationMsg
+                [validationControl]="reportForm"
+              >
+                <b> <i class="fa fa-file-excel-o"></i>&nbsp; Export Report</b>
+                </button>
+        </div>
+    </div>
+    <kendo-grid [data]="gridViewWeeklyReport" [resizable]="true" [pageSize]="limit" [skip]="skip" [pageable]="true" [loading]="loading" [resizable]="true" (dataStateChange)="dataStateChangeWeekly($event)">
+        <kendo-grid-column title="S.N" [width]="60">
+            <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                <p>{{ rowIndex + 1 }}</p>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column *ngIf="showDepartment" title="Department" field="department">
+        </kendo-grid-column>
+
+        <kendo-grid-column *ngIf="showEmpId" title="EE ID" field="emp_id">
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Name" field="name" [width]="200">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">Total</div>
+                <div class="footer-cell">Daily Headcount</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Monday" field="monday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalMonday }})</div>
+                <div class="footer-cell">({{ headMonday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Tuesday" field="tuesday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalTuesday }})</div>
+                <div class="footer-cell">({{ headTuesday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Wednesday" field="wednesday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalWednesday }})</div>
+                <div class="footer-cell">({{ headWednesday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Thursday" field="thursday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalThursday }})</div>
+
+                <div class="footer-cell">({{ headThursday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Friday" field="friday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalFriday }})</div>
+                <div class="footer-cell">({{ headFriday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Saturday" field="saturday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalSaturday }})</div>
+                <div class="footer-cell">({{ headSaturday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Sunday" field="sunday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalSunday }})</div>
+                <div class="footer-cell">({{ headSunday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column *ngIf="showLunch" title="Totals" field="workinghr">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotal }})</div>
+
+                <!-- <div class="footer-cell">({{ columnIndex }})</div> -->
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+</div>
+</div>
+</div>
+
+<!-- kendo table for Weekly Grace Report -->
+<div *ngIf="viewGraceWeekly">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <b>
+              <i class="fa fa-hourglass mr-2" aria-hidden="true"></i>
+
+              View Weekly Grace Report</b
+            >
+          </h3>
+        </div>
+        <div class="panel-body">
+          <!-- Export Button Grace Weekly -->
+          <div class="flex-content mb-3">
+            <div class="flex-item">
+              <button
+                class="btn btn-secondary"
+                (click)="exportWeeklyGraceReport()"
+                appFormSubmitValidationMsg
+                [validationControl]="reportForm"
+              >
+                <b> <i class="fa fa-file-excel-o"></i>&nbsp; Export Report</b>
+                </button>
+        </div>
+    </div>
+    <kendo-grid [data]="gridViewWeeklyReport" [resizable]="true" [pageSize]="limit" [skip]="skip" [pageable]="true" [loading]="loading" [resizable]="true" (dataStateChange)="dataStateChangeWeekly($event)">
+        <kendo-grid-column title="S.N" [width]="60">
+            <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                <p>{{ rowIndex + 1 }}</p>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column *ngIf="showDepartment" title="Department" field="department">
+        </kendo-grid-column>
+
+        <kendo-grid-column *ngIf="showEmpId" title="EE ID" field="emp_id">
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Name" field="name" [width]="200">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">Total</div>
+                <div class="footer-cell">Daily Headcount</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Monday" field="monday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalMonday }})</div>
+                <div class="footer-cell">({{ headMonday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Tuesday" field="tuesday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalTuesday }})</div>
+                <div class="footer-cell">({{ headTuesday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Wednesday" field="wednesday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalWednesday }})</div>
+                <div class="footer-cell">({{ headWednesday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Thursday" field="thursday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalThursday }})</div>
+
+                <div class="footer-cell">({{ headThursday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Friday" field="friday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalFriday }})</div>
+                <div class="footer-cell">({{ headFriday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Saturday" field="saturday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalSaturday }})</div>
+                <div class="footer-cell">({{ headSaturday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Sunday" field="sunday">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotalSunday }})</div>
+                <div class="footer-cell">({{ headSunday }})</div>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column *ngIf="showLunch" title="Totals" field="workinghr">
+            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                <div class="footer-cell">({{ grandTotal }})</div>
+
+                <!-- <div class="footer-cell">({{ columnIndex }})</div> -->
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+</div>
+</div>
+</div>
+
+<!--Kendo table for Daily Report  -->
+<div *ngIf="viewDaily">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <b>
+              <i class="fa fa-newspaper-o mr-2" aria-hidden="true"></i>&nbsp;
+              View Daily Report</b
+            >
+          </h3>
+        </div>
+        <div class="panel-body">
+          <!-- Export Button Daily -->
+          <div class="flex-content">
+            <div class="flex-item mb-3">
+              <button
+                class="btn btn-secondary"
+                (click)="exportDailyReport()"
+                appFormSubmitValidationMsg
+                [validationControl]="reportForm"
+              >
+                <i class="fa fa-file-excel-o"></i>
+                Export Report
+              </button>
+            </div>
+          </div>
+
+          <kendo-grid
+            [data]="gridViewDailyReport"
+            [resizable]="true"
+            [rowClass]="rowDailyCallback"
+            [pageSize]="limit"
+            [skip]="skip"
+            [pageable]="
+              gridViewDailyReport
+                ? gridViewDailyReport.total <= pageLimit
+                  ? false
+                  : true
+                : false
+            "
+            [filterable]="false"
+            [loading]="loading"
+            (dataStateChange)="dataStateChangeDaily($event)"
+          >
+            <!-- S.N. -->
+            <kendo-grid-column
+              title="S.N"
+              [width]="50"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                <p style="float: right">{{ rowIndex + 1 }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Department -->
+            <kendo-grid-column
+              *ngIf="showDepartment"
+              title="Department"
+              field="department"
+              [width]="90"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+
+            <!-- Emp Id -->
+            <kendo-grid-column
+              *ngIf="showEmpId"
+              title="EE ID"
+              field="emp_id"
+              [width]="90"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p style="float: right">{{ dataItem.emp_id }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Employee Name -->
+            <kendo-grid-column
+              title="Name"
+              field="name"
+              [width]="100"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+
+            <!-- Date -->
+            <kendo-grid-column
+              title="Date"
+              field="date"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+              [width]="90"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+           <ng-container *ngIf="datePickerFormat == 'E'">
+            <p
+            *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'"
+            style="float: right"
+          >
+            {{ dataItem.date | date: "MM/dd/yyyy" }}
+          </p>
+          <p
+            *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'"
+            style="float: right"
+          >
+            {{ dataItem.date | date: "yyyy/MM/dd" }}
+          </p>
+           </ng-container>
+
+           <ng-container *ngIf="datePickerFormat == 'N'" >
+            <p
+            style="float: right"
+          >
+
+            {{ dataItem.date |nepaliDatePipe:this.datePickerConfig.dateInputFormat }}
+          </p>
+           </ng-container>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Day -->
+            <kendo-grid-column
+              title="Day"
+              field="in"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p>{{ dataItem.date | dayPipe: dateSetting.GS_DATE }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Time in -->
+            <kendo-grid-column
+              title="Time In"
+              field="time_in "
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <!-- <span style="float: right" *ngIf="dataItem.time_in !== null">
+                  {{ dataItem.time_in }}
+                </span> -->
+                <ng-container *ngIf="dataItem.time_in !== '00:00'">
+                  <span style="float: right" *ngIf="timeFormat == '12'">{{
+                    dataItem.time_in !== null
+                      ? (dataItem.date + " " + dataItem.time_in
+                        | date: "shortTime")
+                      : null
+                  }}</span>
+                  <span style="float: right" *ngIf="timeFormat == '24'">{{
+                    dataItem.time_in !== null
+                      ? (dataItem.date + " " + dataItem.time_in | date: "HH:mm")
+                      : null
+                  }}</span>
+                </ng-container>
+                <ng-container *ngIf="dataItem.time_in == '00:00'">
+                  <p style="float: right">
+                    {{ dataItem.time_in }}
+                  </p>
+                </ng-container>
+
+                <span
+                  style="font-style: italic; color: red"
+                  *ngIf="dataItem.time_in == null"
+                  >(not set)</span
+                >
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Lunch Out -->
+            <kendo-grid-column
+              *ngIf="showLunch"
+              title="Lunch Out"
+              field="lunch_out"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <!-- <span style="float: right" *ngIf="dataItem.lunch_out !== null">
+                  {{ dataItem.lunch_out }}
+                </span> -->
+                <ng-container *ngIf="dataItem.lunch_out !== '00:00'">
+                  <span style="float: right" *ngIf="timeFormat == '12'">{{
+                    dataItem.lunch_out !== null
+                      ? (dataItem.date + " " + dataItem.lunch_out
+                        | date: "shortTime")
+                      : null
+                  }}</span>
+                  <span style="float: right" *ngIf="timeFormat == '24'">{{
+                    dataItem.lunch_out !== null
+                      ? (dataItem.date + " " + dataItem.lunch_out
+                        | date: "HH:mm")
+                      : null
+                  }}</span>
+                </ng-container>
+                <ng-container *ngIf="dataItem.lunch_out == '00:00'">
+                  <p style="float: right">{{ dataItem.lunch_out }}</p>
+                </ng-container>
+                <span
+                  style="font-style: italic; color: red; float: right"
+                  *ngIf="dataItem.lunch_out == null"
+                  >(not set)</span
+                >
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Lunch In -->
+            <kendo-grid-column
+              *ngIf="showLunch"
+              title="Lunch In"
+              field="lunch_in"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <!-- <span style="float: right" *ngIf="dataItem.lunch_in !== null">
+                  {{ dataItem.lunch_in }}
+                </span> -->
+                <ng-container *ngIf="dataItem.lunch_in !== '00:00'">
+                  <span style="float: right" *ngIf="timeFormat == '12'">{{
+                    dataItem.lunch_in !== null
+                      ? (dataItem.date + " " + dataItem.lunch_in
+                        | date: "shortTime")
+                      : null
+                  }}</span>
+                  <span style="float: right" *ngIf="timeFormat == '24'">{{
+                    dataItem.lunch_in !== null
+                      ? (dataItem.date + " " + dataItem.lunch_in
+                        | date: "HH:mm")
+                      : null
+                  }}</span>
+                </ng-container>
+                <ng-container *ngIf="dataItem.lunch_in == '00:00'">
+                  <p style="float: right">
+                    {{ dataItem.lunch_in }}
+                  </p>
+                </ng-container>
+                <span
+                  style="font-style: italic; color: red; float: right"
+                  *ngIf="dataItem.lunch_in == null"
+                  >(not set)</span
+                >
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Time Out -->
+            <kendo-grid-column
+              title="Time Out"
+              field="time_out"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <!-- <p style="float: right">
+                  {{ dataItem.time_out }}
+                </p> -->
+                <ng-container *ngIf="dataItem.time_out !== '00:00'">
+                  <span style="float: right" *ngIf="timeFormat == '12'">{{
+                    dataItem.time_out !== null
+                      ? (dataItem.date + " " + dataItem.time_out
+                        | date: "shortTime")
+                      : null
+                  }}</span>
+                  <span style="float: right" *ngIf="timeFormat == '24'">{{
+                    dataItem.time_out !== null
+                      ? (dataItem.date + " " + dataItem.time_out
+                        | date: "HH:mm")
+                      : null
+                  }}</span>
+                </ng-container>
+                <ng-container *ngIf="dataItem.time_out == '00:00'">
+                  <p style="float: right">
+                    {{ dataItem.time_out }}
+                  </p>
+                </ng-container>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Total Time -->
+            <kendo-grid-column
+              title="Total Time"
+              field="total_time "
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p style="float: right">{{ dataItem.total_time }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Lunch Time -->
+            <kendo-grid-column
+              *ngIf="showLunch"
+              title="Lunch "
+              field="lunch_time"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p style="float: right">{{ dataItem.lunch_time }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column
+              *ngIf="showLunch"
+              title="Grand Total"
+              field="grand_total"
+              [width]="70"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p style="float: right">{{ dataItem.grand_total }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Action Force Change button -->
+            <kendo-grid-column title="Action" [width]="80">
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <ng-container *ngIf="authService.currentUserRoleValue !== 'staff'">
+                  <a
+                    tooltip="Force Change"
+                    class="btn"
+                    (click)="
+                      openForceChangeDaily(ForceChangeDailyRef, dataItem)
+                    "
+                  >
+                    <i style="color: rgb(212, 140, 7)" class="fa fa-edit"></i>
+                  </a>
+                </ng-container>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- to get the data inside + button -->
+            <ng-template kendoGridDetailTemplate let-dataItem="dataItem">
+              <section>
+                <app-monthly-report-details
+                  [details]="dataItem"
+                  [userId]="dataItem.staff_id"
+                  [clientId]="this.reportForm.value.client_id"
+                  [dateFormat]="this.datePickerConfig.dateInputFormat"
+                  (onSubmit)="showDailyReport($event)"
+                  [timeFormat]="timeFormat"
+                ></app-monthly-report-details>
+              </section>
+            </ng-template>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+
+    <!--Kendo table for Daily Grace Report  -->
+    <div *ngIf="viewGraceDaily">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <b>
+              <i class="fa fa-hourglass mr-2" aria-hidden="true"></i>
+
+              View Daily Grace Report</b
+            >
+          </h3>
+        </div>
+        <div class="panel-body">
+          <!-- Export Button Daily Grace -->
+          <div class="flex-content">
+            <div class="flex-item mb-3">
+              <button
+                class="btn btn-secondary"
+                (click)="exportDailyGraceReport()"
+                appFormSubmitValidationMsg
+                [validationControl]="reportForm"
+              >
+                <i class="fa fa-excel mr-2" aria-hidden="true"></i>
+
+                <strong> Export Report</strong>
+              </button>
+            </div>
+          </div>
+
+          <kendo-grid
+            [data]="gridViewDailyReport"
+            [resizable]="true"
+            [rowClass]="rowDailyCallback"
+            [pageSize]="limit"
+            [skip]="skip"
+            [pageable]="
+              gridViewDailyReport
+                ? gridViewDailyReport.total <= pageLimit
+                  ? false
+                  : true
+                : false
+            "
+            [filterable]="false"
+            [loading]="loading"
+            (dataStateChange)="dataStateChangeDaily($event)"
+          >
+            <!-- S.N. -->
+            <kendo-grid-column
+              title="S.N"
+              width="60"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                <p style="float: right">{{ rowIndex + 1 }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Department -->
+            <kendo-grid-column
+              *ngIf="showDepartment"
+              title="Department"
+              field="department"
+              [width]="75"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+
+            <!-- Emp Id -->
+            <kendo-grid-column
+              *ngIf="showEmpId"
+              title="EE ID"
+              field="emp_id"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p style="float: right">{{ dataItem.emp_id }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Employee Name -->
+            <kendo-grid-column
+              title="Name"
+              field="name"
+              [width]="100"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+
+            <!-- Date -->
+            <kendo-grid-column
+              title="Date"
+              field="date"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+              [width]="90"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <ng-container *ngIf="datePickerFormat == 'E'">
+                  <p
+                  *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'"
+                  style="float: right"
+                >
+                  {{ dataItem.date | date: "MM/dd/yyyy" }}
+                </p>
+                <p
+                  *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'"
+                  style="float: right"
+                >
+                  {{ dataItem.date | date: "yyyy/MM/dd" }}
+                </p>
+                 </ng-container>
+
+                 <ng-container *ngIf="datePickerFormat == 'N'" >
+                  <p
+                  style="float: right"
+                >
+
+                  {{ dataItem.date |nepaliDatePipe:this.datePickerConfig.dateInputFormat }}
+                </p>
+                 </ng-container>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Day -->
+            <kendo-grid-column
+              title="Day"
+              field="in"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p>{{ dataItem.date | dayPipe: dateSetting.GS_DATE }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Time in -->
+            <kendo-grid-column
+              title="Time In"
+              field="time_in"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <ng-container *ngIf="dataItem.time_in !== '00:00'">
+                  <span style="float: right" *ngIf="timeFormat == '12'">{{
+                    dataItem.time_in !== null
+                      ? (dataItem.date + " " + dataItem.time_in
+                        | date: "shortTime")
+                      : null
+                  }}</span>
+                  <span style="float: right" *ngIf="timeFormat == '24'">{{
+                    dataItem.time_in !== null
+                      ? (dataItem.date + " " + dataItem.time_in | date: "HH:mm")
+                      : null
+                  }}</span>
+                </ng-container>
+                <ng-container *ngIf="dataItem.time_in == '00:00'">
+                  <p style="float: right">
+                    {{ dataItem.time_in }}
+                  </p>
+                </ng-container>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Lunch Out -->
+            <kendo-grid-column
+              *ngIf="showLunch"
+              title="Lunch Out"
+              field="lunch_out"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <!-- <span style="float: right" *ngIf="dataItem.lunch_out !== null">
+                  {{ dataItem.lunch_out }}
+                </span> -->
+                <ng-container *ngIf="dataItem.lunch_out !== '00:00'">
+                  <span style="float: right" *ngIf="timeFormat == '12'">{{
+                    dataItem.lunch_out !== null
+                      ? (dataItem.date + " " + dataItem.lunch_out
+                        | date: "shortTime")
+                      : null
+                  }}</span>
+                  <span style="float: right" *ngIf="timeFormat == '24'">{{
+                    dataItem.lunch_out !== null
+                      ? (dataItem.date + " " + dataItem.lunch_out
+                        | date: "HH:mm")
+                      : null
+                  }}</span>
+                </ng-container>
+                <ng-container *ngIf="dataItem.lunch_out == '00:00'">
+                  <p style="float: right">
+                    {{ dataItem.lunch_out }}
+                  </p>
+                </ng-container>
+                <span
+                  style="font-style: italic; color: red; float: right"
+                  *ngIf="dataItem.lunch_out == null"
+                  >(not set)</span
+                >
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Lunch In -->
+            <kendo-grid-column
+              *ngIf="showLunch"
+              title="Lunch In"
+              field="lunch_in"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <!-- <span style="float: right" *ngIf="dataItem.lunch_in !== null">
+                  {{ dataItem.lunch_in }}
+                </span> -->
+                <ng-container *ngIf="dataItem.lunch_in !== '00:00'">
+                  <span style="float: right" *ngIf="timeFormat == '12'">{{
+                    dataItem.lunch_in !== null
+                      ? (dataItem.date + " " + dataItem.lunch_in
+                        | date: "shortTime")
+                      : null
+                  }}</span>
+                  <span style="float: right" *ngIf="timeFormat == '24'">{{
+                    dataItem.lunch_in !== null
+                      ? (dataItem.date + " " + dataItem.lunch_in
+                        | date: "HH:mm")
+                      : null
+                  }}</span>
+                </ng-container>
+                <ng-container *ngIf="dataItem.lunch_in == '00:00'">
+                  <p style="float: right">
+                    {{ dataItem.lunch_in }}
+                  </p>
+                </ng-container>
+                <span
+                  style="font-style: italic; color: red; float: right"
+                  *ngIf="dataItem.lunch_in == null"
+                  >(not set)</span
+                >
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Time Out -->
+            <kendo-grid-column
+              title="Time Out"
+              field="time_out "
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <!-- <p style="float: right">
+                  {{ dataItem.time_out }}
+                </p> -->
+                <ng-container *ngIf="dataItem.time_out !== '00:00'">
+                  <span style="float: right" *ngIf="timeFormat == '12'">{{
+                    dataItem.time_out !== null
+                      ? (dataItem.date + " " + dataItem.time_out
+                        | date: "shortTime")
+                      : null
+                  }}</span>
+                  <span style="float: right" *ngIf="timeFormat == '24'">{{
+                    dataItem.time_out !== null
+                      ? (dataItem.date + " " + dataItem.time_out
+                        | date: "HH:mm")
+                      : null
+                  }}</span>
+                </ng-container>
+                <ng-container *ngIf="dataItem.time_out == '00:00'">
+                  <p style="float: right">
+                    {{ dataItem.time_out }}
+                  </p>
+                </ng-container>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Total Time -->
+            <kendo-grid-column
+              title="Total Time"
+              field="total_time "
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p style="float: right">{{ dataItem.total_time }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Lunch Time -->
+            <kendo-grid-column
+              *ngIf="showLunch"
+              title="Lunch "
+              field="lunch_time"
+              [width]="70"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p style="float: right">{{ dataItem.lunch_time }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column
+              *ngIf="showLunch"
+              title="Grand Total"
+              field="grand_total"
+              [width]="70"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p style="float: right">{{ dataItem.grand_total }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- Action Force Change button -->
+            <kendo-grid-column title="Action" [width]="80">
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <ng-container *ngIf="authService.currentUserRoleValue !== 'staff'">
+                  <a
+                    tooltip="Force Change"
+                    class="btn"
+                    (click)="
+                      openForceChangeDaily(ForceChangeDailyRef, dataItem)
+                    "
+                  >
+                    <i style="color: rgb(212, 140, 7)" class="fa fa-edit"></i>
+                  </a>
+                </ng-container>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- to get the data inside + button -->
+            <ng-template kendoGridDetailTemplate let-dataItem="dataItem">
+              <section>
+                <app-monthly-report-details
+                  [details]="dataItem"
+                  [userId]="dataItem.staff_id"
+                  [clientId]="this.reportForm.value.client_id"
+                  [dateFormat]="this.datePickerConfig.dateInputFormat"
+                  (onSubmit)="addItem($event)"
+                  [timeFormat]="timeFormat"
+                ></app-monthly-report-details>
+              </section>
+            </ng-template>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive text-nowrap" style="margin-top: 20px">
+      <table class="table border">
+        <thead>
+          <tr>
+            <th scope="col">Color</th>
+            <th style="background-color: #fff"></th>
+            <th style="background-color: rgba(123, 240, 154, 0.68)"></th>
+            <th style="background-color: #9bc4db"></th>
+            <th style="background-color: rgb(253, 210, 207)"></th>
+            <th style="background-color: rgb(248 219 112 / 75%)"></th>
+            <th scope="col">NS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Notification</th>
+            <td>Holiday</td>
+            <td>Meet Work Hrs</td>
+            <td>Weekend</td>
+            <td>Absent</td>
+            <td>Empty Checkout</td>
+            <td>Not Set</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="role == 'staff'">
+  <app-userwise-monthly-report></app-userwise-monthly-report>
+</div>
+
+<!-- Add Attendance Modal -->
+<ng-template #addAttendanceModal>
+  <form [formGroup]="addAttendanceForm">
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">Add Attendance</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="client">Client</label>
+            <ng-select
+              appearance="outline"
+              #agreeSelect
+              labelForId="client"
+              [searchable]="true"
+              formControlName="client_id"
+              placeholder="Select Client"
+              appFormControlValidationMsg
+              (change)="addAttendanceClientChange()"
+            >
+              <ng-option
+                *ngFor="let item of clientList"
+                [value]="item.client_id"
+                >{{ item.name }}</ng-option
+              >
+            </ng-select>
+          </div>
+
+          <div class="form-group">
+            <label for="user">User</label>
+            <ng-select
+              appearance="outline"
+              #agreeSelect
+              labelForId="user"
+              [multiple]="true"
+              [searchable]="true"
+              formControlName="user_id"
+              placeholder="Select User"
+            >
+              <ng-option *ngFor="let item of staffLists" [value]="item.user_id">
+                {{ item.emp_id }} - {{ item.last_name
+                }}{{&nbsp;item.middle_name}}&nbsp;{{ item.first_name }} -
+                {{ item.username }}
+              </ng-option>
+              <!-- <ng-option value="">Search User</ng-option> -->
+              <ng-template ng-header-tmp>
+                <div>
+                  <button class="btn btn-link" (click)="onSelectAll()">
+                    Select All
+                  </button>
+                  <button class="btn btn-link" (click)="onClearAll()">
+                    Clear All
+                  </button>
+                </div>
+              </ng-template>
+              <!-- <ng-option
+                *ngFor="let staff of staffLists"
+                [value]="staff.user_id"
+              >
+                {{ staff.first_name
+                }}<span *ngIf="staff.username">({{ staff.username }}) </span>
+              </ng-option> -->
+              >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input
+                  style="margin-right: 15px"
+                  type="checkbox"
+                  name="check"
+                  id="optionsRadios1"
+                  value="option1"
+                  formControlName="check"
+                  (change)="onCheckInChange()"
+                />
+                Entry Time (Checkin, Checkout)
+              </label>
+            </div>
+            <!-- english date picker -->
+            <!-- <div *ngIf="dateSetting.GS_DATE == 'E'">
+              <input
+                type="text"
+                class="form-control"
+                id="input123"
+                name="input123"
+                bsDatepicker
+                autocomplete="off"
+                formControlName="checkin_datetime"
+                [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+              />
+            </div> -->
+            <!-- nepali date-picker -->
+            <!-- <div *ngIf="dateSetting.GS_DATE == 'N'">
+              <np-datepicker
+                inputClass="form-control"
+                language="en"
+                formControlName="checkin_datetime"
+
+                [dateFormatter]="dateFormatter"
+              ></np-datepicker>
+            </div> -->
+          </div>
+
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input
+                  style="margin-right: 15px"
+                  type="checkbox"
+                  name="lunch"
+                  id="optionsRadios2"
+                  value="option2"
+                  formControlName="lunch"
+                  (change)="onLunchChange($event.target.checked)"
+                />
+                Entry Time (Lunchout, Lunchin)
+              </label>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-md-6" *ngIf="dateSetting.GS_DATE == 'N'">
+          <div class="form-group">
+            <label for="input12">CheckIn Time</label>
+
+            <div>
+              <kendo-timepicker
+                [format]="'HH:mm'"
+                formControlName="checkin_time"
+                id="kendo-time-picker"
+              >
+              </kendo-timepicker>
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group" *ngIf="addAttendanceForm.value.check">
+            <label for="input1234">Checkin Date Time</label>
+            <!-- <input
+              type="datetime-local"
+              style="width: 100%"
+              formControlName="checkin_datetime"
+              appFormControlValidationMsg
+            /> -->
+
+             <!-- custom datetimelocal picker created by roshan  starts here  -->
+            <app-custom-datetimelocal-picker [controlName]="'checkin_datetime'"  [formGroup]="addAttendanceForm"  [datepickerSetting]="customDateTimeLocalPickerSettingsForCheckIn" (valueOnChanges)="onCheckInValue($event)"></app-custom-datetimelocal-picker>
+              <!-- custom datetimelocal picker ends here  -->
+
+
+            <!-- english date picker -->
+            <!-- <div *ngIf="dateSetting.GS_DATE == 'E'">
+              <input
+                type="text"
+                class="form-control"
+                id="input1234"
+                name="englishDatePicker"
+                bsDatepicker
+                autocomplete="off"
+                formControlName="checkout_datetime"
+                [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+              />
+            </div> -->
+            <!-- nepali date-picker -->
+            <!-- <div *ngIf="dateSetting.GS_DATE == 'N'">
+              <np-datepicker
+                inputClass="form-control"
+                language="en"
+                formControlName="checkout_datetime"
+                [dateFormatter]="dateFormatter"
+              ></np-datepicker>
+            </div> -->
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group" *ngIf="addAttendanceForm.value.check">
+            <label>Checkout Date Time</label>
+            <!-- <input
+              type="datetime-local"
+              style="width: 100%"
+              formControlName="checkout_datetime"
+              appFormControlValidationMsg
+            /> -->
+            <app-custom-datetimelocal-picker [controlName]="'checkout_datetime'" [formGroup]="addAttendanceForm"  [datepickerSetting]="customDateTimeLocalPickerSettingsForCheckOut" (valueOnChanges)="checkoutValueChange($event)"></app-custom-datetimelocal-picker>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-6" *ngIf="dateSetting.GS_DATE == 'N'">
+          <div class="form-group">
+            <label for="input12">CheckOut Time</label>
+
+            <div>
+              <kendo-timepicker
+                [format]="'HH:mm'"
+                formControlName="checkout_time"
+                id="kendo-time-picker"
+              >
+              </kendo-timepicker>
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group" *ngIf="addAttendanceForm.value.lunch">
+            <label>Lunchout Date Time</label>
+            <!-- <input
+              type="datetime-local"
+              style="width: 100%"
+              formControlName="lunchout_datetime"
+            /> -->
+            <app-custom-datetimelocal-picker [controlName]="'lunchout_datetime'" [formGroup]="addAttendanceForm"  [datepickerSetting]="customDateTimeLocalPickerSettingsForLunchOut" (valueOnChanges)="onLunchOutValue($event)"></app-custom-datetimelocal-picker>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group" *ngIf="addAttendanceForm.value.lunch">
+            <label for="input1234">Lunchin Date Time</label>
+            <!-- <input
+              type="datetime-local"
+              style="width: 100%"
+              formControlName="lunchin_datetime"
+            /> -->
+
+            <app-custom-datetimelocal-picker [controlName]="'lunchin_datetime'" [formGroup]="addAttendanceForm"  [datepickerSetting]="customDateTimeLocalPickerSettingsForLunchIn" ></app-custom-datetimelocal-picker>
+
+            <!-- english date picker -->
+            <!-- <div *ngIf="dateSetting.GS_DATE == 'E'">
+              <input
+                type="text"
+                class="form-control"
+                id="input1234"
+                name="englishDatePicker"
+                bsDatepicker
+                autocomplete="off"
+                formControlName="checkout_datetime"
+                [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+              />
+            </div> -->
+            <!-- nepali date-picker -->
+            <!-- <div *ngIf="dateSetting.GS_DATE == 'N'">
+              <np-datepicker
+                inputClass="form-control"
+                language="en"
+                formControlName="checkout_datetime"
+                [dateFormatter]="dateFormatter"
+              ></np-datepicker>
+            </div> -->
+          </div>
+        </div>
+
+        <!-- <div class="col-md-6" *ngIf="dateSetting.GS_DATE == 'N'">
+          <div class="form-group">
+            <label for="input12">CheckOut Time</label>
+
+            <div>
+              <kendo-timepicker
+                [format]="'HH:mm'"
+                formControlName="checkout_time"
+                id="kendo-time-picker"
+              >
+              </kendo-timepicker>
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="message11">Message</label>
+            <textarea
+              class="form-control rounded-0"
+              id="message11"
+              rows="3"
+              name="message"
+              formControlName="checkin_message"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- modal body -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-success btn-oval"
+        (click)="onSubmitAttendance()"
+        type="submit"
+        [validationControl]="addAttendanceForm"
+        appFormSubmitValidationMsg
+      >
+        <b>Submit</b>
+                </button>
+        </div>
+        </form>
+        </ng-template>
+
+        <!-- Force change Monthly button modal in table -->
+        <ng-template #ForceChangesRef>
+            <div class="modal-header">
+                <h3 class="modal-title pull-left">Force Change</h3>
+
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="forceChangesForm">
+                    <kendo-grid [data]="forceChangeValue.value" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [pageable]="false" [sortable]="true">
+                        <kendo-grid-column title="Time" [width]="180">
+                            <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <span *ngIf="dataItem.status == 'Check In'">
+                  <label>{{ dataItem.status }}</label>
+                </span>
+                                        <span *ngIf="dataItem.status == 'Lunch In'">
+                  <label>Lunch Out</label>
+                </span>
+                                        <!-- [max]="this.forceChangeValue.controls[rowIndex].get('in_datetime').value" -->
+                                        <input type="datetime-local" style="width: 100%" [formControl]="
+                    forceChangeValue.controls[rowIndex].get('in_datetime')
+                  " [min]="this.forceChangeValue.controls[rowIndex].get('in_datetime').value" />
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column title="Time" field="checkout_time" [width]="180">
+                            <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <span *ngIf="dataItem.status_out == 'Check Out'">
+                  <label>{{ dataItem.status_out }}</label>
+                </span>
+                                        <span *ngIf="dataItem.status_out == 'Lunch Out'">
+                  <label>Lunch In</label>
+                </span>
+                                        <!-- [max]="this.forceChangeValue.controls[rowIndex].get('in_datetime').value" -->
+                                        <input type="datetime-local" style="width: 100%" [formControl]="
+                    forceChangeValue.controls[rowIndex].get('out_datetime')
+                  " (change)="onForceChangeValidate(rowIndex,'monthly')" [min]="this.forceChangeValue.controls[rowIndex].get('in_datetime').value" />
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+                <button class="btn btn-success btn-oval" type="submit" (click)="forceChangeSubmit()">
+      <b>Submit</b>
+    </button>
+            </div>
+        </ng-template>
+
+        <!-- Force change Daily button modal in table -->
+        <ng-template #ForceChangeDailyRef>
+            <div class="modal-header">
+                <h3 class="modal-title pull-left">Force Change</h3>
+
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <kendo-grid [data]="forceChangeDailyValue.value" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [pageable]="false" [sortable]="true">
+                        <kendo-grid-column title="Time" [width]="180">
+                            <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <span *ngIf="dataItem.status == 'Check In'">
+                  <label>{{ dataItem.status }}</label>
+                </span>
+                                        <span *ngIf="dataItem.status == 'Lunch In'">
+                  <label>Lunch Out</label>
+                </span>
+                                        <!-- [max]="forceChangeDailyValue.controls[rowIndex].get('in_datetime').value" -->
+                                        <input type="datetime-local" style="width: 100%" [formControl]="
+                    forceChangeDailyValue.controls[rowIndex].get('in_datetime')" [min]="forceChangeDailyValue.controls[rowIndex].get('in_datetime').value" />
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column title="Time" field="checkout_time" [width]="180">
+                            <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <span *ngIf="dataItem.status_out == 'Check Out'">
+                  <label>{{ dataItem.status_out }}</label>
+                </span>
+                                        <span *ngIf="dataItem.status_out == 'Lunch Out'">
+                  <label>Lunch In</label>
+                </span>
+                                        <!-- [max]="forceChangeDailyValue.controls[rowIndex].get('in_datetime').value" -->
+                                        <input type="datetime-local" style="width: 100%" [formControl]="
+                    forceChangeDailyValue.controls[rowIndex].get('out_datetime')
+                  " (change)="onForceChangeValidate(rowIndex,'daily')" [min]="forceChangeDailyValue.controls[rowIndex].get('in_datetime').value" />
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+                <button class="btn btn-success btn-oval" type="submit" (click)="forceChangeSubmitDaily()">
+      <b>Submit</b>
+    </button>
+            </div>
+            <!-- </ng-template>
+        =======
+        </div> -->
+        </ng-template>

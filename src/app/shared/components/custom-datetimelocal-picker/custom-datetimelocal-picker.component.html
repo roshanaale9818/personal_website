@@ -1,0 +1,4 @@
+<form [formGroup]="form">
+    <input style="padding: 6px 12px;" type="datetime-local" [style.width]="datepickerSetting.width ? datepickerSetting.width:null" [placeholder]="datepickerSetting.placeholder" [formControlName]='controlName' [id]="datepickerSetting.id" [min]="datepickerSetting.minDate"
+        [max]="datepickerSetting.maxDate" (change)="onChange($event.target.value)">
+</form>

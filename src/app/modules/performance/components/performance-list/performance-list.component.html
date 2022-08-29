@@ -1,0 +1,190 @@
+<div class="panel panel-primary mt-4">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <b>
+      <i class="fa fa-rocket" aria-hidden="true"></i>
+      View Employees List </b>
+        </h3>
+    </div>
+    <div class="panel-body">
+        <div style="padding: 5px">
+            <!-- <div class="btn-wrap">
+
+            </div> -->
+            <button class="btn btn-success btn-oval mr-2" (click)="onCreateModalShow(addPerformanceModal)">
+              <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+                Create Performance
+              </button>
+            <button class="btn btn-default btn-oval" type="buton" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" arial-controls="collapseEvent">
+      <b><i class="fa fa-search"></i>&nbsp;&nbsp;{{ collapseButton }}</b>
+            </button>
+            <!-- <ng-container *ngIf="companyId == 1 || companyId =='1'">
+                <button class="btn btn-default btn-ova ml-3" (click)="openWFHModal(workFromHomeModal)" tooltip="Work From Home">
+      <b><i class="fa fa-map-pin"></i>&nbsp;Bulk Edit WFH</b>
+    </button>
+            </ng-container> -->
+
+            <div id="collapseEvent" [isAnimated]="true" [collapse]="isCollapsed" (collapsed)="collapsed()" (expanded)="expanded()">
+                <div class="well mt-4">
+                    <form [formGroup]="searchForm">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="staff">Employee Name</label>
+                                    <ng-select [appendTo]="'body'" [dropdownPosition]="'bottom'" (change)="changeEmp()" [searchable]="true" placeholder="Select Employee" formControlName="staff_id">
+                                        <ng-option value="" selected>Select Employee</ng-option>
+                                        <ng-option *ngFor="let list of staffList" [value]="list.staff_id">
+                                            {{ list.emp_id }} - {{ list.last_name }}&nbsp;{{ list.middle_name ? list.middle_name : "" }}&nbsp;{{ list.first_name }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <!-- User Name -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="user">User Name</label>
+                                    <ng-select [appendTo]="'body'" [dropdownPosition]="'bottom'" (change)="changeEmp()" [searchable]="true" formControlName="username">
+                                        <ng-option value="" selected>Select Username</ng-option>
+                                        <ng-option *ngFor="let list of userLists" [value]="list.username">
+                                            {{ list.username }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Buttons -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <button class="btn btn-success  btn-oval" type="button" (click)="onSearchStaff()">
+                  <b><i class="fa fa-search"></i></b>&nbsp;Search
+                </button>
+                                    <button class="btn btn-danger  btn-oval ml-3" type="button" (click)="onCancel()">
+                  <b><i class="fa fa-remove"></i></b>&nbsp;Clear
+                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="active" class="tab-pane fade in active">
+
+            <div class="box-body">
+
+                <kendo-grid [data]="performanceList" [resizable]="true" [pageSize]="limit" [loading]="listLoading" [skip]="skip" [pageable]="
+          performanceList ? (performanceList.total <= pageLimit ? false : true) : false" [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" (dataStateChange)="dataStateChange($event)">
+                    <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="50" [minResizableWidth]="30">
+                        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                            <p>{{ rowIndex + 1 }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Full Name" field="first_name" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="250">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <div class="flex-container cursor-pointer">
+                                <div class="flex-item">
+                                    <ngx-avatar size="40" name="{{ dataItem?.first_name }}"></ngx-avatar>
+                                </div>
+                                <div class="flex-item">
+                                    <!-- {{ dataItem.emp_id }} - {{dataItem.first_name |name :dataItem.last_name:dataItem.middle_name}} -->
+                                    John Doe
+
+                                </div>
+                            </div>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="User Name" field="username" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="180"></kendo-grid-column>
+                    <!-- //work from home option only for bentray -->
+                    <!-- <ng-container *ngIf="companyId == 1 || companyId == '1'">
+                        <kendo-grid-column title="Work From Home" [headerStyle]="{ 'font-weight': 'bold' }" [filterable]="false" field="wfh" [width]="120">
+                            <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                                <kendo-switch [checked]="dataItem.wfh == '1' ? true : false" [offLabel]="' '" [onLabel]="' '" (valueChange)="changeWFH($event, dataItem)"></kendo-switch>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </ng-container> -->
+                    <!-- <kendo-grid-column title="Status" [headerStyle]="{ 'font-weight': 'bold' }" [filterable]="false" field="status" [width]="100">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                            <kendo-switch [checked]="dataItem.status == '10' ? true : false" [offLabel]="' '" [onLabel]="' '" (valueChange)="changeStatus($event, dataItem)"></kendo-switch>
+                        </ng-template>
+                    </kendo-grid-column> -->
+                    <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- <a type="button" class="btn" [popover]="popTemplate" [popoverContext]="context" [outsideClick]="true" (click)="setData(dataItem)">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </a> -->
+                        </ng-template>
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<ng-template #addPerformanceModal>
+    <form [formGroup]="addPerformanceForm">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">Create Performance</h4>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="staff">Employee Name <sup>*</sup></label>
+                        <ng-select [appendTo]="'body'" [dropdownPosition]="'bottom'" [searchable]="true" placeholder="Select Employee" formControlName="user_id">
+                            <ng-option value="" selected>Select User</ng-option>
+                            <ng-option *ngFor="let list of staffList" [value]="list.staff_id">
+                                {{ list.emp_id }} - {{ list.last_name }}&nbsp;{{ list.middle_name ? list.middle_name : "" }}&nbsp;{{ list.first_name }}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="datefrom">Date From <sup>*</sup></label>
+                        <ng-container *ngIf="datePickerFormat == 'E'">
+                            <input name="datefrom" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" formControlName="from_date" bsDatepicker />
+
+                        </ng-container>
+                        <ng-container *ngIf="datePickerFormat == 'N'">
+                            <nepali-date-picker name="nepaliDateFrom" [id]="'nepaliDatefrom'" (change)="changeDate($event.detail.value, 'dateFrom')" [label]="this.datePickerConfig.dateInputFormat" formControlName="from_date" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDateFrom">
+                            </nepali-date-picker>
+                        </ng-container>
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="Date To">Date To<sup>*</sup></label>
+                        <ng-container *ngIf="datePickerFormat == 'E'">
+                            <input name="dateTo" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfigForTo" [placement]="'bottom'" formControlName="to_date" bsDatepicker />
+
+                        </ng-container>
+                        <ng-container *ngIf="datePickerFormat == 'N'">
+                            <nepali-date-picker name="nepaliDateTo" [id]="'nepaliDateTo'" (change)="changeDate($event.detail.value, 'dateTo')" [label]="this.datePickerConfig.dateInputFormat" formControlName="to_date" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDateTo"
+                                [disableBefore]="disableBefore">
+                            </nepali-date-picker>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+            <button [disabled]="disabled" class="btn btn-success" (click)="onSavePerformance()">Submit</button>
+        </div>
+    </form>
+</ng-template>

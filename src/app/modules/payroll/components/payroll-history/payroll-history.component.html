@@ -1,0 +1,793 @@
+<div class="box box-default box-shadow">
+    <div class="panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <b><i class="fa fa-money mr-3"></i>Payroll History
+          <!-- <span *ngIf="staffName !== null && staffName !== undefined">
+            ({{ staffName }})
+          </span> -->
+          <span *ngIf="staff_name !== null && staff_name !== undefined">
+            ({{ staff_name }})
+          </span>
+        </b>
+            </h3>
+        </div>
+        <div class="panel-body">
+
+            <div class="box-body">
+                <!-- [formGroup]="payrollHistoryForm" (submit)="onViewClicked()" -->
+                <form [formGroup]="payrollHistoryForm">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="month">Month<sup>*</sup></label>
+                                <ng-container *ngIf="this.datePickerFormat == 'E'">
+                                    <select class="form-control" id="month1" formControlName="month" (change)="getFirstAndLastDayOfMonth($event.target.value)">
+                                  <option value="">Select Month</option>
+                                  <option *ngFor="let month of monthType" value="{{ month.value }}">
+                                    {{ month.month }}
+                                  </option>
+                                </select>
+                                </ng-container>
+                                <ng-container *ngIf="this.datePickerFormat == 'N'">
+                                    <select class="form-control" id="month2" formControlName="month" (change)="onNepaliMonthChange($event.target.value)">
+                                    <option value="">Select Month</option>
+                                    <option *ngFor="let month of nepaliMonths"[value]="month.value">
+                                      {{ month.month }}
+                                    </option>
+                                  </select>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="month1">Date From</label>
+                                <!-- english date picker starts here  -->
+                                <ng-container *ngIf="this.datePickerFormat == 'E'">
+                                    <input name="yearFrom" type="text" formControlName="englishDateFrom" class="form-control" [bsConfig]="datePickerConfig" name="dateFrom" id="dateFrom" (ngModelChange)="onDateFromChange($event)" bsDatepicker />
+                                </ng-container>
+                                <!-- english date picker ends here  -->
+
+                                <!-- nepali date picker starts here  -->
+                                <ng-container *ngIf="this.datePickerFormat == 'N'">
+                                    <nepali-date-picker name="nepaliDateFrom" #nepalifrom [id]="'nepaliDatefrom'" (change)="changeDate($event.detail.value, 'dateFrom')" [label]="this.datePickerConfig.dateInputFormat" formControlName="nepaliDateFrom" [nepaliDatePickerSettings]="
+                      nepaliDatePickerSettingsForDateFrom
+                    ">
+                                    </nepali-date-picker>
+                                    <!-- <app-custom-nepalidatepicker [formGroup]="payrollHistoryForm" [controlName]="'nepaliDateFrom'" [customNepaliDatePickerSetting]="customNepaliDatePickerSettingForDateFrom" (valueOnChanges)="onSetNepaliDateFrom($event)"></app-custom-nepalidatepicker> -->
+                                </ng-container>
+                                <!-- nepali date picker ends here -->
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="month1">Date To</label>
+
+                                <!-- english datpicker starts here  -->
+                                <ng-container *ngIf="this.datePickerFormat == 'E'">
+                                    <input name="dateTo" formControlName="englishDateTo" type="text" class="form-control" [bsConfig]="datePickerConfigForTo" name="dateTo" id="dateTo" bsDatepicker />
+                                </ng-container>
+                                <!-- english date picker starts here  -->
+
+                                <!-- nepali date picker starts here  -->
+                                <ng-container *ngIf="this.datePickerFormat == 'N'">
+                                    <nepali-date-picker name="nepaliDateTo" #nepalito [id]="'nepaliDateTo'" (change)="changeDate($event.detail.value, 'BS')" [label]="this.datePickerConfig.dateInputFormat" formControlName="nepaliDateTo" [nepaliDatePickerSettings]="
+                      nepaliDatePickerSettingsForDateTo
+                    " [disableBefore]="disableBefore">
+                                    </nepali-date-picker>
+                                    <!-- <app-custom-nepalidatepicker [formGroup]="payrollHistoryForm" [controlName]="'nepaliDateTo'" [customNepaliDatePickerSetting]="customNepaliDatePickerSettingForDateTo" (valueOnChanges)="onSetNepaliDateTo($event)"> </app-custom-nepalidatepicker> -->
+                                </ng-container>
+                                <!-- nepali date picker ends here  -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-success btn-oval" type="submit" (click)="onViewClicked()">
+              <b>View</b>
+            </button>
+                    </div>
+                </div>
+            </div>
+            <div class="heading text center" *ngIf="staff_name">
+                <h2 class="text-center headingGroup"> Payroll from <span *ngIf="datePickerFormat == 'N'">
+            {{
+               this.payrollHistoryForm.get('nepaliDateFrom').value}}
+          </span>
+                    <span *ngIf="datePickerFormat =='E'">
+            {{this.payrollHistoryForm.get('englishDateFrom').value}}
+
+          </span> to
+                    <ng-container *ngIf="datePickerFormat == 'N'">
+                        {{this.payrollHistoryForm.get('nepaliDateTo').value}}
+                    </ng-container>
+                    <ng-container *ngIf="datePickerFormat =='E'">
+                        {{this.payrollHistoryForm.get('englishDateTo').value}}
+                    </ng-container>
+                    for {{staff_name}}</h2>
+            </div>
+            <div class="box-body">
+                <kendo-grid [data]="gridView" [rowClass]="rowCallBack" [resizable]="true" [pageSize]="limit" [loading]="listLoading" [skip]="skip" [pageable]="
+            gridView ? (gridView.total <= pageLimit ? false : true) : false
+          " [filterable]="false" [filter]="state.filter" [sortable]="true" [sort]="sort" [selectable]="false" (dataStateChange)="dataStateChange($event)">
+                    <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="40">
+                        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                            <p>{{ rowIndex + 1 }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Staff" [headerStyle]="{ 'font-weight': 'bold' }" [width]="100">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem ">
+                            <p>
+                                {{dataItem.emp_id}} - {{dataItem.first_name|name :dataItem.last_name:dataItem.middle_name}}
+                                <!-- {{ dataItem.first_name }} {{ dataItem.middle_name }} {{ dataItem.last_name }} -->
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Gross Salary" field="working_salary" [headerStyle]="{ 'font-weight': 'bold' }" [width]="120">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p class="text-right">
+                                {{ dataItem.working_salary | currency: " ":"symbol" }}
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <!-- <kendo-grid-column title="Salary Period" field="salary_period" [headerStyle]="{ 'font-weight': 'bold' }" [width]="100"></kendo-grid-column> -->
+                    <!-- <kendo-grid-column title="Start Date" field="start_date" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p *ngIf="datePickerFormat == 'N'">
+                                {{ dataItem.start_date | nepaliDatePipe:this.datePickerConfig.dateInputFormat}}
+                            </p>
+
+                            <p *ngIf="datePickerFormat == 'E'">
+                                {{ dataItem.start_date | customdateFormat:this.datePickerConfig.dateInputFormat}}
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="End Date" field="end_date" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p *ngIf="datePickerFormat == 'N'">
+                                {{ dataItem.end_date | nepaliDatePipe:this.datePickerConfig.dateInputFormat}}
+                            </p>
+
+                            <p *ngIf="datePickerFormat == 'E'">
+                                {{ dataItem.end_date | customdateFormat:this.datePickerConfig.dateInputFormat}}
+                            </p>
+                        </ng-template>
+
+                    </kendo-grid-column> -->
+                    <!-- <kendo-grid-column title="Net Salary" field="salary" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p class="text-right">
+                                {{ dataItem.salary | currency: " ":"symbol" }}
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column> -->
+                    <!-- <kendo-grid-column title="Working Salary" field="working_salary" [headerStyle]="{ 'font-weight': 'bold' }" [width]="100">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p class="text-right">
+                                {{ dataItem.working_salary | currency: " ":"symbol" }}
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column> -->
+
+                    <!-- addition starts here  -->
+                    <kendo-grid-column title="Addition" field="addition" [headerStyle]="{ 'font-weight': 'bold' }" [width]="90">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p class="text-right" *ngIf="dataItem.totalAddition">
+                                {{ dataItem.totalAddition | currency: " ":"symbol" }}
+                                <!-- <a class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'add')">
+                                    <i class="fa fa-edit"></i>
+                                </a> -->
+                            </p>
+                            <p class="text-right" *ngIf="!dataItem.totalAddition">
+                                {{ 00 | currency: " ":"symbol" }}
+                                <!-- <a class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'add')">
+                                    <i class="fa fa-edit"></i>
+                                </a> -->
+                            </p>
+
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- addition ends here  -->
+
+                    <!-- deductuon starts here  -->
+                    <kendo-grid-column title="Deduction" field="addition" [headerStyle]="{ 'font-weight': 'bold' }" [width]="90">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p class="text-right" *ngIf="dataItem.totalDeduction">
+                                {{ dataItem.totalDeduction | currency: " ":"symbol" }}
+                                <!-- <a class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'deduct')">
+                                    <i class="fa fa-edit"></i>
+                                </a> -->
+                            </p>
+                            <p class="text-right" *ngIf="!dataItem.totalDeduction">
+                                {{ 00 | currency: " ":"symbol" }}
+                                <!-- <a class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'deduct')">
+                                    <i class="fa fa-edit"></i>
+                                </a> -->
+                            </p>
+                            <!-- <a class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'deduct')">
+                      <i class="fa fa-edit"></i>
+                  </a> -->
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- deduction  ends here  -->
+                    <!-- <kendo-grid-column title="Gross Salary" field="gross_salary" [headerStyle]="{ 'font-weight': 'bold' }" [width]="100">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p class="text-right">
+                                {{ dataItem.gross_salary | currency: " ":"symbol" }}
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column> -->
+
+
+                    <kendo-grid-column title="Net Salary" field="working_salary" [headerStyle]="{ 'font-weight': 'bold' }" [width]="70">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p class="text-right">
+                                {{ dataItem.gross_salary | currency: " ":"symbol" }}
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Status" field="status" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p style="font-weight: bold" *ngIf="dataItem.status == 0">
+                                <span class="badge bg-red">Unpaid</span>
+                                <!-- <a class="btn badge bg-green-gradient ml-2" style="color:#fff;padding: 2px 5px 2px 5px;" (click)="onPayConfirmation(dataItem)">Pay
+                    </a> -->
+                            </p>
+                            <p class="ml-2" style="font-weight: bold" *ngIf="dataItem.status == 1">
+                                <span class="badge bg-green-gradient">Paid</span>
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- onOpenView -->
+                            <!-- (click)="onViewPaySlipDetail(dataItem)" -->
+                            <a tooltip="View" class="btn" (click)="onOpenView(viewDetailModal,dataItem)">
+                                <i class="fa fa-eye"></i
+              ></a>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<ng-template #viewDetailModal>
+  <!-- [formGroup]="updateAdvancedForm " -->
+  <form>
+      <div class="modal-header doNotPrint">
+          <h3 class="modal-title pull-left">Salary Sheet</h3>
+          <button type="button " class="close pull-right" aria-label="Close " (click)="modalRef.hide()">
+      <span aria-hidden="true ">&times;</span>
+    </button>
+      </div>
+      <div class="modal-body" id="print-section">
+          <!-- body starts here  -->
+
+           <!-- container slip starts here  -->
+
+           <div class="salaryslip">
+            <div class="header-content">
+                <div class="logo">
+                    <!-- <img src="../../../../../assets/images/logo.png" alt="logo"> -->
+                    <ng-container *ngIf="companyLogoObj?.company_logo">
+                        <img src="{{ imageUrl }}{{ companyLogoObj?.company_logo }}" />
+                    </ng-container>
+                    <ng-container *ngIf="!companyLogoObj?.company_logo">
+                        <img src="../../../../../assets/images/logo.png" />
+                    </ng-container>
+                </div>
+                <div class="location">
+                    <ng-container *ngIf="!this.companyInfo">
+                        Jwagal, Lalitpur
+                    </ng-container>
+                    <ng-container *ngIf="this.companyInfo">
+                        {{companyInfo[0].address}}
+                    </ng-container>
+                </div>
+                <div class="page-title">
+                    <h2>
+                        <b>Payslip</b>
+                    </h2>
+                </div>
+            </div>
+            <div class="top-details">
+                <div class="date-content">
+                    <div class="emp-num">Employee ID: <span>{{selectedPaySlip.staff_id}}</span></div>
+                    <div>
+                        Status:<span class="ml-2">
+
+                    <span style="font-weight: bold" *ngIf="selectedPaySlip.status == 0">
+                      <span class="badge bg-red">Unpaid</span>
+
+                        </span>
+                        <span class="ml-2" style="font-weight: bold" *ngIf="selectedPaySlip.status == 1">
+                        <span class="badge bg-green-gradient">Paid</span>
+                        </span>
+
+                        </span>
+                    </div>
+
+                    <div class="date">Date From:
+                        <span *ngIf="this.datePickerFormat == 'E'">
+          {{selectedPaySlip.start_date }}
+        </span>
+                        <span *ngIf="this.datePickerFormat == 'N'">{{selectedPaySlip.start_date | nepaliDatePipe:this.datePickerConfig.dateInputFormat}}
+
+      </span></div>
+
+                </div>
+
+                <div class="date-content">
+                    <div>Name: <span>{{selectedPaySlip.first_name}} {{selectedPaySlip.middle_name}}
+        {{selectedPaySlip.last_name}}</span></div>
+                    <div class="date">Date To:
+                        <span *ngIf="this.datePickerFormat == 'E'"> {{selectedPaySlip.end_date}}</span>
+                        <span *ngIf="this.datePickerFormat == 'N'">
+        {{selectedPaySlip.end_date |nepaliDatePipe:this.datePickerConfig.dateInputFormat}}</span></div>
+                </div>
+                <!-- <div class="bottomDiv">
+                    Salary Period:<span>
+  {{selectedPaySlip.salary_period}}
+</span>
+                </div> -->
+
+                <div class="bottomDiv">
+                    Month:<span *ngIf="this.datePickerFormat == 'E'">
+    {{this.payrollHistoryForm.get('month').value | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+  </span>
+                    <span *ngIf="this.datePickerFormat == 'N'">
+    {{this.payrollHistoryForm.get('month').value | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+  </span>
+                </div>
+
+            </div>
+            <div class="table-content">
+                <table>
+                    <tr>
+                        <th rowspan="2" class="number">S.N</th>
+                        <th rowspan="2" colspan="4">Particulars</th>
+                        <th colspan="1" rowspan="2" class="text-right">
+                            Amount
+                            <span *ngIf="currencyDetail">
+                           ({{currencyDetail.symbol}})
+                          </span>
+                            <span *ngIf="!currencyDetail">
+                            (Rs)
+                          </span> </th>
+                        <!-- <th colspan="1">Deductions</th> -->
+                    </tr>
+                    <tr>
+                        <!-- <th>
+                            <span *ngIf="currencyDetail">
+                            {{currencyDetail.symbol}}
+                          </span>
+                            <span *ngIf="!currencyDetail">
+                            Rs
+                          </span>
+                        </th> -->
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td colspan="4">Gross Salary</td>
+                        <td class="text-right pr_7" colspan="1">
+                            {{selectedPaySlip.working_salary | currency: " ":"symbol"}}
+                        </td>
+
+                    </tr>
+                    <!-- <tr>
+                        <td>2</td>
+                        <td colspan="4">Working Salary</td>
+                        <td class="text-right pr_7" style="font-style:bold;" colspan="1">
+                            <b>
+                              {{selectedPaySlip.working_salary | currency: " ":"symbol"}}
+                            </b>
+                        </td>
+
+                    </tr> -->
+
+                    <!-- <tr>
+                        <td>2</td>
+                        <td colspan="4">Allowance</td>
+                        <td class="text-right" colspan="1">
+                            {{selectedPaySlip.allowance | currency: " ":"symbol"}}
+                        </td>
+
+                    </tr> -->
+                    <!-- <tr>
+                        <td>3</td>
+                        <td colspan="4">Advance</td>
+                        <td class="text-right color-red pr_7" colspan="1">
+
+                            <span *ngIf="selectedPaySlip.bonus">
+
+                            ({{selectedPaySlip.bonus | currency: " ":"symbol"}})
+                          </span>
+                            <span *ngIf="!selectedPaySlip.bonus">
+
+                            ({{ 00| currency: " ":"symbol"}})
+                          </span>
+
+                        </td>
+
+                    </tr> -->
+
+                    <tr>
+                        <td>2</td>
+                        <td colspan="4">Tax</td>
+                        <td class="text-right color-red pr_7" colspan="1">
+                            <!-- - -->
+                            ( {{selectedPaySlip.total_tax | currency: " ":"symbol"}})
+                        </td>
+
+                    </tr>
+                    <tr *ngFor="let item of selectedFundArray;let i = index;">
+                        <td>{{i+3}}</td>
+                        <td colspan="4">{{item.title}}</td>
+                        <td colspan="1" class="text-right color-red pr_7">
+                            <!-- - -->
+                            ( {{item.percent_deducted_amount}})</td>
+
+                    </tr>
+
+
+                    <ng-container *ngIf="selectedPaySlip && selectedPaySlip.payslipaddded_data">
+                        <tr *ngFor="let item of selectedPaySlip.payslipaddded_data;let j = index;">
+                            <td>
+                                {{selectedFundArray.length > 0 ? (j) + selectedFundArray.length+3 : j+3}}
+                            </td>
+                            <td colspan="4">{{item.title}}</td>
+                            <td colspan="1" class="text-right pr_7" [ngClass]="{'color-red': item.type == 0}">
+                                <ng-container *ngIf="item.type == 1">
+                                    {{ item.amount | currency: " ":"symbol" }}
+                                </ng-container>
+                                <ng-container *ngIf="item.type == 0">
+                                    <!-- - -->
+                                    ({{ item.amount_deduct | currency: " ":"symbol"}})
+                                </ng-container>
+
+                            </td>
+
+                        </tr>
+                    </ng-container>
+
+                    <tr>
+                        <th colspan="5">
+                          <!-- Total -->
+                          Net Salary
+                        </th>
+
+                        <td class="text-right pr_7">
+                            <b>
+                              {{selectedPaySlip.gross_salary | currency: " ":"symbol"}}
+                             </b>
+                        </td>
+
+
+                    </tr>
+                </table>
+                <div class="total-words">
+                    <div>Total Payment (in Words): <span>
+        <!-- Fourteen thousand only. -->
+        {{
+          summaryMoney
+        }}
+
+      </span> </div>
+                </div>
+            </div>
+            <div class="bottom-content">
+                <div class="received">Received By</div>
+                <div class="prepared">Prepared By</div>
+                <div class="checked">Checked By</div>
+                <div class="approved">Approved By</div>
+            </div>
+        </div>
+        <!-- container slip ends here  -->
+
+
+
+
+          <!-- body ends here  -->
+      </div>
+      <div class="modal-footer doNotPrint">
+          <button class="btn btn-primary mr-2">Download</button>
+          <!-- [printStyle]="{
+            span : {'background-color': '#dd4b39 !important'}
+            }" -->
+          <button class="btn btn-primary mr-2" [useExistingCss]="true"  printSectionId="print-section" ngxPrint>Print</button>
+          <button class="btn btn-danger" type="button" (click)="onHideViewModal()">
+      Close
+    </button>
+      </div>
+  </form>
+</ng-template>
+
+
+
+<!-- <ng-template #advancedFormModal>
+  <form [formGroup]="advancedForm">
+      <div class="modal-header">
+          <h3 class="modal-title pull-left" *ngIf=" this.advancedTitle == 'add'
+">Additional</h3>
+          <h3 class="modal-title pull-left" *ngIf=" this.advancedTitle == 'deduct'
+">Deduction</h3>
+          <button type="button " class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+  <span aria-hidden="true ">&times;</span>
+</button>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="flex-item">
+                      <div *ngIf="this.selectedAdvanced.status == '0'" class="flex-content">
+                          <label>Add</label>
+                          <button class="btn btn-success btn-xs ml-1" tooltip="Add" (click)="addAdvancedFormArray()">
+<i class="fa fa-plus"></i>
+                                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="1" style="padding: 10px; background-color: #eee">
+                                    Type
+                                </th>
+                                <th colspan="1" style="padding: 10px; background-color: #eee">
+                                    Amount <span *ngIf="this.currencyDetail">
+                                                ({{this.currencyDetail.symbol}})
+                                              </span>
+                                </th>
+                                <th colspan="1" style="padding: 10px; background-color: #eee">
+                                    Remarks
+                                </th>
+                                <th colspan="1" style="padding: 10px; background-color: #eee">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody formArrayName="advancedFormArray" *ngFor="
+      let data of advancedForm.get('advancedFormArray')[
+        'controls'
+      ];
+      let i = index
+    ">
+                            <tr [formGroupName]="i">
+                                <td>
+                                    <div class="form-group">
+                                        <input type="text" formControlName="title" placeholder="type" class="form-control" name="type" appFormControlValidationMsg>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <input type="radio" class="mr-1" formControlName="isFlat" placeholder="type" value="flat" (change)="onFlatChange($event.target.value)" name="isFlat">Flat
+                                        <input type="radio" class="mr-1" formControlName="isFlat" placeholder="type" value="percent" (change)="onFlatChange($event.target.value)" name="isFlat">%
+                                    </div>
+                                </td>
+
+                                <td>
+
+                                    <input type="number" class="form-control" [placeholder]="this.activeFlatType == 'flat'? 'Amount':'Percent' " formControlName="amount" appFormControlValidationMsg [min]="0" (change)="onAmountChange()" />
+                                </td>
+                                <td>
+
+                                    <input type="text" class="form-control" placeholder="remarks" formControlName="details" />
+                                </td>
+
+
+                                <td>
+                                    <div class="flex-item">
+                                        <div class="flex-content"></div>
+                                        <div class="flex-content">
+                                            <a tooltip="Remove" style="color: red" (click)="removeAdvanced(i, data,this.advancedTitle)" class="btn">
+                                                <i class="fa fa-remove"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                            </tr>
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">Total</td>
+                                <td colspan="2" class="text-right"> <span *ngIf=" this.currencyDetail">
+                                            {{this.currencyDetail.symbol}}
+                                          </span> {{totalAmt | twoDigitNumber}}</td>
+                            </tr>
+
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal-footer">
+    <button *ngIf="this.selectedAdvanced.status == '0'" [disabled]="saving" class="btn btn-success" type="submit" (click)="onMultipleAdvanceSave()">
+          Save
+        </button>
+    <button class="btn btn-danger" type="button" (click)="onHideAdvancedModal()">
+    Close
+  </button>
+</div>
+</form>
+</ng-template> -->
+<ng-template #advancedFormModal>
+    <form [formGroup]="advancedForm">
+        <div class="modal-header">
+            <h3 class="modal-title pull-left" *ngIf=" this.advancedTitle == 'add'
+">Addition/Deduction</h3>
+            <h3 class="modal-title pull-left" *ngIf=" this.advancedTitle == 'deduct'
+">Additon/Deduction</h3>
+            <button type="button " class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+  <span aria-hidden="true ">&times;</span>
+</button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="flex-item">
+                        <div *ngIf="this.selectedAdvanced.status == '0'" class="flex-content d-flex">
+                            <div class="btn-wrap">
+                                <label>Add</label>
+                                <button class="btn btn-success btn-xs ml-1" tooltip="Add" (click)="addAdvancedFormArray()">
+<i class="fa fa-plus"></i>
+</button>
+                            </div>
+                            <div class="total-wrap">
+                                <!-- <b>Base Salary: {{selectedAdvanced.salary}}</b> -->
+                                <b> Gross Salary: <span *ngIf="currencyDetail">
+                                {{currencyDetail.symbol}}
+                              </span>
+                                <span *ngIf="!currencyDetail">
+                                Rs
+                              </span>{{selectedAdvanced.working_salary}}</b>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                Particulars
+                                            </th>
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                <!-- Flat/Percent -->
+                                                Type
+                                            </th>
+
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                Amount <span *ngIf="this.currencyDetail">
+                                                ({{this.currencyDetail.symbol}})
+                                              </span>
+                                            </th>
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                Remarks
+                                            </th>
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody formArrayName="advancedFormArray" *ngFor="
+      let data of advancedForm.get('advancedFormArray')[
+        'controls'
+      ];
+      let i = index
+    ">
+                                        <tr [formGroupName]="i">
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="text" formControlName="title" placeholder="type" class="form-control" name="type" appFormControlValidationMsg>
+
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <!-- <input type="radio" class="mr-1" formControlName="isFlat" placeholder="type" value="flat" (change)="onFlatChange($event.target.value)" name="isFlat">Flat
+                                                  <input type="radio" class="mr-1" formControlName="isFlat" placeholder="type" value="percent" (change)="onFlatChange($event.target.value)" name="isFlat">% -->
+                                                    <select formControlName="addType" class="form-control" name="type">
+                                                    <option value="additional" >Additional</option>
+                                                    <option value="deduction"> Deduction</option>
+                                                  </select>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <!-- appFormControlValidationMsg -->
+                                                <!-- <div class="d-flex justify-content-initial">
+                                                    <input type="number" style="width: 30%;" placeholder="%" formControlName="amount_percent" (change)="recalculateAmount(i, data,'percentage')" class="form-control" max="100" min="0">
+
+                                                    <span class="mr-2 ml-1"><b>
+                                                    %
+                                                  </b></span>
+
+                                                    <input type="number" style="width: 50%;" class="form-control" [placeholder]="this.activeFlatType == 'flat'? 'Amount':'Percent' " formControlName="amount" [min]="0" (change)="recalculateAmount(i,data,'amount')" />
+                                                </div> -->
+                                                <div class="d-flex justify-content-initial">
+                                                    <input type="number" style="width: 30%;" placeholder="%" formControlName="amount_percent" appBlockCopyPaste appInputRestriction="noNegative" (keydown)="recalculateAmount(i, data,'percentage',$event)" class="form-control" max="100" min="0">
+                                                    <!-- appFormControlValidationMsg -->
+                                                    <span class="mr-2 ml-1 mt-2"><b>
+                                                    %
+                                                  </b></span>
+                                                    <!-- onAmountChange() -->
+                                                    <input type="number" appBlockCopyPaste appInputRestriction="noNegative" style="width: 50%;" class="form-control" [placeholder]="this.activeFlatType == 'flat'? 'Amount':'Percent' " formControlName="amount" [min]="0" (keydown)="recalculateAmount(i,data,'amount',$event)"
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <!-- appFormControlValidationMsg -->
+                                                <input type="text" class="form-control" placeholder="remarks" formControlName="details" />
+                                            </td>
+
+
+                                            <td>
+                                                <div class="flex-item">
+                                                    <div class="flex-content"></div>
+                                                    <div class="flex-content">
+                                                        <a tooltip="Remove" style="color: red" (click)="removeAdvanced(i, data,this.advancedTitle)" class="btn">
+                                                            <i class="fa fa-trash"></i>
+                                                            <!-- <i class="fa fa-remove"></i> -->
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <!-- </tr> -->
+                                        </tr>
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2" class="total-f-14">Total Deductions</td>
+                                            <td colspan="2" class="text-right total-f-14"> <span *ngIf=" this.currencyDetail">
+                                        {{this.currencyDetail.symbol}}
+                                      </span> {{totalDeduction | twoDigitNumber}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class='total-f-14'>Total Additions</td>
+                                            <td colspan="2" class="text-right total-f-14"> <span *ngIf=" this.currencyDetail">
+                                      {{this.currencyDetail.symbol}}
+                                    </span> {{totalAddition | twoDigitNumber}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="total-f-14">Grand Total</td>
+                                            <td colspan="2" class="text-right total-f-14"> <span *ngIf=" this.currencyDetail">
+                                            {{this.currencyDetail.symbol}}
+                                          </span> {{totalAmt | twoDigitNumber}}</td>
+                                        </tr>
+
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="this.selectedAdvanced.status == '0'" [disabled]="saving" class="btn btn-success" type="submit" (click)="onMultipleAdvanceSave()">
+              Save
+            </button>
+            <button class="btn btn-danger" type="button" (click)="onHideAdvancedModal()">
+        Close
+      </button>
+        </div>
+    </form>
+</ng-template>

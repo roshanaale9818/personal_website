@@ -1,0 +1,393 @@
+<div class="menu-index">
+    <div class="mt-3">
+        <div class="box box-default box-shadow">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <button class="btn btn-success btn-oval" [routerLink]="'add'">
+              <i class="fa fa-plus-circle mr-2"></i> <b>Create Employee</b>
+            </button>
+                        <button (click)="openBulkFileUpload(BulkUploadRef)" style="margin-left: 10px" class="btn btn-success btn-oval">
+              <strong>
+                <i class="fa fa-download" aria-hidden="true"></i> Bulk
+                Import</strong
+              >
+            </button>
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+                    <!-- collaspe section -->
+                    <div style="padding: 5px">
+                        <button type="button" class="btn btn-default" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseEvent">
+              <i class="fa fa-search"></i
+              ><strong style="margin-left: 5px">{{ collapseButton }}</strong>
+            </button>
+                        <div id="collapseEvent" [isAnimated]="true" [collapse]="isCollapsed" (collapsed)="collapsed()" (expanded)="expanded()">
+                            <!-- <div class="well card card-block card-header"></div> -->
+                            <div class="well mt-4">
+                                <form [formGroup]="searchForm">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Employee Id</label>
+                                                <input type="text" class="form-control" formControlName="emp_id" placeholder="Employee" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">First Name</label>
+                                                <input type="text" class="form-control" formControlName="first_name" placeholder="Eg: John" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Middle Name</label>
+                                                <input type="text" class="form-control" formControlName="middle_name" placeholder="Eg: Olver" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Last Name</label>
+                                                <input type="text" class="form-control" formControlName="last_name" placeholder="Eg: Johnson" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Mobile</label>
+                                                <input type="text" class="form-control" formControlName="mobile" placeholder="980000000" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Email</label>
+                                                <input type="text" class="form-control" formControlName="email_address" placeholder="someone@someone.com" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Employee Type</label>
+                                                <!-- <ng-select
+                          class=""
+                          appearance="outline"
+                          #agreeSelect
+                          labelForId="status"
+                          [searchable]="true"
+                          formControlName="employee_type"
+                          placeholder="Select Employee"
+                        >
+                          <ng-option value="">Select Employee</ng-option>
+                          <ng-option
+                            *ngFor="let type of employeeTypeList"
+                            [value]="type.employee_type_id"
+                          >
+                            {{ type.employee_type }}
+                          </ng-option>
+                        </ng-select> -->
+                                                <select class="form-control" formControlName="employee_type">
+                          <option value="">Select Employee Type</option>
+                          <option
+                            *ngFor="let type of employeeTypeList"
+                            [value]="type.employee_type_id"
+                          >
+                            {{ type.employee_type }}
+                          </option>
+                        </select>
+                                                <!-- <kendo-combobox
+                    [data]="employeeTypeList"
+                    [textField]="'employee_type'"
+                    [valueField]="'employee_type_id'"
+                    [placeholder]="'Search..'"
+                    formControlName="employee_type"
+                    [valuePrimitive]="true"
+                    style="width: 100%"
+                  ></kendo-combobox> -->
+
+                                                <!-- <input
+                    type="text"
+                    class="form-control "
+                    formControlName="employee_type"
+                  /> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- <div class="col-md-3">
+                <div class="form-group">
+                  <label for="">Gender</label>
+                  <input
+                    type="text"
+                    class="form-control input-sm"
+                    formControlName="gender"
+                  />
+                </div>
+              </div> -->
+                                        <!-- <div class="col-md-3">
+                <div class="form-group">
+                  <label for="">Marital Status</label>
+                  <input
+                    type="text"
+                    class="form-control input-sm"
+                    formControlName="marital_status"
+                  />
+                </div>
+              </div> -->
+
+                                        <!-- <div class="col-md-3">
+                <div class="form-group">
+                  <label for="">Date Of Birth</label>
+                  <input
+                    type="text"
+                    class="form-control input-sm"
+                    formControlName="dob"
+                  />
+                </div>
+              </div> -->
+                                    </div>
+                                    <!-- <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="">Designation</label>
+                  <kendo-combobox
+                    [data]="designationList"
+                    [textField]="'designation_name'"
+                    [valueField]="'designation_id'"
+                    [placeholder]="'Search..'"
+                    formControlName="designation_id"
+                    [valuePrimitive]="true"
+                    style="width: 100%"
+                  ></kendo-combobox> -->
+
+                                    <!-- <input
+                    type="text"
+                    class="form-control input-sm"
+                    formControlName="employee_type"
+                  /> -->
+                                    <!-- </div>
+              </div> -->
+                                    <!-- </div> -->
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="flex-container">
+                                                <div class="flex-item">
+                                                    <button class="btn btn-success btn-oval " type="button" (click)="onSearchStaff()" appFormSubmitValidationMsg [validationControl]="searchForm">
+                            <b> <i class="fa fa-search"></i> Search</b>
+                          </button>
+                                                </div>
+                                                <div class="flex-item">
+                                                    <button class="btn btn-danger btn-oval  mr-2" type="button" (click)="onCancel()">
+                            <b>
+                              <i class="fa fa-remove"></i>
+                              Cancel</b
+                            >
+                          </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- collaspse section ends here -->
+
+                    <!-- Export Button -->
+                    <div class="flex-content">
+                        <div class="flex-item">
+                            <button class="btn btn-secondary" (click)="exportEmployeeReport()">
+                <b> <i class="fa fa-file-excel-o"></i> Export Report </b>
+              </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="limit" [skip]="skip" [pageable]="
+                gridView ? (gridView.total <= pageLimit ? false : true) : false
+              " [sortable]="true" [sort]="sort" [loading]="listLoading" (dataStateChange)="dataStateChange($event)">
+                            <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="25" [resizable]="false">
+                                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                                    <p>{{ rowIndex + 1 }}</p>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <kendo-grid-column title="Full Name" field="first_name" [headerStyle]="{ 'font-weight': 'bold' }" [width]="150">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <a style="cursor: pointer" (click)="navigateToStaffDetail(dataItem)">
+                                        <div class="row">
+                                            <div class="flex-container">
+                                                <div class="flex-items">
+                                                    <img *ngIf="dataItem?.staff_photo" height="50" width="50" src="{{ baseImageUrl }}{{ dataItem?.staff_photo }}" />
+
+                                                    <ngx-avatar size="40" *ngIf="!dataItem?.staff_photo" name="{{ dataItem?.first_name }}"></ngx-avatar>
+                                                </div>
+
+                                                <div class="flex-items">
+                                                    <!-- {{ getStaffFullNameWithEmpId(dataItem) }} -->
+                                                    {{dataItem.emp_id}} - {{dataItem.first_name | name:dataItem.last_name:dataItem.middle_name}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <!-- <kendo-grid-column
+          title="Designation"
+          field="designation_name"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          [width]="100"
+          [hidden]="companyId === 104"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            {{ dataItem.designation_name }}
+            <span *ngIf="!dataItem?.designation_id" class="not-set"
+              >(not set)</span
+            >
+          </ng-template>
+        </kendo-grid-column> -->
+                            <kendo-grid-column title="Mobile" field="mobile" [headerStyle]="{ 'font-weight': 'bold' }" [width]="100">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    {{ dataItem.mobile }}
+                                    <span *ngIf="!dataItem.mobile" class="not-set">(not set)</span
+                  >
+                </ng-template>
+              </kendo-grid-column>
+
+              <kendo-grid-column
+                title="Address"
+                field="per_address_line1"
+                width="100"
+              ></kendo-grid-column>
+
+              <kendo-grid-column
+                title="City"
+                field="per_city"
+                width="100"
+              ></kendo-grid-column>
+
+              <kendo-grid-column
+                title="Email Address"
+                field="email_address"
+                [headerStyle]="{ 'font-weight': 'bold' }"
+                [width]="100"
+                [resizable]="false"
+              ></kendo-grid-column>
+
+              <kendo-grid-column
+                title="Action"
+                [headerStyle]="{ 'font-weight': 'bold' }"
+                [width]="100"
+                [resizable]="false"
+              >
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                  <a
+                    tooltip="View"
+                    class="btn"
+                    (click)="navigateToStaffDetail(dataItem)"
+                  >
+                    <i class="fa fa-eye"></i
+                  ></a>
+                  <a
+                    class="btn"
+                    tooltip="Update"
+                    (click)="gotoEditStaff(dataItem)"
+                    ><i class="fa fa-edit"></i
+                  ></a>
+                  <flexyear-delete-confirmation-modal
+                    [data]="dataItem"
+                    [title]="dataItem.first_name"
+                    [action]="'delete'"
+                    (onConfirm)="deleteStaff(dataItem)"
+
+
+                  >
+                  <!-- [showConfirmationInput]="true" -->
+                   <!-- (onShowConfirmation)="setConfirmationDialogMethods($event)" -->
+                  </flexyear-delete-confirmation-modal>
+                  <!-- <a class="btn" (click)="openConfirmationDialogue(dataItem)"
+              ><i class="fa fa-trash"></i
+            ></a> -->
+                </ng-template>
+              </kendo-grid-column>
+              <div class="k-i-loading"></div>
+            </kendo-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #viewModal>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Staff Detail</h4>
+
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="modalRef.hide()"
+        >
+          <span aria-hidden="true">&times;</span>
+                                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Full Name</th>
+                                    <td>test</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Designation</th>
+                                    <td>test</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-oval" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+                    </div>
+                    </ng-template>
+                </div>
+            </div>
+
+            <ng-template #BulkUploadRef>
+                <form [formGroup]="csvImportForm">
+                    <div class="modal-header">
+                        <h3 class="modal-title pull-left">Upload Employee CSV</h3>
+
+                        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <a tooltip="Download" class="btn btn-primary" style="border-radius: 20px" href="https://flexsaas.flexyear.com/csv/employee.csv">
+                                <b>
+            <i class="fa fa-download" aria-hidden="true"></i>&nbsp;Download CSV
+            Format
+          </b>
+                            </a>
+                            <div class="mt-3">
+                                <kendo-fileselect formControlName="file" [restrictions]="uploadRestrictions" [multiple]="false" (select)="selectEventHandler($event)" (remove)="onRemoveFile($event)">
+                                </kendo-fileselect>
+                                <p class="mt-2" style="color: red">
+                                    <strong>NOTE:</strong> Please import CSV file only!!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-oval" type="button" (click)="onCancelRef()">
+        <b>Cancel</b>
+      </button>
+                        <button class="btn btn-success btn-oval" type="submit" (click)="onSubmit()">
+        <b>Submit</b>
+      </button>
+                    </div>
+                </form>
+            </ng-template>

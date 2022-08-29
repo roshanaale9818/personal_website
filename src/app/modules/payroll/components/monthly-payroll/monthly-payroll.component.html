@@ -1,0 +1,1248 @@
+<div class="box box-default box-shadow doNotPrint">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            &times;
+          </button>
+                    <h5>
+                        <i class="icon fa fa-warning"></i>
+                        <strong>By default all employees are selected and unpaid are loaded.</strong>
+                    </h5>
+                </div>
+            </div>
+            <!-- collaspe section -->
+            <div style="padding: 0px 15px 10px 15px">
+                <button type="button" class="btn btn-default" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseEvent">
+          <i class="fa fa-search"></i
+          ><strong style="margin-left: 5px">{{ collapseButton }}</strong>
+        </button>
+                <div id="collapseEvent" [isAnimated]="true" [collapse]="isCollapsed" (collapsed)="collapsed()" (expanded)="expanded()">
+                    <!-- <div class="well card card-block card-header"></div> -->
+                    <div class="well mt-4">
+                        <form [formGroup]="searchForm">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="">Department </label>
+                                        <select formControlName="department_id" class="form-control" (change)="onChange()">
+                      <option value="">Select Department</option>
+                      <option
+                        *ngFor="let item of departmentList"
+                        [value]="item.department_id"
+                      >
+                        {{ item.department_name }}
+                      </option>
+                    </select>
+                                        <!-- <input type="text" class="form-control" formControlName="department_id" placeholder="Eg: John" /> -->
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="">Designation </label>
+                                        <select formControlName="designation_id" class="form-control" (change)="onChange()">
+                      <option value="">Select Designation</option>
+                      <option
+                        *ngFor="let item of designationList"
+                        [value]="item.designation_id"
+                      >
+                        {{ item.designation_name }}
+                      </option>
+                    </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="">Employee Type </label>
+                                        <select formControlName="employee_type" (change)="onChange()" class="form-control">
+                      <!-- <option>Full Time</option>
+                                      <option>Part Time</option> -->
+                      <option value="">Select Employee</option>
+                      <option
+                        *ngFor="let item of employeeTypeList"
+                        [value]="item.employee_type_id"
+                      >
+                        {{ item.employee_type }}
+                      </option>
+                    </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="employee">Employee</label>
+                                        <ng-select appearance="outline" #agreeSelect labelForId="user" [searchable]="true" [multiple]="true" formControlName="emp_id" placeholder="Select Employee">
+                                            <ng-option *ngFor="let item of staffList" [value]="item.staff_id">
+                                                {{ item.full_name }}
+                                            </ng-option>
+                                            <ng-template ng-header-tmp>
+                                                <button class="btn btn-xs btn-primary mr-4 mt-3 ml-2" (click)="onSelectedAll()">
+                          Select All
+                        </button>
+                                                <button class="btn btn-xs btn-danger mr-2 mt-3" (click)="onClearableAll()">
+                          Clear All
+                        </button>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="flex-container">
+                                        <div class="flex-item">
+                                            <!-- btn-xs -->
+                                            <button class="btn btn-danger btn-oval btn-xs mr-2" (click)="onResetForm()" type="button">
+                        <b>
+                          <i class="fa fa-remove"></i>
+                          Reset</b
+                        >
+                      </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- collaspse section ends here -->
+        </div>
+        <div class="row">
+            <!-- // if english date picker  -->
+            <ng-container *ngIf="datePickerFormat == 'E'">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="month">Month<sup>*</sup></label>
+                        <select class="form-control" id="month1" [(ngModel)]="currentMonth" (change)="getFirstAndLastDayOfMonth($event.target.value)">
+              <option value="">Select Month</option>
+              <option *ngFor="let month of monthType" value="{{ month.value }}">
+                {{ month.month }}
+              </option>
+            </select>
+                    </div>
+                </div>
+                <ng-container *ngIf="type == 'non-yearly'">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <!-- //this has to pass dateconfig1 -->
+                            <label for="month1">Date From <sup>*</sup></label>
+                            <input name="datefrom" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" [(ngModel)]="nonyearlyDateFrom" bsDatepicker (ngModelChange)="setDateTo($event)" />
+                        </div>
+                    </div>
+
+                    <!-- (ngModelchange)="getFirstAndLastDayOfMonth($event.target.value)" -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="month1">Date To <sup>*</sup></label>
+                            <input name="dateTo" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfigForTo" [placement]="'bottom'" [(ngModel)]="nonYearlyDateTo" (ngModelChange)="onReset()" bsDatepicker />
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <!-- english date picker ends here -->
+            <ng-container *ngIf="datePickerFormat == 'N'">
+                <form [formGroup]="nepaliDateForm">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="month">Month<sup>*</sup></label>
+                            <select class="form-control" id="month2" formControlName="month" (change)="onNepaliMonthChange($event.target.value)">
+              <option value="">Select Month</option>
+              <option *ngFor="let month of nepaliMonths"[value]="month.value">
+                {{ month.month }}
+              </option>
+            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="month">Date From<sup>*</sup></label>
+                            <nepali-date-picker name="nepaliDateFrom" [id]="'nepaliDatefrom'" (change)="changeDate($event.detail.value, 'dateFrom')" [label]="this.datePickerConfig.dateInputFormat" formControlName="nepaliDateFrom" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDateFrom">
+                            </nepali-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="month">Date To<sup>*</sup></label>
+                            <nepali-date-picker name="nepaliDateTo" [id]="'nepaliDateTo'" (change)="changeDate($event.detail.value, 'dateTo')" [label]="this.datePickerConfig.dateInputFormat" formControlName="nepaliDateTo" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDateTo"
+                                [disableBefore]="disableBefore">
+                            </nepali-date-picker>
+                        </div>
+                    </div>
+
+                </form>
+            </ng-container>
+            <ng-container *ngIf="!isGenerate">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="paid">Paid</label>
+                        <!-- <label> -->
+                        <input style="display: block;
+                        transform: scale(2);
+                        margin-left: 10px
+                    ;" [(ngModel)]="status" (change)="onStatusChange()" type="checkbox" />
+                        <!-- Paid -->
+                        <!-- </label> -->
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <!-- <div *ngIf="!isGenerate" class="float-right">
+            <div class="dropdown">
+                <button tooltip="Change status for view" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-bars"></i>
+              </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-item">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                        <input
+                         [(ngModel)]="status"
+                         (change)="onStatusChange()"
+                         type="checkbox"
+                        />
+                        Paid
+                      </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="row">
+            <div class="col-md-6">
+                <button *ngIf="!isGenerate" class="btn btn-success btn-oval" (click)="onViewClicked()">
+          <b>View</b>
+        </button>
+                <button *ngIf="isGenerate == true" class="btn btn-success btn-oval" [disabled]="isGenerateDisabled" (click)="onGenerateClicked()">
+          <b>Generate</b>
+        </button>
+                <button class="btn btn-success btn-oval">
+          <b>PDF</b>
+        </button>
+                <button class="btn btn-success btn-oval">
+          <b>Download CSV</b>
+        </button>
+                <button class="btn btn-success btn-oval" [disabled]="!bulkpayarray || bulkpayarray.length == 0" (click)="onBulkPayConfirmation()">
+          <b>Bulk Pay</b>
+        </button>
+            </div>
+        </div>
+    </div>
+    <div class="box-body">
+        <kendo-grid [data]="gridView" [selectable]="{
+        enabled: true,
+        multiple: true
+      }" [rowClass]="rowCallBack" [resizable]="true" [pageSize]="limit" [loading]="listLoading" [skip]="skip" [pageable]="
+        gridView ? (gridView.total <= pageLimit ? false : true) : false
+      " [filterable]="false" [filter]="state.filter" (pageChange)="onPageChange($event)" [sortable]="true" [sort]="sort" [selectable]="false" (dataStateChange)="onSearchdataStateChange($event)" (selectionChange)="onSearchSelectionChange($event)">
+            <ng-container *ngIf="!this.status">
+                <kendo-grid-checkbox-column showSelectAll="true" [width]="50">
+                </kendo-grid-checkbox-column>
+            </ng-container>
+            <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="50">
+                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex ">
+                    <p>{{ rowIndex + 1 }}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Staff" [headerStyle]="{ 'font-weight': 'bold' }" [width]="120">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem ">
+                    <p>
+                        <!-- {{ dataItem.first_name }} {{ dataItem.middle_name }} {{ dataItem.last_name }} -->
+                        {{dataItem.first_name|name :dataItem.last_name:dataItem.middle_name}}
+                    </p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Base Salary" field="salary" [headerStyle]="{ 'font-weight': 'bold' }" [width]="90">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem ">
+                    <p class="text-right">
+                        {{ dataItem.salary | currency: " ":"symbol" }}
+                    </p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Start Date" field="start_date" [headerStyle]="{ 'font-weight': 'bold' }" [width]="70">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <p *ngIf="datePickerFormat == 'N'">
+                        {{ dataItem.start_date | nepaliDatePipe: this.datePickerConfig.dateInputFormat }}
+                    </p>
+
+                    <p *ngIf="datePickerFormat == 'E'">
+                        {{ dataItem.start_date | customdateFormat: this.datePickerConfig.dateInputFormat }}
+                    </p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="End Date" field="end_date" [headerStyle]="{ 'font-weight': 'bold' }" [width]="70">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <p *ngIf="datePickerFormat == 'N'">
+                        {{ dataItem.end_date | nepaliDatePipe: this.datePickerConfig.dateInputFormat }}
+                    </p>
+
+                    <p *ngIf="datePickerFormat == 'E'">
+                        {{ dataItem.end_date | customdateFormat: this.datePickerConfig.dateInputFormat }}
+                    </p>
+                </ng-template>
+            </kendo-grid-column>
+            <!-- <kendo-grid-column title="Salary Period" field="salary_period" [headerStyle]="{ 'font-weight': 'bold' }" [width]="70"></kendo-grid-column> -->
+            <!-- advance start here  -->
+            <!-- <ng-container *ngIf="isGenerate">
+                <kendo-grid-column title="Advance" field="working_salary" [headerStyle]="{ 'font-weight': 'bold' }" [width]="120">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <p class="text-right">
+                            {{ dataItem.bonus | currency: " ":"symbol" }}
+                        </p>
+                        <a class="ml-2" style="cursor:pointer;" (click)="onUpdatePaySlip(updatePaySlip,dataItem)">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </ng-template>
+                </kendo-grid-column>
+            </ng-container> -->
+            <!-- advance ends here  -->
+
+            <!-- addition starts here  -->
+            <kendo-grid-column title="Addition" field="addition" [headerStyle]="{ 'font-weight': 'bold' }" [width]="90">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <p (mouseover)="setActiveRowPayroll(dataItem,'add')" class="text-right cursor-pointer" *ngIf="dataItem.totalAddition">
+                        {{ dataItem.totalAddition | currency: " ":"symbol" }}
+                        <ng-container *ngIf="activeRowPayroll == dataItem && activeDeductType == 'add' &&isGenerate">
+                            <a class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'add')">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </ng-container>
+                    </p>
+                    <p (mouseover)="setActiveRowPayroll(dataItem,'add')" class="text-right cursor-pointer" *ngIf="!dataItem.totalAddition">
+                        {{ 00 | currency: " ":"symbol" }}
+                        <ng-container *ngIf="activeRowPayroll == dataItem && activeDeductType == 'add' &&isGenerate">
+                            <a class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'add')">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </ng-container>
+                    </p>
+
+                </ng-template>
+            </kendo-grid-column>
+
+            <!-- addition ends here  -->
+
+            <!-- deductuon starts here  -->
+            <kendo-grid-column title="Deduction" field="addition" [headerStyle]="{ 'font-weight': 'bold' }" [width]="90">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <p (mouseover)="setActiveRowPayroll(dataItem,'deduct')" class="text-right" *ngIf="dataItem.totalDeduction">
+                        {{ dataItem.totalDeduction | currency: " ":"symbol" }}
+                        <a *ngIf="activeRowPayroll == dataItem && activeDeductType == 'deduct' &&isGenerate" class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'deduct')">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </p>
+                    <p (mouseover)="setActiveRowPayroll(dataItem,'deduct')" class="text-right" *ngIf="!dataItem.totalDeduction">
+                        {{ 00 | currency: " ":"symbol" }}
+                        <a *ngIf="activeRowPayroll == dataItem && activeDeductType == 'deduct' &&isGenerate" class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'deduct')">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </p>
+                    <!-- <a class="ml-2" style="cursor:pointer;" (click)="onOpenAdvancedModal(advancedFormModal,dataItem,'deduct')">
+                        <i class="fa fa-edit"></i>
+                    </a> -->
+                </ng-template>
+            </kendo-grid-column>
+
+            <!-- deduction  ends here  -->
+
+
+
+
+
+            <kendo-grid-column title="Net Salary" field="working_salary" [headerStyle]="{ 'font-weight': 'bold' }" [width]="70">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <p class="text-right">
+                        {{ dataItem.working_salary | currency: " ":"symbol" }}
+                    </p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Status" field="status" [headerStyle]="{ 'font-weight': 'bold' }" [width]="90">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <p style="font-weight: bold" *ngIf="dataItem.status == 0">
+                        <span class="badge bg-red">Unpaid</span>
+                        <a class="btn badge bg-green-gradient ml-2" style="color: #fff; padding: 2px 5px 2px 5px" (click)="onPayConfirmation(dataItem)">Pay
+            </a>
+                    </p>
+                    <p class="ml-2" style="font-weight: bold" *ngIf="dataItem.status == 1">
+                        <span class="badge bg-green-gradient">Paid</span>
+                    </p>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <!-- (click)="onViewPaySlip(dataItem,viewModal)" -->
+                    <a tooltip="View" class="btn" (click)="onOpenView(viewDetailModal,dataItem)"> <i class="fa fa-eye"></i></a>
+                    <a class="btn  mr-1" tooltip="History" (click)="onHistoryClicked(dataItem)">
+                        <i class="fa fa-history" aria-hidden="true"></i></a>
+                </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+        <!-- search  template ends here  -->
+        <!-- </ng-container> -->
+    </div>
+</div>
+
+<!-- add Bonus modal -->
+<ng-template #editAdvanceModal>
+    <form [formGroup]="advanceForm">
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">Advance Payment</h3>
+            <button type="button " class="close pull-right" aria-label="Close " (click)="modalRef.hide()">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <!-- <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="dateFrom ">Date From <sup>*</sup></label>
+                        <input name="datefrom " [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" bsDatepicker />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="dateFrom ">Date To <sup>*</sup></label>
+                        <input name="datefrom " [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" bsDatepicker />
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="shiftFrom">Advance<sup>*</sup></label>
+                        <input class="form-control" formControlName="amount" type="number " />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="shiftFrom">Status<sup>*</sup></label>
+                        <select class="form-control" formControlName="status">
+              <option>Paid</option>
+              <option>Unpaid</option>
+            </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="onCancel()">
+        Cancel
+      </button>
+            <!-- appFormSubmitValidationMsg [validationControl]="payrollForm " -->
+            <button class="btn btn-success" type="submit" (click)="onAdvanceSave()">Save</button>
+        </div>
+    </form>
+</ng-template>
+
+<!-- //update payslip starts here  -->
+<ng-template #updatePaySlip>
+    <form [formGroup]="updateAdvancedForm">
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">Update PaySlip</h3>
+            <button type="button " class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="sign" class="d-block">Sign<sup>*</sup></label>
+                        <div class="ml-4">
+                            <input type="radio" formControlName="sign" value="1" appFormControlValidationMsg name="sign" />
+                            <b>(+)</b>
+                        </div>
+                        <div class="ml-4">
+                            <input type="radio" formControlName="sign" value="0" appFormControlValidationMsg name="sign" />
+                            <b>(-)</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="dateFrom">Advanced <sup>*</sup></label>
+                        <input type="number" [min]="0" class="form-control" formControlName="bonus_advance" appFormControlValidationMsg name="advanced" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="onCancel()">
+        Cancel
+      </button>
+            <!-- appFormSubmitValidationMsg [validationControl]="payrollForm " -->
+            <button class="btn btn-success" type="submit" (click)="onSaveAdvanced()">
+        Update
+      </button>
+        </div>
+    </form>
+</ng-template>
+<!-- update payslip ends here  -->
+
+<!-- view payslip starts here  -->
+
+<ng-template #viewModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">PaySlip View</h4>
+
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                    <th scope="row">Staff</th>
+                    <td>{{ selectedPaySlip.first_name }} {{ selectedPaySlip.middle_name }} {{ selectedPaySlip.last_name }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Date From</th>
+
+                    <td>
+                        {{selectedPaySlip.start_date}}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Date to</th>
+                    <td>
+                        {{selectedPaySlip.end_date}}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Salary Period</th>
+
+                    <td>
+                        {{selectedPaySlip.salary_period}}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Salary</th>
+
+                    <td>
+                        {{selectedPaySlip.salary | currency: " ":"symbol"}}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Working Salary</th>
+
+                    <td>
+                        {{selectedPaySlip.working_salary | currency: " ":"symbol"}}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Advance</th>
+
+                    <td>
+                        {{selectedPaySlip.bonus | currency: " ":"symbol"}}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Total Tax</th>
+
+                    <td>
+                        {{selectedPaySlip.total_tax | currency: " ":"symbol"}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">Gross Salary</th>
+
+                    <td>
+                        {{selectedPaySlip.gross_salary | currency: " ":"symbol"}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">Month</th>
+
+                    <td>
+                        <ng-container *ngIf="
+                   this.datePickerFormat == 'N'">
+                            {{this.nepaliDateForm.get('month').value | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+                        </ng-container>
+                        <ng-container *ngIf="
+                   this.datePickerFormat == 'E'">
+                            {{this.currentMonth | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+                        </ng-container>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">Status</th>
+                    <td>
+                        <p style="font-weight: bold;" *ngIf="selectedPaySlip.status == 0">
+                            <span class="badge bg-red">Unpaid</span>
+                        </p>
+                        <p class="ml-2" style="font-weight: bold;" *ngIf="selectedPaySlip.status==1">
+                            <span class="badge bg-green-gradient">Paid</span>
+                        </p>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" (click)="onHideView()">
+        Cancel
+      </button>
+    </div>
+</ng-template>
+<!-- view payslip ends here  -->
+
+
+<ng-template #viewDetailModal>
+    <!-- [formGroup]="updateAdvancedForm " -->
+    <form>
+        <div class="modal-header doNotPrint">
+            <h3 class="modal-title pull-left">Salary Sheet</h3>
+            <button type="button " class="close pull-right" aria-label="Close " (click)="modalRef.hide()">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body" id="print-section">
+            <!-- body starts here  -->
+
+            <!-- container slip starts here  -->
+
+            <div class="salaryslip">
+                <div class="header-content">
+                    <div class="logo">
+                        <!-- <img src="../../../../../assets/images/logo.png" alt="logo"> -->
+                        <ng-container *ngIf="companyLogoObj?.company_logo">
+                            <img src="{{ imageUrl }}{{ companyLogoObj?.company_logo }}" />
+                        </ng-container>
+                        <ng-container *ngIf="!companyLogoObj?.company_logo">
+                            <img src="../../../../../assets/images/logo.png" />
+                        </ng-container>
+                    </div>
+                    <div class="location">
+                        <ng-container *ngIf="!this.companyInfo">
+                            Jwagal, Lalitpur
+                        </ng-container>
+                        <ng-container *ngIf="this.companyInfo">
+                            {{companyInfo[0].address}}
+                        </ng-container>
+                    </div>
+                    <div class="page-title">
+                        <h2>
+                            <b>Payslip</b>
+                        </h2>
+                    </div>
+                </div>
+                <div class="top-details">
+                    <div class="date-content">
+                        <div class="emp-num">Employee ID: <span>{{selectedPaySlip.staff_id}}</span></div>
+                        <div>
+                            Salary Period:<span>
+              {{selectedPaySlip.salary_period}}
+            </span>
+                        </div>
+                        <div>
+                            Status:<span class="ml-2">
+
+                            <span style="font-weight: bold" *ngIf="selectedPaySlip.status == 0">
+                              <span class="badge bg-red">Unpaid</span>
+
+                            </span>
+                            <span class="ml-2" style="font-weight: bold" *ngIf="selectedPaySlip.status == 1">
+                                <span class="badge bg-green-gradient">Paid</span>
+                            </span>
+
+                            </span>
+                        </div>
+                        <div>
+                            Month:<span *ngIf="this.datePickerFormat == 'E'">
+              {{this.currentMonth | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+            </span>
+                            <span *ngIf="this.datePickerFormat == 'N'">
+              {{this.nepaliDateForm.get('month').value | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+            </span>
+                        </div>
+                        <div class="date">Date From:
+                            <span *ngIf="this.datePickerFormat == 'E'">
+              {{selectedPaySlip.start_date }}
+            </span>
+                            <span *ngIf="this.datePickerFormat == 'N'">{{selectedPaySlip.start_date | nepaliDatePipe:this.datePickerConfig.dateInputFormat}}
+
+          </span></div>
+
+                    </div>
+                    <div class="date-content">
+                        <div>Name: <span>{{selectedPaySlip.first_name}} {{selectedPaySlip.middle_name}}
+            {{selectedPaySlip.last_name}}</span></div>
+                        <div class="date">Date To:
+                            <span *ngIf="this.datePickerFormat == 'E'"> {{selectedPaySlip.end_date}}</span>
+                            <span *ngIf="this.datePickerFormat == 'N'">
+            {{selectedPaySlip.end_date |nepaliDatePipe:this.datePickerConfig.dateInputFormat}}</span></div>
+                    </div>
+                </div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th rowspan="2" class="number">S.N</th>
+                            <th rowspan="2" colspan="4">Particulars</th>
+                            <th colspan="1" rowspan="2" class="text-right">
+                                Amount
+                                <span *ngIf="currencyDetail">
+                               ({{currencyDetail.symbol}})
+                              </span>
+                                <span *ngIf="!currencyDetail">
+                                (Rs)
+                              </span> </th>
+                            <!-- <th colspan="1">Deductions</th> -->
+                        </tr>
+                        <tr>
+                            <!-- <th>
+                                <span *ngIf="currencyDetail">
+                                {{currencyDetail.symbol}}
+                              </span>
+                                <span *ngIf="!currencyDetail">
+                                Rs
+                              </span>
+                            </th> -->
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td colspan="4">Basic Salary</td>
+                            <td class="text-right pr_7" colspan="1">
+                                {{selectedPaySlip.salary | currency: " ":"symbol"}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td colspan="4">Working Salary</td>
+                            <td class="text-right pr_7" style="font-style:bold;" colspan="1">
+                                <b>
+                                  {{selectedPaySlip.working_salary | currency: " ":"symbol"}}
+                                </b>
+                            </td>
+
+                        </tr>
+
+                        <!-- <tr>
+                            <td>2</td>
+                            <td colspan="4">Allowance</td>
+                            <td class="text-right" colspan="1">
+                                {{selectedPaySlip.allowance | currency: " ":"symbol"}}
+                            </td>
+
+                        </tr> -->
+                        <tr>
+                            <td>3</td>
+                            <td colspan="4">Advance</td>
+                            <td class="text-right color-red pr_7" colspan="1">
+
+                                <span *ngIf="selectedPaySlip.bonus">
+                                  <!-- - -->
+                                ({{selectedPaySlip.bonus | currency: " ":"symbol"}})
+                              </span>
+                                <span *ngIf="!selectedPaySlip.bonus">
+                                  <!-- - -->
+                                ({{ 00| currency: " ":"symbol"}})
+                              </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>4</td>
+                            <td colspan="4">Tax</td>
+                            <td class="text-right color-red pr_7" colspan="1">
+                                <!-- - -->
+                                ( {{selectedPaySlip.total_tax | currency: " ":"symbol"}})
+                            </td>
+
+                        </tr>
+                        <tr *ngFor="let item of selectedFundArray;let i = index;">
+                            <td>{{i+5}}</td>
+                            <td colspan="4">{{item.title}}</td>
+                            <td colspan="1" class="text-right color-red pr_7">
+                                <!-- - -->
+                                ( {{item.percent_deducted_amount}})</td>
+
+                        </tr>
+
+
+                        <ng-container *ngIf="selectedPaySlip && selectedPaySlip.payslipaddded_data">
+                            <tr *ngFor="let item of selectedPaySlip.payslipaddded_data;let j = index;">
+                                <td>
+                                    {{selectedFundArray.length > 0 ? (j) + selectedFundArray.length+5 : j+5}}
+                                </td>
+                                <td colspan="4">{{item.title}}</td>
+                                <td colspan="1" class="text-right pr_7" [ngClass]="{'color-red': item.type == 0}">
+                                    <ng-container *ngIf="item.type == 1">
+                                        {{ item.amount | currency: " ":"symbol" }}
+                                    </ng-container>
+                                    <ng-container *ngIf="item.type == 0">
+                                        <!-- - -->
+                                        ({{ item.amount_deduct | currency: " ":"symbol"}})
+                                    </ng-container>
+
+                                </td>
+
+                            </tr>
+                        </ng-container>
+
+                        <tr>
+                            <th colspan="5">Total</th>
+
+                            <td class="text-right pr_7">
+                                <b>
+                                  {{selectedPaySlip.gross_salary | currency: " ":"symbol"}}
+                                 </b>
+                            </td>
+
+
+                        </tr>
+                    </table>
+                    <div class="total-words">
+                        <div>Total Payment (in Words): <span>
+            <!-- Fourteen thousand only. -->
+            {{
+              summaryMoney
+            }}
+
+          </span> </div>
+                    </div>
+                </div>
+                <div class="bottom-content">
+                    <div class="received">Received By</div>
+                    <div class="prepared">Prepared By</div>
+                    <div class="checked">Checked By</div>
+                    <div class="approved">Approved By</div>
+                </div>
+            </div>
+            <!-- container slip ends here  -->
+
+
+
+
+            <!-- body ends here  -->
+        </div>
+        <div class="modal-footer doNotPrint">
+            <button class="btn btn-primary mr-2" (click)="download()">Download</button>
+            <button class="btn btn-primary mr-2" [useExistingCss]="true" printSectionId="print-section" ngxPrint>Print</button>
+            <button class="btn btn-danger" type="button" (click)="onHideViewModal()">
+        Close
+      </button>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #advancedFormModal>
+    <form [formGroup]="advancedForm">
+        <div class="modal-header">
+            <h3 class="modal-title pull-left" *ngIf=" this.advancedTitle == 'add'
+">Addition/Deduction</h3>
+            <h3 class="modal-title pull-left" *ngIf=" this.advancedTitle == 'deduct'
+">Additon/Deduction</h3>
+            <button type="button " class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true ">&times;</span>
+  </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="flex-item">
+                        <div *ngIf="!this.status" class="flex-content d-flex">
+                            <div class="btn-wrap">
+                                <label>Add</label>
+                                <button class="btn btn-success btn-xs ml-1" tooltip="Add" (click)="addAdvancedFormArray()">
+  <i class="fa fa-plus"></i>
+</button>
+                            </div>
+                            <div class="total-wrap">
+                                <!-- <b>Base Salary: {{selectedAdvanced.salary}}</b> -->
+                                <b>Salary: <span *ngIf="currencyDetail">
+                                  {{currencyDetail.symbol}}
+                                </span>
+                                  <span *ngIf="!currencyDetail">
+                                  Rs
+                                </span>{{selectedAdvanced.working_salary}}</b>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                Particulars
+                                            </th>
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                <!-- Flat/Percent -->
+                                                Type
+                                            </th>
+
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                Amount <span *ngIf="this.currencyDetail">
+                                                  ({{this.currencyDetail.symbol}})
+                                                </span>
+                                            </th>
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                Remarks
+                                            </th>
+                                            <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody formArrayName="advancedFormArray" *ngFor="
+        let data of advancedForm.get('advancedFormArray')[
+          'controls'
+        ];
+        let i = index
+      ">
+                                        <tr [formGroupName]="i">
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="text" formControlName="title" placeholder="type" class="form-control" name="type" appFormControlValidationMsg>
+
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <!-- <input type="radio" class="mr-1" formControlName="isFlat" placeholder="type" value="flat" (change)="onFlatChange($event.target.value)" name="isFlat">Flat
+                                                    <input type="radio" class="mr-1" formControlName="isFlat" placeholder="type" value="percent" (change)="onFlatChange($event.target.value)" name="isFlat">% -->
+                                                    <select formControlName="addType" class="form-control" name="type" (change)="recalculateAmount(i,data,'amount',$event.target.value)">
+                                                      <option value="additional" >Additional</option>
+                                                      <option value="deduction"> Deduction</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <!-- appFormControlValidationMsg -->
+                                                <div class="d-flex justify-content-initial">
+                                                    <input type="number" style="width: 30%;" placeholder="%" formControlName="percentage" appBlockCopyPaste appInputRestriction="noNegative" (keyup)="recalculateAmount(i, data,'percentage',$event.target.value)" class="form-control" max="100" min="0">
+                                                    <!-- appFormControlValidationMsg -->
+                                                    <span class="mr-2 ml-1"><b>
+                                                      %
+                                                    </b></span>
+                                                    <!-- onAmountChange() -->
+                                                    <input type="number" appBlockCopyPaste appInputRestriction="noNegative" style="width: 50%;" class="form-control" [placeholder]="this.activeFlatType == 'flat'? 'Amount':'Percent' " formControlName="amount" [min]="0" (keyup)="recalculateAmount(i,data,'amount',$event,$event.target.value)"
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <!-- appFormControlValidationMsg -->
+                                                <input type="text" class="form-control" placeholder="remarks" formControlName="details" />
+                                            </td>
+
+
+                                            <td>
+                                                <div class="flex-item">
+                                                    <div class="flex-content"></div>
+                                                    <div class="flex-content">
+                                                        <a tooltip="Remove" style="color: red" (click)="removeAdvanced(i, data,this.advancedTitle)" class="btn">
+                                                            <i class="fa fa-trash"></i>
+                                                            <!-- <i class="fa fa-remove"></i> -->
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <!-- </tr> -->
+                                        </tr>
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2" class="total-f-14">Total Deductions</td>
+                                            <td colspan="2" class="text-right total-f-14"> <span *ngIf=" this.currencyDetail">
+                                          {{this.currencyDetail.symbol}}
+                                        </span> {{totalDeduction}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class='total-f-14'>Total Additions</td>
+                                            <td colspan="2" class="text-right total-f-14"> <span *ngIf=" this.currencyDetail">
+                                        {{this.currencyDetail.symbol}}
+                                      </span> {{totalAddition}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="total-f-14">Grand Total</td>
+                                            <td colspan="2" class="text-right total-f-14"> <span *ngIf=" this.currencyDetail">
+                                              {{this.currencyDetail.symbol}}
+                                            </span> {{totalAmt }}</td>
+                                        </tr>
+
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="!this.status" class="btn btn-success" type="submit" [disabled]="saving" (click)="onMultipleAdvanceSave()">
+            Save
+          </button>
+            <button class="btn btn-danger" type="button" (click)="onHideAdvancedModal()">
+      Close
+    </button>
+        </div>
+    </form>
+</ng-template>
+
+<!--
+<app-pdf-download #pdfDownload [companyLogoObj]="companyLogoObj" [companyInfo]="companyInfo" [selectedPaySlip]="selectedPaySlip" [datePickerFormat]="datePickerFormat" [currentMonth]="currentMonth" [nepaliMonth]="
+  this.datePickerFormat && this.datePickerFormat =='N'?this.nepaliDateForm.get('month').value:null
+  " [datePickerConfig]="datePickerConfig" [currencyDetail]="currencyDetail" [selectedFundArray]="selectedFundArray" [summaryMoney]="summaryMoney" [imageUrl]="imageUrl" [show]="showPdf"></app-pdf-download> -->
+
+
+
+
+
+
+<ng-template #pdfDownload>
+    <!-- [formGroup]="updateAdvancedForm " -->
+    <form>
+
+        <div class="modal-body">
+            <!-- body starts here  -->
+
+            <!-- container slip starts here  -->
+
+            <div class="salaryslip">
+                <div class="header-content">
+                    <div class="logo">
+                        <!-- <img src="../../../../../assets/images/logo.png" alt="logo"> -->
+                        <ng-container *ngIf="companyLogoObj?.company_logo">
+                            <img src="{{ imageUrl }}{{ companyLogoObj?.company_logo }}" />
+                        </ng-container>
+                        <ng-container *ngIf="!companyLogoObj?.company_logo">
+                            <img src="../../../../../assets/images/logo.png" />
+                        </ng-container>
+                    </div>
+                    <div class="location">
+                        <ng-container *ngIf="!this.companyInfo">
+                            Jwagal, Lalitpur
+                        </ng-container>
+                        <ng-container *ngIf="this.companyInfo">
+                            {{companyInfo[0].address}}
+                        </ng-container>
+                    </div>
+                    <div class="page-title">
+                        <h2>
+                            <b>Payslip</b>
+                        </h2>
+                    </div>
+                </div>
+                <div class="top-details">
+                    <div class="date-content">
+                        <div class="emp-num">Employee ID: <span>{{selectedPaySlip.staff_id}}</span></div>
+                        <div>
+                            Salary Period:<span>
+                {{selectedPaySlip.salary_period}}
+              </span>
+                        </div>
+                        <div>
+                            Status:<span class="ml-2">
+
+                              <span style="font-weight: bold" *ngIf="selectedPaySlip.status == 0">
+                                <span class="badge bg-red">Unpaid</span>
+
+                            </span>
+                            <span class="ml-2" style="font-weight: bold" *ngIf="selectedPaySlip.status == 1">
+                                  <span class="badge bg-green-gradient">Paid</span>
+                            </span>
+
+                            </span>
+                        </div>
+                        <div>
+                            Month:<span *ngIf="this.datePickerFormat == 'E'">
+                {{this.currentMonth | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+              </span>
+                            <span *ngIf="this.datePickerFormat == 'N'">
+                {{this.nepaliDateForm.get('month').value | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+              </span>
+                        </div>
+                        <div class="date">Date From:
+                            <span *ngIf="this.datePickerFormat == 'E'">
+                {{selectedPaySlip.start_date }}
+              </span>
+                            <span *ngIf="this.datePickerFormat == 'N'">{{selectedPaySlip.start_date | nepaliDatePipe:this.datePickerConfig.dateInputFormat}}
+
+            </span></div>
+
+                    </div>
+                    <div class="date-content">
+                        <div>Name: <span>{{selectedPaySlip.first_name}} {{selectedPaySlip.middle_name}}
+              {{selectedPaySlip.last_name}}</span></div>
+                        <div class="date">Date To:
+                            <span *ngIf="this.datePickerFormat == 'E'"> {{selectedPaySlip.end_date}}</span>
+                            <span *ngIf="this.datePickerFormat == 'N'">
+              {{selectedPaySlip.end_date |nepaliDatePipe:this.datePickerConfig.dateInputFormat}}</span></div>
+                    </div>
+                </div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th rowspan="2" class="number">S.N</th>
+                            <th rowspan="2" colspan="4">Particulars</th>
+                            <th colspan="1" rowspan="2" class="text-right">
+                                Amount
+                                <span *ngIf="currencyDetail">
+                                 ({{currencyDetail.symbol}})
+                                </span>
+                                <span *ngIf="!currencyDetail">
+                                  (Rs)
+                                </span> </th>
+                            <!-- <th colspan="1">Deductions</th> -->
+                        </tr>
+                        <tr>
+                            <!-- <th>
+                                  <span *ngIf="currencyDetail">
+                                  {{currencyDetail.symbol}}
+                                </span>
+                                  <span *ngIf="!currencyDetail">
+                                  Rs
+                                </span>
+                              </th> -->
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td colspan="4">Basic Salary</td>
+                            <td class="text-right pr_7" colspan="1">
+                                {{selectedPaySlip.salary | currency: " ":"symbol"}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td colspan="4">Working Salary</td>
+                            <td class="text-right pr_7" style="font-style:bold;" colspan="1">
+                                <b>
+                                    {{selectedPaySlip.working_salary | currency: " ":"symbol"}}
+                                  </b>
+                            </td>
+
+                        </tr>
+
+                        <!-- <tr>
+                              <td>2</td>
+                              <td colspan="4">Allowance</td>
+                              <td class="text-right" colspan="1">
+                                  {{selectedPaySlip.allowance | currency: " ":"symbol"}}
+                              </td>
+
+                          </tr> -->
+                        <tr>
+                            <td>3</td>
+                            <td colspan="4">Advance</td>
+                            <td class="text-right color-red pr_7" colspan="1">
+
+                                <span *ngIf="selectedPaySlip.bonus">
+                                    <!-- - -->
+                                  ({{selectedPaySlip.bonus | currency: " ":"symbol"}})
+                                </span>
+                                <span *ngIf="!selectedPaySlip.bonus">
+                                    <!-- - -->
+                                  ({{ 00| currency: " ":"symbol"}})
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>4</td>
+                            <td colspan="4">Tax</td>
+                            <td class="text-right color-red pr_7" colspan="1">
+                                <!-- - -->
+                                ( {{selectedPaySlip.total_tax | currency: " ":"symbol"}})
+                            </td>
+
+                        </tr>
+                        <tr *ngFor="let item of selectedFundArray;let i = index;">
+                            <td>{{i+5}}</td>
+                            <td colspan="4">{{item.title}}</td>
+                            <td colspan="1" class="text-right color-red pr_7">
+                                <!-- - -->
+                                ( {{item.percent_deducted_amount}})</td>
+
+                        </tr>
+
+
+                        <ng-container *ngIf="selectedPaySlip && selectedPaySlip.payslipaddded_data">
+                            <tr *ngFor="let item of selectedPaySlip.payslipaddded_data;let j = index;">
+                                <td>
+                                    {{selectedFundArray.length > 0 ? (j) + selectedFundArray.length+5 : j+5}}
+                                </td>
+                                <td colspan="4">{{item.title}}</td>
+                                <td colspan="1" class="text-right pr_7" [ngClass]="{'color-red': item.type == 0}">
+                                    <ng-container *ngIf="item.type == 1">
+                                        {{ item.amount | currency: " ":"symbol" }}
+                                    </ng-container>
+                                    <ng-container *ngIf="item.type == 0">
+                                        <!-- - -->
+                                        ({{ item.amount_deduct | currency: " ":"symbol"}})
+                                    </ng-container>
+
+                                </td>
+
+                            </tr>
+                        </ng-container>
+
+                        <tr>
+                            <th colspan="5">Total</th>
+
+                            <td class="text-right pr_7">
+                                <b>
+                                    {{selectedPaySlip.gross_salary | currency: " ":"symbol"}}
+                                   </b>
+                            </td>
+
+
+                        </tr>
+                    </table>
+                    <div class="total-words">
+                        <div>Total Payment (in Words): <span>
+              <!-- Fourteen thousand only. -->
+              {{
+                summaryMoney
+              }}
+
+            </span> </div>
+                    </div>
+                </div>
+                <div class="bottom-content">
+                    <div class="received">Received By</div>
+                    <div class="prepared">Prepared By</div>
+                    <div class="checked">Checked By</div>
+                    <div class="approved">Approved By</div>
+                </div>
+            </div>
+            <!-- container slip ends here  -->
+
+
+
+
+            <!-- body ends here  -->
+        </div>
+        <!-- <div class="modal-footer">
+              <button class="btn btn-primary mr-2" (click)="download()">Download</button>
+              <button class="btn btn-primary mr-2">Print</button>
+              <button class="btn btn-danger" type="button" (click)="onHideViewModal()">
+          Close
+        </button>
+          </div> -->
+    </form>
+</ng-template>

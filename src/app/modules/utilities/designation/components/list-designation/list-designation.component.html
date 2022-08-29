@@ -1,0 +1,177 @@
+<div class="box box-default box-shadow">
+    <button class="btn btn-success btn-oval" (click)="openAddModal(designationModal)">
+  <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+    <b>Add Designation</b>
+  </button>
+    <div class="box-body">
+        <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="limit" [loading]="designationListLoading" [skip]="skip" [pageable]="
+        gridView ? (gridView.total <= pageLimit ? false : true) : false
+      " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" (dataStateChange)="dataStateChange($event)">
+            <kendo-grid-column title="S.N" [width]="50" [minResizableWidth]="30" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }">
+                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                    <p>{{ rowIndex + 1 }}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Desination Name" field="designation_name" [headerStyle]="{ 'font-weight': 'bold' }" [width]="180">
+            </kendo-grid-column>
+            <kendo-grid-column title="Department" field="department_name" [headerStyle]="{ 'font-weight': 'bold' }" [width]="180">
+                <ng-template kendoGridFilterCellTemplate>
+                    <kendo-dropdownlist [defaultItem]="defaultItem" [data]="departmentList" [textField]="'department_name'" [valueField]="'department_name'" (valueChange)="searchDepartment($event)">
+                    </kendo-dropdownlist>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column title="Description" field="description" [headerStyle]="{ 'font-weight': 'bold' }" [width]="300"></kendo-grid-column>
+
+            <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="150">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <a class="btn" (click)="openViewModal(designationViewModal, dataItem)" tooltip="View Designation">
+                        <i class="fa fa-eye"></i
+          ></a>
+          <a
+            class="btn"
+            (click)="openEditModel(dataItem, designationModal)"
+            tooltip="Edit Designation"
+            ><i class="fa fa-edit"></i
+          ></a>
+          <a
+            class="btn"
+            (click)="openConfirmationDialogue(dataItem)"
+            tooltip="Delete Designation"
+            ><i class="fa fa-trash"></i
+          ></a>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- add modal -->
+<form [formGroup]="designationForm">
+  <ng-template #designationModal>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="title">Designation</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              placeholder="Enter Title Here"
+              formControlName="designation_name"
+              appFormControlValidationMsg
+            />
+            <!-- <span
+              class="form-error-msg"
+              *ngIf="formErrors.designation_name && submitted"
+              >{{ formErrors.designation_name }}</span
+            > -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="allowanceType">Department</label>
+            <select
+              class="form-control"
+              id="sel1"
+              data-placeholder="Select Allowance Type"
+              formControlName="department_id"
+            >
+            <option value="">Select department</option>
+              <option
+                *ngFor="let department of departmentList"
+                value="{{ department.department_id }}"
+              >
+                {{ department.department_name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="exampleFormControlTextarea2">Description</label>
+            <textarea
+              class="form-control rounded-0"
+              id="exampleFormControlTextarea2"
+              rows="3"
+              name="description"
+              formControlName="description"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- modal body -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-success"
+        (click)="onSubmitDesignation()"
+        type="submit"
+        appFormSubmitValidationMsg
+        [validationControl]="designationForm"
+      >
+        {{ submitButton }}
+      </button>
+    </div>
+  </ng-template>
+</form>
+
+<!-- designation view modal -->
+
+<ng-template #designationViewModal>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">View Designation</h3>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">Designation Name</th>
+          <td>{{ designationDetail.designation_name }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Department</th>
+          <td>{{ designationDetail.department_name }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Description</th>
+          <td>{{ designationDetail.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

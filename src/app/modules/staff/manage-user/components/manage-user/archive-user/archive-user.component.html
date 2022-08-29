@@ -1,0 +1,112 @@
+<div class="panel panel-primary mt-4">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <b> <i class="fa fa-ban"></i>&nbsp;View Archived Users</b>
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <!-- collaspe section -->
+        <div style="padding: 5px">
+            <button type="button" class="btn btn-default" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseEvent">
+        <i class="fa fa-search"></i
+        ><strong style="margin-left: 5px">{{ collapseButton }}</strong>
+      </button>
+            <div id="collapseEvent" [isAnimated]="true" [collapse]="isCollapsed" (collapsed)="collapsed()" (expanded)="expanded()">
+                <div class="well mt-4">
+                    <form [formGroup]="archiveSearchForm">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="staff">Employee Name</label>
+                                    <ng-select [appendTo]="'body'" [dropdownPosition]="'bottom'" (change)="changeEmp()" [searchable]="true" placeholder="Select Employee" formControlName="staff_id">
+                                        <ng-option value="" selected>Select Employee</ng-option>
+                                        <ng-option *ngFor="let list of staffList" [value]="list.staff_id">
+                                            {{ list.emp_id }} - {{ list.last_name }}&nbsp;{{ list.middle_name ? list.middle_name : "" }}&nbsp;{{ list.first_name }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <!-- User Name -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="user">User Name</label>
+                                    <ng-select [appendTo]="'body'" [dropdownPosition]="'bottom'" (change)="changeEmp()" [searchable]="true" formControlName="username">
+                                        <ng-option value="" selected>Select Username</ng-option>
+                                        <ng-option *ngFor="let list of userLists" [value]="list.user_id">
+                                            {{ list.username }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Buttons -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <button class="btn btn-success  btn-oval" type="button" (click)="onSearchStaff()">
+                    <b><i class="fa fa-search"></i></b>&nbsp;Search
+                  </button>
+                                    <button class="btn btn-danger  btn-oval ml-3" type="button" (click)="onCancel()">
+                    <b><i class="fa fa-remove"></i></b>&nbsp;Clear
+                  </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-body">
+            <kendo-grid [data]="userList" [resizable]="true" [pageSize]="limit" [loading]="listLoading" [skip]="skip" [pageable]="
+          userList ? (userList.total <= pageLimit ? false : true) : false
+        " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" (dataStateChange)="dataStateChange($event)">
+                <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="50" [minResizableWidth]="30">
+                    <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                        <p>{{ rowIndex + 1 }}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column title="Full Name" field="first_name" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="360">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <ngx-avatar size="40" name="{{ dataItem?.first_name }}"></ngx-avatar>
+                            </div>
+                            <div class="col-md-9" style="padding-top: 15px">
+                                <!-- {{ getStaffFullNameWithEmpId(dataItem) }} -->
+                                {{dataItem.emp_id}}- {{dataItem.first_name |name :dataItem.last_name:dataItem.middle_name}}
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column title="User Name" field="username" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="180"></kendo-grid-column>
+                <kendo-grid-column title="Status" [headerStyle]="{ 'font-weight': 'bold' }" [width]="100">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <kendo-switch [checked]="dataItem.status == '10' ? true : false" [offLabel]="' '" [onLabel]="' '" (valueChange)="changeStatus($event, dataItem)"></kendo-switch>
+                    </ng-template>
+                </kendo-grid-column>
+                <!-- <kendo-grid-column
+            title="Action"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+            [width]="80"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <a
+                type="button"
+                class="btn"
+                [popover]="popTemplate"
+                [popoverContext]="context"
+                [outsideClick]="true"
+                (click)="setData(dataItem)"
+              >
+                <i class="fa fa-ellipsis-h"></i>
+              </a>
+            </ng-template>
+          </kendo-grid-column> -->
+            </kendo-grid>
+        </div>
+    </div>
+</div>

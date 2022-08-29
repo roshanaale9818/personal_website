@@ -1,0 +1,65 @@
+<div class="company-wrap">
+    <div class="inner-wrap">
+        <div class="row company-register">
+            <div class="col-md-4 col-sm-12 bkg-green">
+                <form [formGroup]="verifyForm">
+                    <div class="modal-header">
+                        <h3 class="modal-title pull-left">Company Verification</h3>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="message">
+                            <p classs="check" *ngIf="!verificationStatus">
+                                Please check your email for registration.
+                            </p>
+                            <p class="success" *ngIf="verificationStatus == true">
+                                You have successfully registered company.
+
+                            </p>
+                            <p *ngIf="verificationStatus == true">
+                                <button class="btn btn-primary" (click)="routeToLogin()">Back to Login</button>
+                            </p>
+                            <p class="fail" *ngIf="verificationStatus == false">
+                                Company registration failed.
+                            </p>
+                        </div>
+                        <!-- <div class="alert alert-warning alert-dismissible" *ngIf="true">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                      &times;
+                    </button>
+                            <h5>
+                                <i class="icon fa fa-warning"></i>
+                                <strong>Please check your email for registration code.</strong
+                      >
+                    </h5>
+                  </div> -->
+                        <!-- <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="username" class="code-title">Verfication Code </label>
+                                    <input type="text" placeholder="Enter code" id="username" class="form-control" formControlName="verify_code" appFormControlValidationMsg />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-12">
+                              <div class="form-group">
+                                  <a for="password" class="pointer-cursor resend">Resend verification code</a>
+
+                              </div>
+                          </div>
+                        </div> -->
+
+
+                        <div>
+
+
+                            <!-- <button class="btn btn-primary submit">
+Submit
+</button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

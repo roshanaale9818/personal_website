@@ -1,0 +1,204 @@
+<div class="box box-default">
+  <div class="box-header">
+    <div class="row">
+      <form [formGroup]="generatePayrollForm">
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <div class="form-group">
+            <label for="user1">Select Employee</label>
+            <select class="form-control" id="user1" formControlName="user_id">
+              <option
+                *ngFor="let staff of staffList"
+                value="{{ staff.user_id }}"
+              >
+                {{ staff.first_name }}
+                {{ staff.middle_name ? staff.middle_name : "" }}
+                {{ staff.last_name }} ({{ staff.username }})</option
+              >
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <div class="form-group">
+            <div class="form-group">
+              <label for="month1">Month</label>
+              <select
+                class="form-control"
+                id="month1"
+                formControlName="month"
+                appFormControlValidationMsg
+              >
+                <option value="">Select Month</option>
+                <option
+                  *ngFor="let month of monthList"
+                  value="{{ month.value }}"
+                  >{{ month.month }}</option
+                >
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <div class="form-group">
+            <label for="year">Year</label>
+            <select
+              class="form-control"
+              id="year"
+              formControlName="year"
+              appFormControlValidationMsg
+            >
+              <option value="">Select Year</option>
+              <option *ngFor="let year of yearList" value="{{ year }}">{{
+                year
+              }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <button
+            class="btn btn-success"
+            appFormSubmitValidationMsg
+            [validationControl]="generatePayrollForm"
+            (click)="OnGeneratePayroll()"
+          >
+            <i class="fa fa-search"></i> Search
+          </button>
+        </div>
+      </form>
+    </div>
+    <div>
+      <h4>
+        <i class="fa fa-list"></i>List of Generated Payroll Of Month
+        <strong>January</strong>
+      </h4>
+    </div>
+  </div>
+
+  <div class="box-body">
+    <!-- kendo table -->
+    <kendo-grid
+      [data]="generatedPayrollList"
+      [loading]="loading"
+      [resizable]="true"
+    >
+      <kendo-grid-column
+        title="S.N"
+        width="50"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+          <p>{{ rowIndex + 1 }}</p>
+        </ng-template>
+      </kendo-grid-column>
+      <!-- <kendo-grid-column
+        title="Code"
+        width="80"
+        field="code"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column> -->
+      <kendo-grid-column
+        title="Full Name"
+        width="200"
+        field="staff_name"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Monthly Salary"
+        width="150"
+        field="monthly_salry"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Working Days"
+        width="150"
+        field="working_days"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Total Hour"
+        width="100"
+        field="total_hr"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Total Days"
+        width="110"
+        field="totaldays"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Paid Holiday"
+        width="110"
+        field="paid_holidays"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Allowance"
+        width="110"
+        field="allowance"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Bonus Advance"
+        width="80"
+        field="bonus_advance"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Tax Percent"
+        width="100"
+        field="txt_percent"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="CIT"
+        width="80"
+        field="cit"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="PF"
+        width="80"
+        field="pf"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Status"
+        width="80"
+        field="status"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Total Salary"
+        width="150"
+        field="total_salary"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        title="Gross Pay"
+        width="150"
+        field="gross_pay"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+          <strong>{{ dataItem.gross_pay }}</strong>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>

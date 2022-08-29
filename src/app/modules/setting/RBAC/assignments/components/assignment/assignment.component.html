@@ -1,0 +1,66 @@
+<div class="box box-default box-shadow">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <i class="fa fa-tasks mr-2"></i>
+        <strong>Role Assignment to User</strong>
+      </h3>
+    </div>
+
+    <div class="panel-body">
+      <div class="box-body">
+        <kendo-grid
+          [data]="gridView"
+          [skip]="skip"
+          [loading]="listLoading"
+          [filter]="state.filter"
+          [sortable]="true"
+          [sort]="sort"
+          [sortable]="true"
+          [resizable]="true"
+          [pageSize]="limit"
+          [pageable]="
+            gridView ? (gridView.total <= pageLimit ? false : true) : false
+          "
+          [filterable]="true"
+          (dataStateChange)="dataStateChange($event)"
+        >
+          <kendo-grid-column title="#" [width]="60">
+            <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+              <p>{{ rowIndex + 1 }}</p>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Username" field="username">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <div class="flex-container">
+                <div class="flex-item">
+                  <ngx-avatar
+                    size="40"
+                    name="{{ dataItem?.username }}"
+                  ></ngx-avatar>
+                </div>
+                <div class="flex-item">
+                  {{ dataItem.username }}
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Action" [width]="120">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <a
+                class="btn"
+                data-toggle="tooltip"
+                tooltip="Assign Role"
+                (click)="navigateToRoleAssign(dataItem)"
+              >
+                <i class="fa fa-user-plus"></i
+              ></a>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

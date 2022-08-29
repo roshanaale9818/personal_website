@@ -1,0 +1,209 @@
+<kendo-pdf-export #pdf paperSize="A4" margin="3cm">
+    <!-- <form>
+        <div class="modal-body">
+
+
+            <div class="salaryslip">
+                <div class="header-content">
+                    <div class="logo">
+
+                        <ng-container *ngIf="companyLogoObj?.company_logo">
+                            <img src="{{ imageUrl }}{{ companyLogoObj?.company_logo }}" />
+                        </ng-container>
+                        <ng-container *ngIf="!companyLogoObj?.company_logo">
+                            <img src="../../../../../assets/images/logo.png" />
+                        </ng-container>
+                    </div>
+                    <div class="location">
+                        <ng-container *ngIf="!this.companyInfo">
+                            Jwagal, Lalitpur
+                        </ng-container>
+                        <ng-container *ngIf="this.companyInfo">
+                            {{companyInfo[0].address}}
+                        </ng-container>
+                    </div>
+                    <div class="page-title">
+                        <h2>
+                            <b>Payslip</b>
+                        </h2>
+                    </div>
+                </div>
+                <div class="top-details">
+                    <div class="date-content">
+                        <div class="emp-num">Employee ID: <span *ngIf="selectedPaySlip">{{selectedPaySlip.staff_id}}</span></div>
+                        <div>
+                            Salary Period:<span *ngIf="selectedPaySlip">
+            {{selectedPaySlip.salary_period}}
+          </span>
+                        </div>
+                        <div>
+                            Status:<span class="ml-2">
+
+                          <span style="font-weight: bold" *ngIf="selectedPaySlip&& selectedPaySlip.status == 0">
+                            <span class="badge bg-red">Unpaid</span>
+
+                            </span>
+                            <span class="ml-2" style="font-weight: bold" *ngIf="selectedPaySlip&&selectedPaySlip.status == 1">
+                              <span class="badge bg-green-gradient">Paid</span>
+                            </span>
+
+                            </span>
+                        </div>
+                        <div>
+                            Month:<span *ngIf="this.datePickerFormat == 'E'">
+            {{this.currentMonth | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+          </span>
+                            <span *ngIf="this.datePickerFormat == 'N'">
+            {{nepaliMonth | monthPipe: this.datePickerFormat == "E"?'eng':'nep'}}
+          </span>
+                        </div>
+                        <div class="date">Date From:
+                            <span *ngIf="this.datePickerFormat == 'E' && selectedPaySlip">
+            {{selectedPaySlip.start_date }}
+          </span>
+                            <span *ngIf="this.datePickerFormat == 'N' && selectedPaySlip">{{selectedPaySlip.start_date | nepaliDatePipe:this.datePickerConfig.dateInputFormat}}
+
+        </span></div>
+
+                    </div>
+                    <div class="date-content">
+                        <div>Name: <span *ngIf="selectedPaySlip">{{selectedPaySlip.first_name | name:selectedPaySlip.last_name:selectedPaySlip.middle_name}}
+        </span></div>
+                        <div class="date">Date To:
+                            <span *ngIf="this.datePickerFormat == 'E' && selectedPaySlip"> {{selectedPaySlip.end_date}}</span>
+                            <ng-container *ngIf="selectedPaySlip">
+                                <span *ngIf="this.datePickerFormat == 'N'">
+                              {{selectedPaySlip.end_date |nepaliDatePipe:this.datePickerConfig.dateInputFormat}}</span>
+
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th rowspan="2" class="number">S.N</th>
+                            <th rowspan="2" colspan="4">Particulars</th>
+                            <th colspan="1" rowspan="2" class="text-right">
+                                Amount
+                                <span *ngIf="currencyDetail">
+                             ({{currencyDetail.symbol}})
+                            </span>
+                                <span *ngIf="!currencyDetail">
+                              (Rs)
+                            </span> </th>
+
+                        </tr>
+                        <tr>
+
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td colspan="4">Basic Salary</td>
+                            <td class="text-right pr_7" colspan="1" *ngIf="selectedPaySlip">
+                                {{selectedPaySlip.salary | currency: " ":"symbol"}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td colspan="4">Working Salary</td>
+                            <td class="text-right pr_7" style="font-style:bold;" colspan="1">
+                                <b *ngIf="selectedPaySlip">
+                                {{selectedPaySlip.working_salary | currency: " ":"symbol"}}
+                              </b>
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+                            <td>3</td>
+                            <td colspan="4">Advance</td>
+                            <td class="text-right color-red pr_7" colspan="1">
+
+                                <span *ngIf="selectedPaySlip&& selectedPaySlip.bonus">
+
+                              ({{selectedPaySlip.bonus | currency: " ":"symbol"}})
+                            </span>
+                                <span *ngIf="selectedPaySlip && !selectedPaySlip.bonus">
+
+                              ({{ 00| currency: " ":"symbol"}})
+                            </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>4</td>
+                            <td colspan="4">Tax</td>
+                            <td class="text-right color-red pr_7" colspan="1" *ngIf="selectedPaySlip">
+
+                                ( {{selectedPaySlip.total_tax | currency: " ":"symbol"}})
+                            </td>
+
+                        </tr>
+                        <tr *ngFor="let item of selectedFundArray;let i = index;">
+                            <td>{{i+5}}</td>
+                            <td colspan="4">{{item.title}}</td>
+                            <td colspan="1" class="text-right color-red pr_7">
+
+                                ( {{item.percent_deducted_amount}})</td>
+
+                        </tr>
+
+
+                        <ng-container *ngIf="selectedPaySlip && selectedPaySlip.payslipaddded_data">
+                            <tr *ngFor="let item of selectedPaySlip.payslipaddded_data;let j = index;">
+                                <td>
+                                    {{selectedFundArray.length > 0 ? (j) + selectedFundArray.length+5 : j+5}}
+                                </td>
+                                <td colspan="4">{{item.title}}</td>
+                                <td colspan="1" class="text-right pr_7" [ngClass]="{'color-red': item.type == 0}">
+                                    <ng-container *ngIf="item.type == 1">
+                                        {{ item.amount | currency: " ":"symbol" }}
+                                    </ng-container>
+                                    <ng-container *ngIf="item.type == 0">
+
+                                        ({{ item.amount_deduct | currency: " ":"symbol"}})
+                                    </ng-container>
+
+                                </td>
+
+                            </tr>
+                        </ng-container>
+
+                        <tr>
+                            <th colspan="5">Total</th>
+
+                            <td class="text-right pr_7">
+                                <b *ngIf="selectedPaySlip">
+                                {{selectedPaySlip.gross_salary | currency: " ":"symbol"}}
+                               </b>
+                            </td>
+
+
+                        </tr>
+                    </table>
+                    <div class="total-words">
+                        <div>Total Payment (in Words): <span *ngIf="summaryMoney">
+
+          {{
+            summaryMoney
+          }}
+
+        </span> </div>
+                    </div>
+                </div>
+                <div class="bottom-content">
+                    <div class="received">Received By</div>
+                    <div class="prepared">Prepared By</div>
+                    <div class="checked">Checked By</div>
+                    <div class="approved">Approved By</div>
+                </div>
+            </div>
+
+        </div>
+    </form> -->
+</kendo-pdf-export>

@@ -1,0 +1,379 @@
+<div class="box box-default box-shadow mt-3">
+    <!-- collaspe section -->
+    <!-- <div style="padding: 5px">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      aria-controls="collapseEvent"
+    >
+      <i class="fa fa-search"></i
+      ><strong style="margin-left: 5px">{{ collapseButton }}</strong>
+    </button>
+    <div
+      id="collapseEvent"
+      [isAnimated]="true"
+      [collapse]="isCollapsed"
+      (collapsed)="collapsed()"
+      (expanded)="expanded()"
+    >
+      <div class="well mt-4"></div>
+    </div>
+  </div> -->
+    <div class="box-header with-border mt-3">
+        <form [formGroup]="attendanceDetailsForm">
+            <div class="row" *ngIf="showClient">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="client">Client</label>
+                        <ng-select appearance="outline" #agreeSelect labelForId="client" [searchable]="true" formControlName="client_id" placeholder="Select Client" appFormControlValidationMsg (change)="clientChange()">
+                            <ng-option value="" selected>Select Client</ng-option>
+
+                            <ng-option *ngFor="let item of clientList" [value]="item.client_id">
+                                {{ item.name }}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="user123">User</label>
+                    <ng-select appearance="outline" #agreeSelect [searchable]="true" [dropdownPosition]="'bottom'" placeholder="Select User" formControlName="user_id" (change)="getStaffId($event)">
+                        <ng-option value="" selected>Select User</ng-option>
+                        <ng-option *ngFor="let staff of staffList" [value]="staff.user_id">
+                            <!-- {{ staff.last_name }}
+              {{ staff.middle_name ? staff.middle_name : "" }}
+              {{ staff.first_name }} -->
+                            {{staff.first_name|name:staff.last_name:staff.middle_name}} ({{ staff.username }})
+                        </ng-option>
+                    </ng-select>
+                </div>
+                <!-- <div class="col-md-2">
+        <button class="btn btn-success">Upload Attendance From Device</button>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary">Filter Data</button>
+      </div> -->
+
+                <!-- <div class="col-md-3">
+        <div class="form-group">
+          <input
+            placeholder="Search..."
+            class="form-control"
+            bsDatepicker
+            [bsConfig]="datePickerConfig"
+            formControlName="checkin_datetime"
+          />
+        </div>
+      </div> -->
+
+                <!-- <div class="col-md-1">
+        <div class="form-group">
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="onSearchAttendanceDetail()"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-1">
+        <div class="form-group">
+          <button
+            class="btn btn-danger ml-3"
+            type="button"
+            (click)="onCancel()"
+          >
+            Clear
+          </button>
+        </div>
+      </div> -->
+
+                <!-- <div class="col-md-2">
+        <button class="btn btn-danger">
+          <i class="fa fa-trash"></i> Select and Delete
+        </button>
+      </div> -->
+            </div>
+
+            <div class="row" *ngIf !="showClient">
+                <div class="col-md-4">
+                    <label for="userId">User</label>
+                    <ng-select appearance="outline" #agreeSelect [searchable]="true" [dropdownPosition]="'bottom'" placeholder="Select.." formControlName="user_id" (change)="getStaffId($event)">
+                        <ng-option *ngFor="let staff of employeeList" [value]="staff.user_id">
+                            <!-- {{ staff.last_name }}
+              {{ staff.middle_name ? staff.middle_name : "" }}
+              {{ staff.first_name }} -->
+                            {{staff.first_name|name:staff.last_name:staff.middle_name}} ({{ staff.username }})
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--
+  [kendoGridSelectBy]="mySelectionKey"
+  [selectedKeys]="mySelection"
+  (selectionChange)="onSelect($event)" -->
+
+    <div class="panel panel-primary mt-5">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <i class="fa fa-table mr-2"></i>
+                <strong>Detail Table</strong>
+            </h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="box-body">
+                <!-- kendo table -->
+                <kendo-grid [data]="gridData" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [loading]="loading" [filter]="state.filter" [sortable]="true" [resizable]="true" [pageable]="attendanceDetailList.length > state.take" (dataStateChange)="dataStateChange($event)">
+                    <!-- <kendo-grid-checkbox-column
+            width="50"
+            [locked]="true"
+            [headerStyle]="{
+              'font-weight': 'bold',
+              'background-color': '#666',
+              color: '#fff'
+            }"
+            [style]="{ 'background-color': 'rgb(203, 221, 236)' }"
+          ></kendo-grid-checkbox-column> -->
+                    <kendo-grid-column width="60" [locked]="true" [headerStyle]="{
+              'font-weight': 'bold',
+              'background-color': '#666',
+              color: '#fff'
+            }" [style]="{ 'background-color': 'rgb(203, 221, 236)' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <input type="checkbox" (change)="onSelect(dataItem, $event.target.checked)" />
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="S.N" width="50" [headerStyle]="{
+              'font-weight': 'bold',
+              'background-color': '#666',
+              color: '#fff'
+            }" [style]="{ 'background-color': 'rgb(203, 221, 236)' }" [locked]="true">
+                        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                            <p>{{ rowIndex + 1 }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Client Name" width="100" [locked]="true" field="clinet_name" [headerStyle]="{
+              'font-weight': 'bold',
+              'background-color': '#666',
+              color: '#fff'
+            }" [style]="{ 'background-color': 'rgb(203, 221, 236)' }">
+                    </kendo-grid-column>
+                    <kendo-grid-column title="User" field="username" width="180" [headerStyle]="{
+              'font-weight': 'bold',
+              'background-color': '#666',
+              color: '#fff'
+            }" [style]="{ 'background-color': 'rgb(203, 221, 236)' }" [locked]="true">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- {{ dataItem.emp_id }} - {{ dataItem.first_name }}
+              <span *ngIf="dataItem.middle_name !== 'null'">
+                {{&nbsp;dataItem.middle_name }}
+              </span> -->
+                            {{dataItem.first_name|name:dataItem.last_name:dataItem.middle_name}}
+                            <!-- {{ dataItem.last_name }}  -->
+                            ({{ dataItem.username }})
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="CheckIn DateTime" field="checkin_datetime" width="180" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- <p>{{ dataItem.checkin_datetime | date: "MM/dd/yyyy" }}</p> -->
+                            <p *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'">
+                                {{ dataItem.checkin_datetime | date: "MM/dd/yyyy" }}
+                            </p>
+                            <p *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'">
+                                {{ dataItem.checkin_datetime | date: "yyyy/MM/dd" }}
+                            </p>
+                            <p *ngIf="timeFormat == '12'">
+                                {{ dataItem.checkin_datetime | date: "shortTime" }}
+                            </p>
+                            <p *ngIf="timeFormat == '24'">
+                                {{ dataItem.checkin_datetime | date: "HH:mm" }}
+                            </p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="CheckOut Datetime" field="checkout_datetime" width="180" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <p *ngIf="dataItem.checkout_datetime == null" style="color: #c55; font-style: italic">
+                                (not set)
+                            </p>
+                            <!-- <p>{{ dataItem.checkout_datetime | date: "MM/dd/yyyy" }}</p> -->
+                            <p *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'">
+                                {{ dataItem.checkout_datetime | date: "MM/dd/yyyy" }}
+                            </p>
+                            <p *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'">
+                                {{ dataItem.checkout_datetime | date: "yyyy/MM/dd" }}
+                            </p>
+                            <p *ngIf="timeFormat == '12'">
+                                {{ dataItem.checkout_datetime | date: "shortTime" }}
+                            </p>
+                            <p *ngIf="timeFormat == '24'">
+                                {{ dataItem.checkout_datetime | date: "HH:mm" }}
+                            </p>
+                        </ng-template>
+                        <!-- HH:mm:ss for 24 hour format -->
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Checkin Message" field="checkin_message" width="150" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span *ngIf="!dataItem.checkin_message" style="color: #c55; font-style: italic">
+                (not set)
+              </span>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="CheckIn Ip" field="checkin_ip" width="150" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span *ngIf="!dataItem.checkin_ip; else elseBlock" style="color: #c55; font-style: italic">
+                (not set)
+              </span>
+                            <ng-template #elseBlock>
+                                {{ dataItem.checkin_ip }}
+                            </ng-template>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="CheckOut Ip" field="checkout_ip" width="150" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span *ngIf="!dataItem.checkout_ip; else elseBlock" style="color: #c55; font-style: italic">
+                (not set)
+              </span>
+                            <ng-template #elseBlock>
+                                {{ dataItem.checkout_ip }}
+                            </ng-template>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="CheckOut Message" field="checkout_message" width="150" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span *ngIf="!dataItem.checkout_message; else elseBlock" style="color: #c55; font-style: italic">
+                (not set)
+              </span>
+                            <ng-template #elseBlock>
+                                {{ dataItem.checkout_message }}
+                            </ng-template>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="CheckOut Status" field="checkout_status" width="140" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span *ngIf="dataItem.checkout_status == '0'" class="glyphicon glyphicon-remove text-danger"></span>
+                            <span *ngIf="dataItem.checkout_status == '1'" class="glyphicon glyphicon-ok text-success"></span>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Action" width="120 " [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <a class="btn" (click)="openViewModal(ViewModal, dataItem)">
+                                <i class="fa fa-eye"></i
+              ></a>
+
+              <!-- Delete button -->
+              <flexyear-delete-confirmation-modal
+                [data]="dataItem"
+                [title]="dataItem.user_id"
+                [action]="'delete'"
+                (onConfirm)="deleteAttendanceDetail(dataItem)"
+              >
+              </flexyear-delete-confirmation-modal>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- attendance detail view template -->
+<ng-template #ViewModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">View Attendance Detail</h4>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">User</th>
+          <td>
+            {{ attendanceDetail.emp_id }} -
+            <!-- {{ attendanceDetail.first_name }}
+            <span *ngIf="attendanceDetail.middle_name !== 'null'">
+              {{&nbsp;attendanceDetail.middle_name }}
+            </span>
+            {{ attendanceDetail.last_name }}  -->
+            {{attendanceDetail.first_name|name:attendanceDetail.last_name:attendanceDetail.middle_name}}
+            ({{ attendanceDetail.username }})
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">CheckIn DateTime</th>
+          <td>
+            <!-- {{ attendanceDetail.checkin_datetime| date: "shortTime" }} -->
+            <span *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'">
+              {{ attendanceDetail.checkin_datetime | date: "MM/dd/yyyy" }}
+            </span>
+            <span *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'">
+              {{ attendanceDetail.checkin_datetime | date: "yyyy/MM/dd" }}
+            </span>
+            <span *ngIf="timeFormat == '12'">{{
+              attendanceDetail.checkin_datetime | date: "shortTime"
+            }}</span>
+            <span *ngIf="timeFormat == '24'">{{
+              attendanceDetail.checkin_datetime | date: "HH:mm:ss"
+            }}</span>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">CheckIn Message</th>
+
+          <td>{{ attendanceDetail.checkin_message }}</td>
+        </tr>
+        <tr>
+          <th scope="row">CheckIn Ip</th>
+          <td>{{ attendanceDetail.checkin_ip }}</td>
+        </tr>
+        <tr>
+          <th scope="row">CheckOut Ip</th>
+          <td>{{ attendanceDetail.checkout_ip }}</td>
+        </tr>
+        <tr>
+          <th scope="row">CheckOut DateTime</th>
+          <td>
+            <!-- {{ attendanceDetail.checkout_datetime }} -->
+            <span *ngIf="datePickerConfig.dateInputFormat == 'MM/DD/YYYY'">
+              {{ attendanceDetail.checkout_datetime | date: "MM/dd/yyyy" }}
+            </span>
+            <span *ngIf="datePickerConfig.dateInputFormat == 'YYYY/MM/DD'">
+              {{ attendanceDetail.checkout_datetime | date: "yyyy/MM/dd" }}
+            </span>
+            <span *ngIf="timeFormat == '12'">{{
+              attendanceDetail.checkout_datetime | date: "shortTime"
+            }}</span>
+            <span *ngIf="timeFormat == '24'">{{
+              attendanceDetail.checkout_datetime | date: "HH:mm:ss"
+            }}</span>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">CheckOut Message</th>
+          <td>{{ attendanceDetail.checkout_message }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

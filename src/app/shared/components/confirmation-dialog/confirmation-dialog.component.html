@@ -1,0 +1,34 @@
+<div class="alert-box">
+    <!-- Head -->
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"><b>Confirmation</b></h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+        Are you sure you want to {{ bsModalRef?.content?.action }}
+        <strong>{{ bsModalRef?.content?.data }}</strong> ?
+
+        <!-- showcofirmation input  -->
+        <ng-container *ngIf="showConfirmationInput && showConfirmationLabel">
+            <div class="mt-4">
+                <label>{{showConfirmationLabel}}</label>
+                <input class="form-control" id="confirmation" [(ngModel)]="confirmationText" (keyup)="onChange()">
+            </div>
+        </ng-container>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-oval" (click)="onCancel()">
+      Cancel
+    </button>
+        <button type="button" class="btn btn-success btn-oval" [disabled]="disable" (click)="onConfirm()">
+      Confirm
+    </button>
+    </div>
+</div>

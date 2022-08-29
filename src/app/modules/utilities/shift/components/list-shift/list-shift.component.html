@@ -1,0 +1,283 @@
+<div class="box box-default box-shadow">
+    <button class="btn btn-success btn-oval" (click)="openAddModal(shiftModal)">
+    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+    <b>Add Shift</b>
+  </button>
+    <div class="box-body">
+        <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="limit" [loading]="shiftListLoading" [skip]="skip" [pageable]="
+        gridView ? (gridView.total <= pageLimit ? false : true) : false
+      " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" [selectable]="true" (dataStateChange)="dataStateChange($event)">
+            <kendo-grid-column title="Shift Name" field="name" [headerStyle]="{ 'font-weight': 'bold' }" [width]="180">
+            </kendo-grid-column>
+            <kendo-grid-column title="Shift From" field="shift_from" [headerStyle]="{ 'font-weight': 'bold' }" [width]="180">
+            </kendo-grid-column>
+
+            <kendo-grid-column title="Shift To" field="shift_to" [headerStyle]="{ 'font-weight': 'bold' }" [width]="180"></kendo-grid-column>
+
+            <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <a class="btn" tooltip="Update" (click)="openEditModel(dataItem, shiftModal)"><i class="fa fa-edit"></i
+          ></a>
+                    <a class="btn" tooltip="Delete" (click)="openConfirmationDialogue(dataItem)"><i class="fa fa-trash"></i
+          ></a>
+                </ng-template>
+            </kendo-grid-column>
+
+            <ng-template kendoGridDetailTemplate let-dataItem>
+                <section *ngIf="dataItem">
+                    <table class="table table-bordered">
+                        <thead style="background-color: grey; color: white">
+                            <tr>
+                                <th scope="col">Sunday</th>
+                                <th scope="col">Monday</th>
+                                <th scope="col">Tuesday</th>
+                                <th scope="col">Wednesday</th>
+                                <th scope="col">Thursday</th>
+                                <th scope="col">Friday</th>
+                                <th scope="col">Saturday</th>
+                                <th scope="col">Late Warning</th>
+                                <th scope="col">Break</th>
+                                <th scope="col">Check In Restriction</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ dataItem.sunday ? "Yes" : "No" }}</td>
+                                <td>{{ dataItem.monday ? "Yes" : "No" }}</td>
+                                <td>{{ dataItem.tuesday ? "Yes" : "No" }}</td>
+                                <td>{{ dataItem.wednesday ? "Yes" : "No" }}</td>
+                                <td>{{ dataItem.thursday ? "Yes" : "No" }}</td>
+                                <td>{{ dataItem.friday ? "Yes" : "No" }}</td>
+                                <td>{{ dataItem.saturday ? "Yes" : "No" }}</td>
+                                <td>{{ dataItem.late_warn_time }}</td>
+                                <td>{{ dataItem.break_time }}</td>
+                                <td>{{ dataItem.check_in_restriction }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </ng-template>
+        </kendo-grid>
+    </div>
+</div>
+
+<!-- add shift modal -->
+<form [formGroup]="shiftForm">
+    <ng-template #shiftModal>
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="title">Shift Name <sup>*</sup></label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title Here" formControlName="name" appFormControlValidationMsg />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="shiftFrom">Shift From <sup>*</sup></label>
+                        <input class="form-control" type="time" formControlName="shift_from" appFormControlValidationMsg />
+                    </div>
+
+                    <!-- <kendo-timepicker
+              [format]="'HH:mm:ss'"
+              [value]="currentDate"
+              id="kendo-time-picker"
+              formControlName="shift_from"
+            ></kendo-timepicker> -->
+                    <!-- <input type="text" id="shiftFrom" class="form-control" /> -->
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="shiftFrom">Shift To<sup>*</sup></label>
+                        <input class="form-control" type="time" formControlName="shift_to" appFormControlValidationMsg />
+                    </div>
+
+                    <!-- <kendo-timepicker
+              [format]="'HH:mm:ss'"
+              [value]="currentDate"
+              id="kendo-time-picker"
+            ></kendo-timepicker> -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="shiftFrom">Late Warning Time<sup>*</sup></label>
+                        <input class="form-control" type="time" formControlName="late_warn_time" appFormControlValidationMsg />
+                    </div>
+
+                    <!-- <kendo-timepicker
+              [value]="currentDate"
+              [format]="'HH:mm:ss'"
+              id="kendo-time-picker"
+              formControlName="late_warn_time"
+            ></kendo-timepicker> -->
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="shiftFrom">Check In Restriction</label>
+                        <input class="form-control" type="time" formControlName="check_in_restriction" />
+                    </div>
+
+                    <!-- <kendo-timepicker
+              [format]="'HH:mm:ss'"
+              [value]="currentDate"
+              id="kendo-time-picker"
+              formControlName="check_in_restriction"
+            ></kendo-timepicker> -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label> Break Time</label>
+                        <input class="form-control" type="time" formControlName="break_time" />
+                    </div>
+
+                    <!-- <kendo-timepicker
+              [format]="'HH:mm:ss'"
+              [value]="currentDate"
+              id="kendo-time-picker"
+              formControlName="break_time"
+            ></kendo-timepicker> -->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Working Days</label>
+                </div>
+                <div class="col-md-12">
+                    <div class="flex-container">
+                        <div class="flex-item">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label for="sunday">
+                    <input
+                      type="checkbox"
+                      id="sunday"
+                      value="sunday"
+                      formControlName="sunday"
+                    />
+                    Sunday
+                  </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label for="monday">
+                    <input
+                      type="checkbox"
+                      id="monday"
+                      value="monday"
+                      formControlName="monday"
+                    />
+                    Monday
+                  </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label for="tuesday">
+                    <input
+                      type="checkbox"
+                      id="tuesday"
+                      value="tuesday"
+                      formControlName="tuesday"
+                    />
+                    Tuesday
+                  </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label for="wednesday">
+                    <input
+                      type="checkbox"
+                      id="wednesday"
+                      value="wednesday"
+                      formControlName="wednesday"
+                    />
+                    Wednesday
+                  </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label for="thursday">
+                    <input
+                      type="checkbox"
+                      id="thursday"
+                      value="thursday"
+                      formControlName="thursday"
+                    />
+                    Thursday
+                  </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label for="friday">
+                    <input
+                      type="checkbox"
+                      id="friday"
+                      value="friday"
+                      formControlName="friday"
+                    />
+                    Friday
+                  </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label for="saturday">
+                    <input
+                      type="checkbox"
+                      id="saturday"
+                      value="saturday"
+                      formControlName="saturday"
+                    />
+                    Saturday
+                  </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- modal body -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+            <button class="btn btn-success" (click)="onSubmitShift()" type="submit" appFormSubmitValidationMsg [validationControl]="shiftForm">
+        {{ submitButton }}
+      </button>
+        </div>
+    </ng-template>
+</form>

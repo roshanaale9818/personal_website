@@ -1,0 +1,41 @@
+<div class="box box-default box-shadow">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <b>Client Employees</b>
+      </h3>
+    </div>
+
+    <div class="panel-body">
+      <form>
+        <div class="row">
+          <div class="col-md-5">
+            <div class="form-group">
+              <label for="client">Client</label>
+              <ng-select
+                appearance="outline"
+                labelForId="client"
+                [searchable]="true"
+                placeholder="Select Client"
+              >
+                <ng-option disabled value="">Select Client</ng-option>
+                >
+              </ng-select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <button class="btn btn-primary" type="submit">Search</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Kendo table -->
+      <div class="mt-4">
+        <kendo-grid></kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

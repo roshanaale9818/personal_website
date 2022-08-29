@@ -1,0 +1,362 @@
+<div class="box box-default box-shadow">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <i class="fa fa-clock-o mr-3"></i> <b>Client Employee Shift</b>
+      </h3>
+    </div>
+
+    <div class="panel-body">
+      <div class="box-header with-border" style="background-color: #eee">
+        <button
+          type="button"
+          class="btn btn-default btn-oval"
+          (click)="isCollapsed = !isCollapsed"
+          [attr.aria-expanded]="!isCollapsed"
+          aria-controls="collapseEvent"
+        >
+          <i class="fa fa-search"></i
+          ><strong style="margin-left: 5px">
+            <b>{{ collapseButton }}</b>
+          </strong>
+        </button>
+        <button
+          style="margin-left: 20px"
+          class="btn btn-success btn-oval"
+          (click)="openAddModal(addClientStaffShift)"
+        >
+          <i class="fa fa-plus-circle mr-2"></i><b>Add Client Employee Shift</b>
+        </button>
+
+        <!-- Add -->
+      </div>
+      <!-- collaspe section -->
+      <div style="padding: 5px; margin-top: 5px">
+        <div
+          id="collapseEvent"
+          [isAnimated]="true"
+          [collapse]="isCollapsed"
+          (collapsed)="collapsed()"
+          (expanded)="expanded()"
+        >
+          <!-- <div class="well card card-block card-header"></div> -->
+          <div class="well mt-4">
+            <form [formGroup]="clientStaffShiftForm">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Employee<sup>*</sup></label>
+                    <ng-select
+                      [appendTo]="'body'"
+                      [searchable]="true"
+                      formControlName="staff_id"
+                      placeholder="Select Employee"
+                    >
+                      <ng-option value="" selected>Select Employee</ng-option>
+                      <ng-option
+                        *ngFor="let item of clientEmployeeList"
+                        [value]="item.staff_id"
+                      >
+                        {{ item.emp_id }} - {{ item.last_name }}
+                        {{ item.middle_name ? item.middle_name : "" }}
+                        {{ item.first_name }}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <!-- Buttons -->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <button
+                      class="btn btn-success btn-xs btn-oval"
+                      type="button"
+                      (click)="onSearchClientEmployee()"
+                    >
+                      <i class="fa fa-search"></i> Search
+                    </button>
+                    <button
+                      class="btn btn-danger btn-xs ml-3"
+                      type="button"
+                      (click)="onCancel()"
+                    >
+                      <i class="fa fa-remove"></i> Clear
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kendo Table -->
+      <div class="box-body">
+        <kendo-grid
+          [data]="gridView"
+          [resizable]="true"
+          [skip]="skip"
+          [pageSize]="limit"
+          [pageable]="
+            gridView ? (gridView.total <= pageLimit ? false : true) : false
+          "
+          [filterable]="false"
+          [filter]="state.filter"
+          [sort]="sort"
+          [sortable]="true"
+          [loading]="loading"
+          (dataStateChange)="dataStateChange($event)"
+        >
+          <kendo-grid-column title="S.N." [width]="60">
+            <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+              <p>{{ rowIndex + 1 }}</p>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Employee"
+            [filterable]="false"
+            field="staff_id"
+            [width]="300"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <div class="flex-container">
+                <div class="flex-items">
+                  <ngx-avatar
+                    name="{{ dataItem?.first_name }}"
+                    size="40"
+                  ></ngx-avatar>
+                </div>
+                <div class="flex-items">
+                  {{ dataItem.emp_id }} -
+                  {{ dataItem.last_name }}
+                  {{ dataItem.middle_name ? dataItem.middle_name : "" }}
+                  {{ dataItem.first_name }}
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Shift Name" field="shift_name">
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Shift From" field="shift_from">
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Shift To" field="shift_to">
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Rate" field="rate"> </kendo-grid-column>
+
+          <kendo-grid-column title="Pay Period" field="pay_period">
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Status" field="status">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <div style="justify-content: center">
+                <span
+                  *ngIf="dataItem.status == 'Active'"
+                  class="badge bg-green-gradient"
+                  >Active</span
+                >
+                <span
+                  *ngIf="dataItem.status == 'Inactive'"
+                  class="badge bg-red-gradient"
+                  >InActive</span
+                >
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Action"
+            [width]="120"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <!-- <a class="btn" (click)="openViewModal(dataItem)">
+                    <i class="fa fa-eye"></i
+                  ></a> -->
+              <a
+                class="btn"
+                tooltip="Update"
+                (click)="openEditModal(dataItem, addClientStaffShift)"
+                ><i class="fa fa-edit"></i
+              ></a>
+
+              <a
+                class="btn"
+                tooltip="Delete"
+                (click)="openConfirmationDialogue(dataItem)"
+                ><i class="fa fa-trash"></i
+              ></a>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- add client staff shift modal -->
+
+<form [formGroup]="clientStaffShiftForm">
+  <ng-template #addClientStaffShift>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <h6>{{ clientStaffShiftForm.getRawValue() | json }}</h6> -->
+          <div class="form-group">
+            <label for="status">Employee<sup>*</sup></label>
+            <span *ngIf="!editMode">
+              <ng-select
+                appearance="outline"
+                [multiple]="true"
+                #agreeSelect
+                labelForId="status"
+                [searchable]="true"
+                formControlName="staff_id"
+                placeholder="Select Employee"
+                appFormControlValidationMsg
+              >
+                <ng-option value="" selected>Select Employee</ng-option>
+                <ng-option
+                  *ngFor="let item of clientEmployeeList"
+                  [value]="item.staff_id"
+                >
+                  {{ item.emp_id }} - {{ item.last_name }}
+                  {{ item.middle_name ? item.middle_name : "" }}
+                  {{ item.first_name }}
+                </ng-option>
+                <ng-template ng-header-tmp>
+                  <button
+                    class="btn btn-xs btn-primary mr-3"
+                    (click)="onSelectedAll()"
+                  >
+                    Select All
+                  </button>
+                  <button
+                    class="btn btn-xs btn-danger"
+                    (click)="onClearableAll()"
+                  >
+                    Clear All
+                  </button>
+                </ng-template>
+              </ng-select>
+            </span>
+
+            <input
+              *ngIf="editMode"
+              disabled
+              class="form-control"
+              formControlName="staff_id"
+            />
+
+            <!-- <select class="form-control" formControlName="staff_id">
+              <option
+                *ngFor="let item of clientEmployeeList"
+                [value]="item.staff_id"
+              >
+                {{ item.emp_id }} - {{ item.last_name }}
+                {{ item.middle_name ? item.middle_name : "" }}
+                {{ item.first_name }}
+              </option>
+            </select> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="email">Client Shift<sup>*</sup></label>
+            <ng-select
+              appearance="outline"
+              #agreeSelect
+              labelForId="status"
+              [searchable]="true"
+              formControlName="client_shift_id"
+              placeholder="Select Client Shift"
+              appFormControlValidationMsg
+            >
+              <ng-option value="">Select Client Shift</ng-option>
+              <ng-option
+                *ngFor="let item of clientShiftList"
+                [value]="item.client_shift_id"
+              >
+                {{ item.name }}
+              </ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="rate">Rate<sup>*</sup></label>
+            <input
+              class="form-control"
+              id="rate"
+              formControlName="rate"
+              placeholder="Rate"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Pay Period </label>
+            <select class="form-control" formControlName="pay_period">
+              <!-- (change)="clickEvent($event)" -->
+              <option value="" selected>Select Pay Period</option>
+              <option value="Hourly">Hourly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Status </label>
+            <select class="form-control" formControlName="status">
+              <option value="" selected>Select Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+        <button
+          class="btn btn-success btn-oval"
+          type="submit"
+          (click)="onSubmit()"
+          appFormSubmitValidationMsg
+          [validationControl]="clientStaffShiftForm"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</form>

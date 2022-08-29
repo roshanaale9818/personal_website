@@ -1,0 +1,7 @@
+<form [formGroup]="form">
+    <np-datepicker name="nepali" [formControlName]='controlName' [dateFormatter]="formatter" inputClass="form-control" [language]="customNepaliDatePickerSetting?.language ? customNepaliDatePickerSetting?.language:'en'" (change)="onChange($event)">
+    </np-datepicker>
+</form>
+<!-- <nepali-date-picker name="nepaliDateFrom" [id]="'nepaliDatefrom'" (change)="changeDate($event.detail.value,'BS')" [label]="'From'" [(ngModel)]="dateTest">
+</nepali-date-picker> -->
+<!-- form-control -->

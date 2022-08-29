@@ -1,0 +1,334 @@
+<div class="box box-default box-shadow">
+    <!-- <button class="btn btn-success" (click)="openAddModal(taxSlabModalMultiple)">
+    Add Tax Slab
+  </button> -->
+    <!-- <div class="box-body search-wrap">
+        <div style="padding: 5px">
+            <div class="well mt-4">
+                <form [formGroup]="searchForm">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="datfrom">Date From</label>
+                                <input type="text" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" bsDatepicker class="form-control" formControlName="dateFrom" appFormControlValidationMsg placeholder="Date From"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="dateTo">Date To</label>
+                                <input type="text" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" bsDatepicker class="form-control" formControlName="dateTo" appFormControlValidationMsg placeholder="Date From">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <button class="btn btn-success btn-oval taxSlabBtn" (click)="onSearchClicked()" type="button" appFormSubmitValidationMsg [validationControl]="searchForm">
+                              <b> <i class="fa fa-search"></i> Search</b>
+                            </button>
+                                </div>
+                                <div class="flex-item ml-3" (click)="onReset()">
+                                    <button class="btn btn-danger btn-oval mr-2 taxSlabBtn" type="button">
+                              <b>
+                                <i class="fa fa-remove"></i>
+                                Cancel</b
+                              >
+                            </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div> -->
+
+
+    <div class="box-body">
+        <div *ngIf="loading" class="k-i-loading"></div>
+        <div class="box-body table-responsive" *ngFor="let item of employeeGroupList; let j = index">
+            <div class="heading mb-2" style="font-size: 16px; ">
+                <b style="color: green;">({{ j + 1 }}) {{ item.title }}</b>
+                <!-- *ngIf="allTaxListArrayObj[item.employee_group_id]?.length > 0" -->
+                <ng-container *ngIf="allTaxListArrayObj[item.employee_group_id]?.length > 0">
+                    <button class="ml-3 badge bg-green-gradient mb-2" style="font-size: 12px;border:none;padding:6px" (click)="openBulkEditTaxSlab(allTaxListArrayObj[item.employee_group_id][0],taxSlabModalMultiple)">
+                        <i class="fa fa-edit"></i> Edit
+                        <!-- <b style="color:black;">
+                          Edit {{ allTaxListArrayObj[item.employee_group_id][0].valid_from}} - {{ allTaxListArrayObj[item.employee_group_id][0].valid_to}}
+                        </b> -->
+                      </button>
+                </ng-container>
+                <ng-container *ngIf="allTaxListArrayObj[item.employee_group_id]?.length == 0">
+                    <button class="ml-3 badge bg-green-gradient mb-2" style="font-size: 12px;border:none;padding:6px" (click)="openAddModal(taxSlabModalMultiple,item.employee_group_id)">
+                      <i class="fa fa-plus"></i> Add
+                      <!-- <b style="color:black;">
+                        Edit {{ allTaxListArrayObj[item.employee_group_id][0].valid_from}} - {{ allTaxListArrayObj[item.employee_group_id][0].valid_to}}
+                      </b> -->
+                    </button>
+                </ng-container>
+            </div>
+            <table class="table table-striped table-bordered" style="width: 860px;">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:2%">S.N</th>
+                        <!-- <th scope="col">Employee Group</th> -->
+                        <th scope="col" class="text-center" style="width: 20%;">Annual Income</th>
+                        <th scope="col" style="width: 20%;">Type</th>
+                        <th scope="col" style="width: 14%;">Tax Rate(%)</th>
+                        <!-- <th scope="col" style="width: 14%;">Valid From</th>
+                        <th scope="col" style="width: 14%;">Valid To</th> -->
+                        <!-- <th scope="col">Action</th> -->
+                    </tr>
+                </thead>
+                <tbody style="width: 900px;">
+                    <ng-container *ngIf="allTaxListArrayObj[item.employee_group_id]">
+                        <tr *ngFor="
+                    let taxSlab of allTaxListArrayObj[item.employee_group_id];
+                    let i = index
+                  ">
+                            <th scope="row">{{ i + 1 }}</th>
+                            <!-- <td>{{ taxSlab.employee_group_id }}</td> -->
+                            <td style="text-align: right">
+                                {{ taxSlab.annual_income | currency: " ":"symbol" }}
+                                <!-- <input type="number" class="form-control" name="income{{1}}" [(ngModel)]="taxSlab.annual_income"> -->
+                            </td>
+                            <td>
+                                {{ taxSlab.type }}
+                                <!-- <select name="type{{i}}" class="form-control" [(ngModel)]="taxSlab.type">
+                              <option value="upto">Upto</option>
+                              <option value="additional">Addtional</option>
+                              </select> -->
+                            </td>
+                            <td>
+                                {{ taxSlab.tax_rate }}
+                                <!-- <input type="number" class="form-control" name="tax{{i}}" [(ngModel)]="taxSlab.tax_rate"> -->
+                            </td>
+                            <!-- <td>
+                                {{ taxSlab.valid_from }}
+                               
+                            </td>
+                            <td>
+                                {{ taxSlab.valid_to }}
+                               
+                            </td> -->
+
+                            <!-- <td>
+
+                                <a class="btn" tooltip="Update" (click)="openBulkEditTaxSlab(taxSlab,taxSlabModalMultiple)"><i
+                              class="fa fa-save"
+
+                            ></i
+                          ></a>
+                                <a class="btn" tooltip="Delete" (click)="openConfirmationDialogue(taxSlab)"><i
+                        class="fa fa-trash"
+
+                      ></i
+                    ></a>
+                                <div style="display: inline-flex"></div>
+                            </td> -->
+                        </tr>
+                    </ng-container>
+                    <tr *ngIf="allTaxListArrayObj[item.employee_group_id]?.length == 0">
+                        <td colspan="7" class="text-center">No any Tax Slab Found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="box-body table-responsive" *ngIf="employeeGroupList.length == 0">
+        <div class="text-center">
+            No any employee group and tax slab.
+        </div>
+    </div>
+</div>
+
+
+<ng-template #taxSlabModalMultiple>
+    <form [formGroup]="taxSlabForm">
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="employeetype">Tax Group<sup>*</sup>
+              </label>
+                        <button *ngIf="!editMode" #button class="btn btn-success btn-xs ml-3" [tooltip]="!isAddEmployeeGroup ? 'Add new group' : 'Cancel'" type="submit" (click)="addEmployeeGroup($event);button.blur">
+                <i class="fa fa-plus" *ngIf="!isAddEmployeeGroup"></i>
+                <i class="fa fa-remove" *ngIf="isAddEmployeeGroup"></i>
+                </button>
+                        <ng-container *ngIf="!isAddEmployeeGroup">
+                            <select class="form-control" formControlName="employee_group_id">
+                <option value="" selected>Select Group</option>
+                <option
+                  [value]="item.employee_group_id"
+                  *ngFor="let item of employeeGroupList"
+                >
+                  {{ item.title }}
+                </option>
+              </select>
+                            <span class="form-error-msg" style="color: red" *ngIf="
+                  (taxSlabForm.controls?.employee_group_id?.invalid &&
+                    taxSlabForm.controls?.employee_group_id?.touched) ||
+                  (taxSlabForm.controls?.employee_group_id?.invalid &&
+                    submitted)
+                ">
+                Maritial Status is required
+              </span>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="isAddEmployeeGroup">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="sd"> Group Name<sup>*</sup> </label>
+                            <input type="text" class="form-control" placeholder="Name" formControlName="groupname" (keydown.Enter)="$event.preventDefault()" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="sd"> Group Code<sup>*</sup> </label>
+                            <input type="text" class="form-control" placeholder="Code" formControlName="groupcode" (keydown.Enter)="$event.preventDefault()" />
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!isAddEmployeeGroup">
+                <!-- <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label>Valid From</label>
+                            <input [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" formControlName="valid_from" bsDatepicker (ngModelChange)="setDateTo($event)" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label>Valid To</label>
+                            <input [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfigForTo" [placement]="'bottom'" formControlName="valid_to" bsDatepicker />
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="flex-item">
+                            <div class="flex-content">
+                                <label>Add Tax Slab</label>
+                                <button class="btn btn-success btn-xs ml-3" tooltip="Add" [disabled]='isAddDisabled' (click)="addTaxSlabArray()">
+                  <i class="fa fa-plus"></i>
+                </button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                    Type
+                                                </th>
+                                                <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                    Annual Income
+                                                </th>
+                                                <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                    Tax Rate (%)
+                                                </th>
+                                                <th colspan="1" style="padding: 10px; background-color: #eee">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody formArrayName="taxSlabArray" *ngFor="
+                        let taxSlab of taxSlabForm.get('taxSlabArray')[
+                          'controls'
+                        ];
+                        let i = index
+                      ">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    <div class="form-group">
+                                                        <!-- appFormControlValidationMsg -->
+                                                        <!-- [attr.disabled]="this.editMode" -->
+                                                        <select class="form-control" formControlName="type" (change)="onTypeChange($event.target.value,i,taxSlab)">
+                              <!-- <option value="" selected>Select Status</option> -->
+                              <!-- || this.editMode -->
+                              <option value="upto">Upto</option>
+                              <option
+                                *ngIf="
+                                  i !== 0  || this.editMode
+                                "
+                                value="additional"
+                              >
+                                Additional
+                              </option>
+                              <option  *ngIf="
+                              i !== 0
+                            " value="above">Above</option>
+                            </select>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <!-- appFormControlValidationMsg -->
+                                                    <input type="number" class="form-control" placeholder="Annual income" formControlName="annual_income" [min]="0" />
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <input type="number" class="form-control" placeholder="Tax Rate" formControlName="tax_rate" [min]="0" [max]="100" />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="flex-item" *ngIf="i !== 0 || this.editMode">
+                                                        <div class="flex-content"></div>
+                                                        <div class="flex-content">
+                                                            <a tooltip="Remove" style="color: red" (click)="removeTaxSlab(i, taxSlab)" class="btn">
+                                                                <i class="fa fa-remove"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <!-- </tr> -->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- modal body -->
+        </div>
+        <ng-container *ngIf="!isAddEmployeeGroup">
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" (click)="modalRef.hide();isAddDisabled = false;">
+          Cancel
+        </button>
+                <button class="btn btn-success" type="button" (click)="onSubmittaxSlab();" appFormSubmitValidationMsg [validationControl]="taxSlabForm">
+          {{ submitButton }}
+        </button>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="isAddEmployeeGroup">
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" (click)="addEmployeeGroup()">
+                Cancel
+              </button>
+                <button class="btn btn-success" type="button" (click)="saveEmployeeGroup()">
+          Save
+        </button>
+            </div>
+        </ng-container>
+    </form>
+</ng-template>

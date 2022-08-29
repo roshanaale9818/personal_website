@@ -1,0 +1,38 @@
+.save-wrap {
+    display: flex;
+    justify-content: center;
+    .border-wrap {
+        width: 60%;
+        border: 1px solid #ccc;
+        padding: 10px;
+        span {
+            // width: 84px;
+            margin-top: 7px;
+        }
+        .badge-group {
+            display: flex;
+            flex-wrap: wrap;
+            grid-gap: 1rem;
+            height: auto;
+            max-height: 200px;
+            overflow-y: auto;
+            span {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                justify-content: space-between;
+            }
+        }
+        .btn-wrap {
+            margin-top: 3rem;
+        }
+    }
+}
+
+.checkbox {
+    transform: scale(1.1);
+}
+
+.btn-secondary {
+    background-color: #ccc;
+}

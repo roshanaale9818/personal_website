@@ -1,0 +1,55 @@
+$color_1: #858796;
+$background_color_1: rgb(248, 249, 250);
+$background_color_2: whitesmoke;
+$background_color_3: #fff;
+
+h6 {
+  font-size: 20px;
+  font-weight: 400;
+  color: $color_1;
+}
+
+.row {
+  margin-top: 10px;
+}
+
+input {
+  width: 23em;
+}
+
+.buttons {
+  margin-bottom: 10px;
+}
+
+.button-area {
+  margin-top: 70px;
+  padding: 10px;
+}
+
+label {
+  margin-top: 10px;
+}
+
+#box1 {
+  max-width: 23em;
+  height: 17em;
+  padding: 1em;
+  margin-left: 0px;
+  border: 0.062em solid #999;
+  border-radius: 5px;
+  background-color: $background_color_3;
+  overflow: auto;
+  text-align: left;
+}
+
+#box2 {
+  max-width: 23em;
+  height: 17em;
+  padding: 1em;
+  margin-left: 0px;
+  border: 0.062em solid #999;
+  border-radius: 5px;
+  background-color: $background_color_3;
+  overflow: auto;
+  text-align: left;
+}

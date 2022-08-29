@@ -1,0 +1,585 @@
+# Query: btn-success
+# Flags: CaseSensitive RegExp
+# ContextLines: 1
+
+148 results - 64 files
+
+src\styles.scss:
+  113  
+  114: .btn-success {
+  115    &:hover {
+
+  139  
+  140: .btn-success {
+  141    background-color: #36b37e !important;
+
+src\app\modules\dashboard\admin-dashboard\component\admin-dashboard\admin-dashboard.component.html:
+  139            <div class="col-md-4">
+  140:             <button class="btn btn-success btn-oval">
+  141                <i class="fa fa-clock-o"></i> Check In
+
+  147            <div class="col-md-4">
+  148:             <button class="btn btn-success btn-oval">
+  149                <i class="fa fa-bicycle"></i>Break In
+
+  155            <div class="col-md-4">
+  156:             <button class="btn btn-success btn-oval">
+  157                <i class="fa fa-cutlery"></i>Lunch In
+
+  247              </table>
+  248:             <button class="btn btn-success btn-oval">Browse All</button>
+  249            </div>
+
+  288              </table>
+  289:             <button class="btn btn-success btn-oval">Browse All</button>
+  290            </div>
+
+src\app\modules\dashboard\admin-dashboard\component\admin-dashboard\admin-dashboard.component.scss:
+  7  }
+  8: .btn-success {
+  9    color: $green-color !important;
+
+src\app\modules\dashboard\staff-dashboard\component\bent-ray-staff-dashboard\bent-ray-staff-dashboard.component.html:
+  43              type="submit"
+  44:             class="btn btn-success btn-oval btn-xs"
+  45              name="checkin"
+
+src\app\modules\dashboard\staff-dashboard\component\tca-staff-dashboard\tca-staff-dashboard.component.html:
+  178                  <div class="col-md-4 col-xs-6">
+  179:                   <button class="btn btn-success btn-oval ">
+  180                      <i class="fa fa-clock-o"></i> Clock In
+
+  186                  <div class="col-md-4 col-xs-6">
+  187:                   <button class="btn btn-success btn-oval">
+  188                      <i class="fa fa-cutlery"></i> In Lunch
+
+  195                    
+  196:                       <button class="btn btn-success btn-oval">
+  197                            <i class="fa fa-bicycle"></i> In Break
+
+src\app\modules\daybook-management\attendance\components\attendance.component.html:
+  161                <button
+  162:                 class="btn btn-success btn-oval"
+  163                  (click)="onAttendanceClick('checkin')"
+
+  181                <button
+  182:                 class="btn btn-success btn-oval"
+  183                  (click)="onAttendanceClick('lunchin')"
+
+  201              <button
+  202:               class="btn btn-success btn-oval"
+  203                (click)="onAttendanceClick('breakin')"
+
+  307        <button
+  308:         class="btn btn-success btn-oval"
+  309          (click)="onSubmitRequestReview()"
+
+src\app\modules\daybook-management\correction-attendance\components\correction-attendance.component.html:
+   4        <div class="flex-item">
+   5:         <button class="btn btn-success btn-oval button-margin-right">List All</button>
+   6:         <button class="btn btn-success btn-oval button-margin-right">Approved</button>
+   7:         <button class="btn btn-success btn-oval button-margin-right">Pendings</button>
+   8:         <button class="btn btn-success btn-oval">Declined</button>
+   9        </div>
+
+  13        <div class="flex-item">
+  14:         <button class="btn btn-success btn-oval" (click)="listAllLeaves()">
+  15            List all
+
+src\app\modules\daybook-management\correction-attendance\components\correction-attendance.component.scss:
+  19  
+  20: // .btn-success {
+  21  //   color: $green-color !important;
+
+src\app\modules\leave-request\create-request\components\create-request\create-request.component.html:
+  169          <button
+  170:           class="btn btn-success btn-oval"
+  171            type="submit"
+
+src\app\modules\leave-request\request-received\components\request-received\request-received.component.html:
+    3      <div class="flex-item">
+    4:       <button class="btn btn-success btn-oval" (click)="listAllLeaves()">
+    5          List all
+
+  184            >
+  185:           <a *ngIf="dataItem.is_approved == '2'" class="btn btn-xs btn-success btn-oval">
+  186              <i class="fa fa-check"></i> Approve</a
+
+  189            <div *ngIf="dataItem.is_approved == '0'">
+  190:             <a class="btn btn-xs btn-success btn-oval" style="margin-right: 10px">
+  191                <i class="fa fa-check"></i> Approve</a
+
+  273          </button>
+  274:         <input type="submit" value="Edit" class="btn btn-success btn-oval" />
+  275        </div>
+
+src\app\modules\leave-request\request-received\components\request-received\request-received.component.scss:
+  19  
+  20:   .btn-success {
+  21      color: $green-color !important;
+
+src\app\modules\manage-client\client\components\client-contact\client-contact.component.html:
+   13            style="float: right"
+   14:           class="btn btn-success btn-oval btn-xs"
+   15            (click)="openAddModal(addContact)"
+
+   92            style="float: right"
+   93:           class="btn btn-success btn-oval btn-xs"
+   94            (click)="openAddIpModal(addClientIp)"
+
+  379          <button
+  380:           class="btn btn-success btn-oval"
+  381            type="submit"
+
+  515          <button
+  516:           class="btn btn-success btn-oval"
+  517            type="submit"
+
+src\app\modules\manage-client\client\components\client-department\client-department.component.html:
+    3      <button
+    4:       class="btn btn-success btn-oval btn-xs"
+    5        (click)="openAddModal(addDepartment)"
+
+  141          <button
+  142:           class="btn btn-success btn-oval"
+  143            type="submit"
+
+src\app\modules\manage-client\client\components\client-detail\client-detail.component.html:
+   52                    style="float: right"
+   53:                   class="btn btn-success btn-oval btn-xs"
+   54                    (click)="openEditModal(editClient)"
+
+   92                    style="float: right"
+   93:                   class="btn btn-success btn-oval btn-xs"
+   94                    (click)="openEditModal(editAddress)"
+
+  227          <button
+  228:           class="btn btn-success btn-oval"
+  229            type="submit"
+
+  350          <button
+  351:           class="btn btn-success btn-oval"
+  352            type="submit"
+
+src\app\modules\manage-client\client\components\client-division\client-division.component.html:
+    2    <div class="box-header with-border" style="background-color: #eee;">
+    3:     <button class="btn btn-success btn-oval btn-xs" (click)="openAddModal(addDivision)">
+    4        + Add Client Division
+
+  138          <button
+  139:           class="btn btn-success btn-oval"
+  140            type="submit"
+
+src\app\modules\manage-client\client\components\client-employees\client-employees.component.html:
+    2    <div class="box-header with-border" style="background-color: #eee">
+    3:     <button class="btn btn-success btn-oval btn-xs" (click)="openAddModal(addEmployee)">
+    4        + Add Client Employees
+
+  299          <button
+  300:           class="btn btn-success btn-oval"
+  301            type="submit"
+
+src\app\modules\manage-client\client\components\client-ip-address\client-ip-address.component.html:
+    2    <div class="box-header with-border" style="background-color: #eee">
+    3:     <button class="btn btn-success btn-oval btn-xs" (click)="openAddModal(addClientIp)">
+    4        + Add Client Ip Address
+
+  199        <button
+  200:         class="btn btn-success btn-oval"
+  201          type="submit"
+
+src\app\modules\manage-client\client\components\client-ip-modal\client-ip-modal.component.html:
+  123          <button
+  124:           class="btn btn-success btn-oval"
+  125            type="submit"
+
+src\app\modules\manage-client\client\components\list-client\list-client.component.html:
+    2    <button
+    3:     class="btn btn-success btn-oval"
+    4      type="button"
+
+  279          <button
+  280:           class="btn btn-success btn-oval"
+  281            type="submit"
+
+src\app\modules\manage-client\client-branch\components\add-client-location\add-client-location.component.html:
+    1  <div class="box box-default box-shadow">
+    2:   <button class="btn btn-success btn-oval" (click)="openAddModal(clientLocationModal)">
+    3      Create Client Location
+
+  193        <button
+  194:         class="btn btn-success btn-oval"
+  195          type="submit"
+
+src\app\modules\manage-client\client-branch\components\list-client-branch\list-client-branch.component.html:
+    1  <div class="box box-default box-shadow">
+    2:   <button class="btn btn-success btn-oval" (click)="openAddModal(clientBranchModal)">
+    3      Create Client Branch
+
+  179        <button
+  180:         class="btn btn-success btn-oval"
+  181          type="submit"
+
+src\app\modules\message\components\message.component.html:
+    3      <div class="flex-item">
+    4:       <button class="btn btn-success btn-oval" (click)="openModal(MessageAccessModal)">
+    5          Create Message Access
+
+   10          type="button"
+   11:         class="btn btn-success btn-oval"
+   12          [popover]="contactTemplate"
+
+  122      </button>
+  123:     <button class="btn btn-success btn-oval" type="submit" (click)="onSave()">
+  124        Save
+
+src\app\modules\reports\all-users-monthly-chart\components\monthly-chart.component.html:
+  112            <button
+  113:             class="btn btn-success btn-oval"
+  114              id="search-button"
+
+src\app\modules\reports\attendance-detail\components\attendance-detail.component.html:
+  67        <!-- <div class="col-md-2">
+  68:         <button class="btn btn-success btn-oval">Upload Attendance From Device</button>
+  69        </div>
+
+  88            <button
+  89:             class="btn btn-success btn-oval"
+  90              type="button"
+
+src\app\modules\reports\break-report\components\break-report.component.html:
+  84        <div class="col-md-3 col-sm-6 col-xs-6">
+  85:         <button class="btn btn-success btn-oval" id="search-button">Search</button>
+  86        </div>
+
+src\app\modules\reports\monthly-report\components\monthly-report.component.html:
+   186        <button
+   187:         class="btn btn-success btn-oval"
+   188          (click)="viewDailyReport()"
+
+   199        <button
+   200:         class="btn btn-success btn-oval"
+   201          (click)="viewMonthlyReport()"
+
+   210      <div class="flex-item ml-3" *ngIf="reportForm.value.types == 1">
+   211:       <button class="btn btn-success btn-oval" (click)="clickedGraceTime()">
+   212          <i class="fa fa-hourglass" aria-hidden="true"></i>
+
+   217      <div class="flex-item ml-3" *ngIf="reportForm.value.types == 2">
+   218:       <button class="btn btn-success btn-oval" (click)="clickGraceTime()">
+   219          <i class="fa fa-hourglass" aria-hidden="true"></i>
+
+   224      <div class="flex-item ml-3">
+   225:       <button class="btn btn-success btn-oval" (click)="openModal(addAttendanceModal)">
+   226          <i class="fa fa-plus" aria-hidden="true"></i> Add Attendance
+
+   937        <button
+   938:         class="btn btn-success btn-oval"
+   939          (click)="onSubmitAttendance()"
+
+  1249        <button
+  1250:         class="btn btn-success btn-oval"
+  1251          (click)="onSubmitAttendance()"
+
+  1395      <button
+  1396:       class="btn btn-success btn-oval"
+  1397        (click)="onSubmitAttendance()"
+
+src\app\modules\reports\yearly-monthly-report\components\yearly-monthly-report.component.html:
+  36            <button
+  37:             class="btn btn-success btn-oval"
+  38              id="search-button"
+
+src\app\modules\salary\monthly-salary-sheet\components\monthly-salary-sheet\monthly-salary-sheet.component.html:
+  58            <button
+  59:             class="btn btn-success btn-oval"
+  60              appFormSubmitValidationMsg
+
+src\app\modules\salary\monthly-salary-sheet\components\search-payroll\search-payroll.component.html:
+  57            <button
+  58:             class="btn btn-success btn-oval"
+  59              (click)="onSearchPayroll()"
+
+src\app\modules\setting\company\components\company-detail\company-detail.component.html:
+  1  <div class="box box-default box-shadow">
+  2:   <button class="btn btn-success btn-oval" (click)="navigateToSwitchCompany()">
+  3      Switch Company
+
+src\app\modules\setting\company\components\company-list\company-list.component.html:
+    2    <button
+    3:     class="btn btn-success btn-oval"
+    4      type="button"
+
+  235          <button
+  236:           class="btn btn-success btn-oval"
+  237            type="submit"
+
+src\app\modules\setting\general-setting\components\setting.component.html:
+  383            <div class="col-md-3">
+  384:             <button class="btn btn-success btn-oval" (click)="OnSave()">Save</button>
+  385            </div>
+
+  482            <div class="col-md-3">
+  483:             <button class="btn btn-success btn-oval" (click)="OnSave()">Save</button>
+  484            </div>
+
+  674            <div class="col-md-3">
+  675:             <button class="btn btn-success btn-oval" (click)="OnSave()">Save</button>
+  676            </div>
+
+src\app\modules\setting\general-setting\components\company-logo\company-logo.component.html:
+  29    <button
+  30:     class="btn btn-success btn-oval btn-xs"
+  31      (click)="fileInput.click()"
+
+  40      (click)="uploadCompanyLogo()"
+  41:     class="btn btn-success btn-oval"
+  42      type="submit"
+
+src\app\modules\setting\RBAC\assignments\components\view-assignment\view-assignment.component.html:
+  31              <div class="buttons">
+  32:               <button type="button" class="btn btn-success btn-oval btn-md">>></button>
+  33              </div>
+
+src\app\modules\setting\RBAC\permission\components\permission\permission.component.html:
+  57      <button
+  58:       class="btn btn-success btn-oval"
+  59        (click)="onSubmitPermission()"
+
+src\app\modules\setting\RBAC\permission\components\view-permission\view-permission.component.html:
+  83            <div class="buttons">
+  84:             <button type="button" class="btn btn-success btn-oval btn-md">>></button>
+  85            </div>
+
+src\app\modules\setting\RBAC\roles\components\roles\roles.component.html:
+  57      <button
+  58:       class="btn btn-success btn-oval"
+  59        (click)="onSubmitRoles()"
+
+src\app\modules\setting\RBAC\roles\components\view-roles\view-roles.component.html:
+  83            <div class="buttons">
+  84:             <button type="button" class="btn btn-success btn-oval btn-md">>></button>
+  85            </div>
+
+src\app\modules\setting\RBAC\route\components\route\route.component.html:
+  34            <div class="buttons">
+  35:             <button type="button" class="btn btn-success btn-oval btn-md">>></button>
+  36            </div>
+
+src\app\modules\staff\manage-staff\components\manage-staff.component.html:
+    1  <div class="menu-index">
+    2:   <button class="btn btn-success btn-oval" [routerLink]="'add'">
+    3      Create Employee
+
+    8      style="margin-left: 10px"
+    9:     class="btn btn-success btn-oval"
+   10    >
+
+  232                      <button
+  233:                       class="btn btn-success btn-oval btn-oval"
+  234                        style="margin-left: 10px"
+
+  448            <button
+  449:             class="btn btn-success btn-oval btn-xs"
+  450              (click)="fileInput.click()"
+
+  462        </button>
+  463:       <button class="btn btn-success btn-oval" type="submit" (click)="onSubmit()">
+  464          Submit
+
+src\app\modules\staff\manage-staff\components\add-staff\add-staff.component.html:
+   32                <button
+   33:                 class="btn btn-success btn-oval btn-xs"
+   34                  (click)="fileInput.click()"
+
+  554                    <!-- <button
+  555:                     class="btn btn-success btn-oval btn-xs"
+  556                      tooltip="Change Tab"
+
+  875                      aria-expanded="true"
+  876:                     class="btn btn-success btn-oval btn-xs"
+  877                      tooltip="Change Tab"
+
+src\app\modules\staff\manage-staff\components\staff-detail\staff-detail.component.html:
+   7        <div class="pull-right">
+   8:         <button class="btn btn-success btn-oval flex-item" (click)="navigateToEdit()">
+   9            <i class="fa fa-edit"></i> Update
+  10          </button>
+  11:         <!-- <button class="btn btn-success btn-oval flex-item">Change Password</button>
+  12:         <button class="btn btn-success btn-oval flex-item">Change Pin</button> -->
+  13        </div>
+
+src\app\modules\staff\manage-user\components\manage-user\manage-user.component.html:
+   4        <button
+   5:         class="btn btn-success btn-oval mr-3 btn-oval"
+   6          (click)="openAddModal(userCredentialsModal)"
+
+  21        <button
+  22:         class="btn btn-success btn-oval"
+  23          (click)="openAssignPinModal(pinChangeModal)"
+
+src\app\modules\staff\manage-user\components\manage-user\active-user\active-user.component.html:
+   51            style="margin-top: 9%"
+   52:           class="btn btn-success btn-oval"
+   53            type="button"
+
+  351        <button
+  352:         class="btn btn-success btn-oval"
+  353          type="submit"
+
+src\app\modules\staff\manage-user\components\manage-user\add-device-id\add-device-id.component.html:
+    1  <div class="box box-default">
+    2:   <button class="btn btn-success btn-oval" (click)="openAddModal(userDeviceModal)">
+    3      Create User Device
+
+  158      </button>
+  159:     <button class="btn btn-success btn-oval" type="submit" (click)="onSave()">
+  160        Save
+
+src\app\modules\staff\manage-user\components\manage-user\archive-user\archive-user.component.html:
+  52            style="margin-top: 9%"
+  53:           class="btn btn-success btn-oval"
+  54            type="button"
+
+src\app\modules\utilities\allow-ip\components\list-ip\list-ip.component.html:
+    1  <div class="box box-default">
+    2:   <button class="btn btn-success btn-oval" (click)="openAddModal(addIpModal)">
+    3      Add Allowed Ip <i class="fa fa-plus"></i>
+
+  161        <button
+  162:         class="btn btn-success btn-oval"
+  163          (click)="onSubmitAllowedIp()"
+
+src\app\modules\utilities\allowance\components\list-allowance\list-allowance.component.html:
+    2    <button
+    3:     class="btn btn-success btn-oval"
+    4      (click)="openAddModal(allowanceModal)"
+
+  187        <button
+  188:         class="btn btn-success btn-oval"
+  189          (click)="onSubmitAllowance()"
+
+src\app\modules\utilities\department\components\department-list\department-list.component.html:
+    2    <button
+    3:     class="btn btn-success btn-oval"
+    4      (click)="openAddModal(departmentModal)"
+
+  127        <button
+  128:         class="btn btn-success btn-oval"
+  129          type="submit"
+
+src\app\modules\utilities\designation\components\list-designation\list-designation.component.html:
+    2    <button
+    3:     class="btn btn-success btn-oval"
+    4      (click)="openAddModal(designationModal)"
+
+  174        <button
+  175:         class="btn btn-success btn-oval"
+  176          (click)="onSubmitDesignation()"
+
+src\app\modules\utilities\employee-type\components\list-employee-type\list-employee-type.component.html:
+    1  <div class="box box-default box-shadow">
+    2:   <button class="btn btn-success btn-oval" (click)="openAddModal(employeTypeModal)">
+    3      Add Employee Type
+
+  124        <button
+  125:         class="btn btn-success btn-oval"
+  126          type="submit"
+
+src\app\modules\utilities\holiday-management\components\list-holiday\list-holiday.component.html:
+    1  <div class="box box-default box-shadow">
+    2:   <button class="btn btn-success btn-oval" (click)="openAddModal(holidayModal)">
+    3      Add Holiday
+
+  148        <button
+  149:         class="btn btn-success btn-oval"
+  150          type="submit"
+
+src\app\modules\utilities\leave-type\components\list-leave-type\list-leave-type.component.html:
+    1  <div class="box box-default">
+    2:   <button class="btn btn-success btn-oval" (click)="openModal(leaveTypeModal)">
+    3      Create Leave Type
+
+  121        <button
+  122:         class="btn btn-success btn-oval"
+  123          type="submit"
+
+src\app\modules\utilities\shift\components\list-shift\list-shift.component.html:
+    1  <div class="box box-default box-shadow">
+    2:   <button class="btn btn-success btn-oval" (click)="openAddModal(shiftModal)">
+    3      Add Shift
+
+  321        <button
+  322:         class="btn btn-success btn-oval"
+  323          (click)="onSubmitShift()"
+
+src\app\modules\utilities\weekend-mangement\components\list-weekend\list-weekend.component.html:
+   1  <div class="box box-default box-shadow">
+   2:   <button class="btn btn-success btn-oval" (click)="openModal(weekendModal)">
+   3      Change Regular Holiday
+
+  69      </button>
+  70:     <button class="btn btn-success btn-oval" type="submit" (click)="onSubmit()">
+  71        Change
+
+src\app\shared\components\add-modal\add-modal.component.html:
+  2    *ngIf="type === 'add'"
+  3:   class="btn btn-success btn-oval"
+  4    (click)="openModal(ModalRef)"
+
+src\assets\build\bootstrap-less\buttons.less:
+  72  // Success appears as green
+  73: .btn-success {
+  74:   .button-variant(@btn-success-color; @btn-success-bg; @btn-success-border);
+  75  }
+
+src\assets\build\bootstrap-less\theme.less:
+  21  .btn-primary,
+  22: .btn-success,
+  23  .btn-info,
+
+  92  .btn-primary { .btn-styles(@btn-primary-bg); }
+  93: .btn-success { .btn-styles(@btn-success-bg); }
+  94  .btn-info    { .btn-styles(@btn-info-bg); }
+
+src\assets\build\bootstrap-less\variables.less:
+  154  
+  155: @btn-success-color:              #fff;
+  156: @btn-success-bg:                 @brand-success;
+  157: @btn-success-border:             darken(@btn-success-bg, 5%);
+  158  
+
+src\assets\build\less\buttons.less:
+  75  
+  76: .btn-success {
+  77    background-color: @green;
+
+src\assets\dist\css\AdminLTE.css:
+  2289  }
+  2290: .btn-success {
+  2291    background-color: #00a65a;
+
+  2293  }
+  2294: .btn-success:hover,
+  2295: .btn-success:active,
+  2296: .btn-success.hover {
+  2297    background-color: #008d4c;
+
+src\assets\dist\css\AdminLTE.min.css:
+  7   *   License: MIT <http://opensource.org/licenses/MIT>
+  8: ⟪ 43862 characters skipped ⟫fault:active,.btn-default.hover{background-color:#e7e7e7}.btn-primary{background-color:#3c8dbc;border-color:#367fa9}.btn-primary:hover,.btn-primary:active,.btn-primary.hover{background-color:#367fa9}.btn-success{background-color:#00a65a;border-color:#008d4c}.btn-success:hover,.btn-success:active,.btn-success.hover{background-color:#008d4c}.btn-info{background-color:#00c0ef;border-color:#00acd6}.btn-info:hover,.btn-info:active,.btn-info.hover{background-color:#00acd6}.btn-danger{background-color:#dd4b39;border-color:#d73925}.btn-danger:hover,.btn-danger:active,.btn-danger.hover{background-color:#d73925}.btn-warning{background-color:#f39c12;border-color:#e08e0b}.btn-warning:hover,.btn-warning:active,.btn-warning.hover{background-color:#e08e0b}.btn-outline{border:1px solid #fff;background:transparent;color:#fff}.btn-outline:hover,.btn-outline:focus,.btn-outline:active{color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.7)}.btn-link{-webkit-box-shadow:none;box-shadow:none}.btn[class*='bg-']:hover{-webkit-box-shadow:inset 0 0 100px rgba(0,0,0,0.2);box-shadow:inset 0 0 100px rgba(0,0,0,0.2)}.btn-app{border-radius:3px;position:relative;padding:15px 5px;margin:0 0 10px 10px;min-width:80px;height:60px;text-align:center;color:#666;border:1px solid #ddd;background-color:#f4f4f4;fo
+
+src\assets\dist\css\alt\AdminLTE-without-plugins.css:
+  2290  }
+  2291: .btn-success {
+  2292    background-color: #00a65a;
+
+  2294  }
+  2295: .btn-success:hover,
+  2296: .btn-success:active,
+  2297: .btn-success.hover {
+  2298    background-color: #008d4c;
+
+src\assets\dist\css\alt\AdminLTE-without-plugins.min.css:
+  8   *   License: MIT <http://opensource.org/licenses/MIT>
+  9: ⟪ 43862 characters skipped ⟫fault:active,.btn-default.hover{background-color:#e7e7e7}.btn-primary{background-color:#3c8dbc;border-color:#367fa9}.btn-primary:hover,.btn-primary:active,.btn-primary.hover{background-color:#367fa9}.btn-success{background-color:#00a65a;border-color:#008d4c}.btn-success:hover,.btn-success:active,.btn-success.hover{background-color:#008d4c}.btn-info{background-color:#00c0ef;border-color:#00acd6}.btn-info:hover,.btn-info:active,.btn-info.hover{background-color:#00acd6}.btn-danger{background-color:#dd4b39;border-color:#d73925}.btn-danger:hover,.btn-danger:active,.btn-danger.hover{background-color:#d73925}.btn-warning{background-color:#f39c12;border-color:#e08e0b}.btn-warning:hover,.btn-warning:active,.btn-warning.hover{background-color:#e08e0b}.btn-outline{border:1px solid #fff;background:transparent;color:#fff}.btn-outline:hover,.btn-outline:focus,.btn-outline:active{color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.7)}.btn-link{-webkit-box-shadow:none;box-shadow:none}.btn[class*='bg-']:hover{-webkit-box-shadow:inset 0 0 100px rgba(0,0,0,0.2);box-shadow:inset 0 0 100px rgba(0,0,0,0.2)}.btn-app{border-radius:3px;position:relative;padding:15px 5px;margin:0 0 10px 10px;min-width:80px;height:60px;text-align:center;color:#666;border:1px solid #ddd;background-color:#f4f4f4;fo

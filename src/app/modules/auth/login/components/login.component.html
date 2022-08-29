@@ -1,0 +1,153 @@
+<body>
+    <div class="container wrapper" id="login-card">
+
+
+        <div class="row">
+
+            <div class="col-sm-8 login-form col-sm-push-4">
+                <div class="row">
+                    <div class="logo">
+                        <ng-container *ngIf="!companyDetailObj && !companyDetailObj?.logo.company_logo">
+                            <img src="../../../../../assets/images/flexyearlogo.png" alt="flexYear-Logo" height="95px" class="img-fluid" title="logo" />
+                        </ng-container>
+                        <ng-container *ngIf="companyDetailObj">
+                            <img [src]=" imageUrl+companyDetailObj?.logo.company_logo" alt="flexYear-Logo" height="95px" class="img-fluid" title="logo" />
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col">
+                        <div id="main-form" style="padding: 10px;position:relative;">
+                            <tabset #loginTabs>
+                                <tab heading="Username Login" (selectTab)="changeTab($event, 'usernameLogin')">
+                                    <div style="margin-top: 10px">
+                                        <form id="main-form " style="padding: 10px" [formGroup]="loginForm">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Username or Email</label
+                      >
+
+                      <div class="icon-wrapper">
+                        <img [ngClass]="(loginForm.controls?.username?.invalid &&
+                        loginForm.controls?.username?.touched) ||
+                      (loginForm.controls?.username?.invalid &&
+                        submitted) ? 'errorTop':null" src="/assets/images/login/user.svg" alt="" />
+                        <input
+                          type="email"
+                          id="loginform-username"
+                          class="form-control credential-field"
+                          id="exampleInputEmail1"
+                          aria-describedby="emailHelp"
+                          name="loginform-username"
+                          placeholder="Username"
+                          formControlName="username"
+                        />
+
+                        <span
+                          class="form-error-msg"
+                          style="color: red"
+                          *ngIf="
+                            (loginForm.controls?.username?.invalid &&
+                              loginForm.controls?.username?.touched) ||
+                            (loginForm.controls?.username?.invalid &&
+                              submitted)
+                          "
+                        >
+                          Username is required
+                        </span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Password</label>
+                                                <div class="icon-wrapper">
+                                                    <img [ngClass]="(loginForm.controls?.password?.invalid &&
+                                                  loginForm.controls?.password?.touched) ||
+                                                (loginForm.controls?.password?.invalid &&
+                                                  submitted)? 'errorTop':null
+                                              " src="/assets/images/login/padlock.svg" alt="" />
+
+                                                    <input type="password" id="loginform-password" class="form-control credential-field" name="LoginForm-password" placeholder="Password" formControlName="password" (keyup.enter)="login()" />
+                                                    <span class="form-error-msg" style="color: red" *ngIf="
+                            (loginForm.controls?.password?.invalid &&
+                              loginForm.controls?.password?.touched) ||
+                            (loginForm.controls?.password?.invalid &&
+                              submitted)
+                          ">
+                          Password is required
+                        </span>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </tab>
+
+                                <tab heading="Pin Login" (selectTab)="changeTab($event, 'pinLogin')">
+                                    <app-pin-login (onInvalidLoginAttempt)="showTimer($event)" (loading)="onLoadingChange($event)"></app-pin-login>
+                                </tab>
+                                <div *ngIf="loading" class="k-i-loading"></div>
+                            </tabset>
+
+                            <button *ngIf="loginByUsername" class="btn btn-primary btn-block btn-login" [disabled]="loginButtonClick" style="text-align: center" (click)="loginWithPromise()">
+              Submit
+            </button>
+
+                            <ng-container *ngIf="loginType !== 'pinLogin'">
+                                <div class="pwd-util-row mt-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" />
+                                        <label class="form-check-label" for="exampleCheck1" style="margin-left: 10px">Remember Me</label
+                >
+              </div>
+
+              <a class="secondary-link" [routerLink]="['/forgot-password']"  href="">Forgot Password?</a>
+
+            </div>
+           <div class="text-right">
+            <a class="secondary-link create-company" [routerLink]="['/company-registration']" routerLinkActive="router-link-active" >Create your own company</a
+              >
+           </div>
+            <div>
+
+            </div>
+          </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4 col-sm-pull-8" id="welcome-section">
+      <div class="row">
+        <div class="col">
+          <h1>Welcome Back</h1>
+
+          <button class="btn btn-signup" [routerLink]="['/company-registration']">
+            Sign up
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+<footer
+class="main-footer"
+style="
+  text-align: end;
+  text-align: end;
+  bottom: 0;
+  width: 100%;
+  margin: 0px;
+  margin-top: 1px solid #eee;
+"
+>
+
+
+<div class="text-center mt-3">
+  <strong
+    >Copyright &copy; 2019 Flex Year
+    <a href="https://bentraytech.com/">BentRay Technologies</a>.</strong
+  >
+  All rights reserved.
+</div>
+</footer>

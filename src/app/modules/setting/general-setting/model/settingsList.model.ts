@@ -1,0 +1,46 @@
+export class SettingsList {
+  COMP_NAME: string;
+  COMP_ADDR: string;
+  COMP_COUNTRY: string;
+  COMP_PHONE: string;
+  GS_DATE: string;
+  GS_DT_FORMAT: string;
+  GS_TIME_ZONE: string;
+  D_SUNDAY: string;
+  D_MONDAY: string;
+  D_TUESDAY: string;
+  D_WEDNESDAY: string;
+  D_THURSDAY: string;
+  D_FRIDAY: string;
+  D_SATURDAY: string;
+  GS_SEND_ATTN_EMAIL: string;
+  GS_SEND_LEAVE_RQ_MAIL: string;
+  GS_SEND_ATTN_CORR_RQ_MAIL: string;
+  GS_MANAGER_EMAIL: string;
+  GM_STAFF_PRESENT: string;
+  GM_ATT_ALERT: string;
+  GS_LEAVE_REVIEW_MONTH: string;
+  GS_LATE: string;
+  GS_SEND_ATTN_EMAIL_MANAGER: string;
+  GS_SEND_LEAVE_RQ_MAIL_MANAGER: string;
+  GS_SEND_ATTN_CORR_RQ_MAIL_MANAGER: string;
+  GS_MANAGER_LATE_ATTENDANCE_EMAIL: string;
+  GS_LATE_ATTENDANCE_EMAIL: string;
+  GS_IP: string;
+
+  GE_MAIL_TYPE: string;
+  GE_RELOAD_INTERVAL: string;
+  GE_MAIL_NO: string;
+  GE_MAIL_ENCODE_BIT: string;
+  GE_IMAP_PATH: string;
+  GE_SERVER_HOST: string;
+  GE_SERVER_USERNAME: string;
+  GE_SERVER_PASSWORD: string;
+  GE_SERVER_ENC_TYPE: string;
+  GE_SERVER_PORT: string;
+  GE_PHP_FROM: string;
+  GE_PHP_REPLY_TO: string;
+  GE_PHP_RETURN_PATH: string;
+  GE_SENDER_NAME: string;
+  GE_PHP_ALTERNATIVE_PATH: string;
+}

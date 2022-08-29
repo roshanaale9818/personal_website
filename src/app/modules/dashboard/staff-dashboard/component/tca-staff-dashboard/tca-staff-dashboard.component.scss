@@ -1,0 +1,49 @@
+.box-body{
+   
+  
+    caption{
+       margin-left: 15px;
+
+    }
+    img{
+        padding: 10px;
+    }
+    img:hover{
+        // background-color: cadetblue;
+        transform:scale(1.2,1.2);
+        transition: 0.8s transform;
+        
+       
+    }
+
+}
+
+.box{
+    h3{
+        font-size: 14px;
+        
+    }
+}
+.check-btns{
+    button{
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+
+    .check-out-btns{
+   
+      
+        padding: 7px;
+  
+}
+}
+
+.border{
+    border: 1px solid black;
+    th{
+        border: 1px solid black;
+    }
+    td{
+        border: 1px solid black;
+    }
+    }

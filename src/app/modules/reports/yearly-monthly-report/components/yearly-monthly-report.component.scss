@@ -1,0 +1,27 @@
+@media screen and (min-width: 993px) {
+    #search-button{
+        margin-top: 23px;
+    }
+  }
+
+  .k-grid .no-padding {
+    padding: 0;
+  }
+  .whole-cell {
+    display: block;
+    padding: 8px 12px ; /* depends on theme */
+    height: 120px;
+    
+  }
+// border for table showing colour information at bottom of kendo table.
+  .border{
+    width: 400px;
+    border: 0.5px solid black;
+    th{
+        border: 0.5px solid black !important;
+    }
+    td{
+        border: 0.5px solid black !important;
+    }
+    }
+  

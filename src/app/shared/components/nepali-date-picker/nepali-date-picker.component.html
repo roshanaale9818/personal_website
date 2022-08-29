@@ -1,0 +1,11 @@
+<div class="dateRangeFrom" style="position: relative;">
+    <i class="far fa-calendar-alt" aria-hidden="true" id="{{id}}" style="position: absolute;
+    cursor: pointer;
+    font-size: 15px;
+    top: 8px;
+    right: 2px;"></i>
+
+    <input type="text" [ngClass]="isInvalid ? 'ng-invalid':''" class="form-control custom-form-control" [formControl]="dateControl" placeholder="{{label}}" id="{{id}}Picker" (mouseover)="$event.preventDefault()" (keydown)="$event.preventDefault()" [attr.disabled]="disableProperty == true ? true:null"
+        style="
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;">
+</div>

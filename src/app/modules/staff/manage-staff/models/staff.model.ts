@@ -1,0 +1,40 @@
+
+export class Staff {
+  staff_id: number;
+  first_name: string;
+  last_name: string;
+  staff_photo: string;
+  mobile: string;
+  phone: string;
+  email_address: string;
+  temporary_address_id: number;
+  permanent_address_id: number;
+  citizenship_no: string;
+  gender: string;
+  marital_status: string;
+  hire_date: string;
+  expiry_date: string;
+  employee_type: string;
+  salary_period: string;
+  payment_type: string;
+  designation_id: number;
+  department_id: number;
+  manager_id: number;
+  normal_salary_rate: number;
+  overtime_salary_rate: number;
+  mobile_code: number;
+  phone_code: number;
+  remarks: string;
+  status: string;
+  salary_duration: string;
+  middle_name: string;
+  cit: 1;
+  tax_included: string;
+  remaining_leave_days: string;
+  emp_id: string;
+  checkinRestrictiontime: string;
+  dob: string;
+  location: string;
+  division: string;
+  company_id: number;
+}

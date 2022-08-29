@@ -1,0 +1,155 @@
+<div class="box box-default box-shadow">
+  <div class="head">
+    <h3>
+      <b>View {{ selectedPermission.name }}</b>
+    </h3>
+  </div>
+
+  <div class="button-wrapper">
+    <button
+      class="btn btn-primary"
+      (click)="navigateToEditPermission(selectedPermission)"
+    >
+      Update
+    </button>
+    <button style="margin-left: 10px" class="btn btn-danger">Delete</button>
+  </div>
+
+  <div class="mt-4">
+    <table id="w0" class="table table-striped table-bordered detail-view">
+      <tbody>
+        <tr>
+          <th>Name</th>
+          <!-- <td>
+            <span *ngIf="selectedPermission.first_name != null">{{
+              selectedPermission.first_name
+            }}</span
+            >&nbsp;<span *ngIf="selectedPermission.middle_name != null">{{
+              selectedPermission.middle_name
+            }}</span
+            >&nbsp;<span *ngIf="selectedPermission.last_name != null">{{
+              selectedPermission.last_name
+            }}</span>
+          </td> -->
+          <td>
+            {{ selectedPermission.name }}
+          </td>
+        </tr>
+
+        <tr>
+          <th>Description</th>
+          <td>
+            {{ selectedPermission.description }}
+          </td>
+        </tr>
+
+        <tr>
+          <th>Rule Name</th>
+          <td>
+            {{ selectedPermission.rule_name }}
+          </td>
+        </tr>
+
+        <tr>
+          <th>Data</th>
+          <td>{{ selectedPermission.data }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-5">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search Name"
+          [(ngModel)]="fieldSearchTerm"
+        />
+        <label for="box1"> Field </label>
+        <div id="box1">
+          <ul style="list-style-type: none">
+            <li></li>
+          </ul>
+          <span *ngIf="listLoading">Loading</span>
+          <span *ngIf="noResult">No Result</span>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <!-- Button goes here -->
+        <div class="button-area">
+          <div class="buttons">
+            <button type="button" class="btn btn-success btn-md">>></button>
+          </div>
+          <div class="buttons">
+            <button type="button" class="btn btn-secondary btn-sm">></button>
+          </div>
+          <div class="buttons">
+            <button type="button" class="btn btn-secondary btn-sm"><</button>
+          </div>
+          <div class="buttons">
+            <button type="button" class="btn btn-danger btn-md"><<</button>
+          </div>
+          <div class="buttons">
+            <button type="button" class="btn btn-secondary btn-md">
+              Move Up
+            </button>
+          </div>
+          <div class="buttons">
+            <button type="button" class="btn btn-secondary btn-md">
+              Move Down
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search Name"
+          [(ngModel)]="selectedSearchTerm"
+        />
+        <label for="box2">Selected</label>
+        <div id="box2">
+          <ul style="list-style-type: none">
+            <li></li>
+          </ul>
+          <span *ngIf="candidatePoolLoading">Loading</span>
+          <span *ngIf="noResult">NoResult</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal part -->
+<ng-template #PermissionRef>
+  <form [formGroup]="permissionForm">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input class="form-control" id="name" formControlName="name" />
+    </div>
+    <div class="form-group">
+      <label for="ruleName">Rule Name</label>
+      <input class="form-control" id="ruleName" formControlName="rule_name" />
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        formControlName="description"
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label for="data">Data</label>
+      <textarea
+        class="form-control"
+        id="data"
+        formControlName="data"
+      ></textarea>
+    </div>
+  </form>
+</ng-template>

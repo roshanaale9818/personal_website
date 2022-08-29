@@ -1,0 +1,9 @@
+<a class="btn" *ngIf="!deleteAll && !showButton" tooltip="Delete" (click)="openConfirmationDialogue()"><i class="fa fa-trash"></i
+></a>
+
+<a *ngIf="deleteAll" class="btn" (click)="openConfirmationDialogue()" tooltip="Delete All">
+    <i class="fa fa-trash" style="font-size: 20px"></i>
+</a>
+<ng-container *ngIf="showButton == true">
+    <button class="btn btn-danger ml-3" (click)="openConfirmationDialogue()">Delete</button>
+</ng-container>

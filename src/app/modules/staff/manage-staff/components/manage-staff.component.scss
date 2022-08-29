@@ -1,0 +1,28 @@
+.flex-content {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-secondary {
+  border-radius: 20px;
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  .flex-item {
+    margin-right: 10px;
+    margin-top: 8px;
+  }
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  .flex-items {
+    margin-left: 20px;
+    margin-top: 8px;
+  }
+}

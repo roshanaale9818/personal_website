@@ -1,0 +1,13 @@
+.flex-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+  .flex-item {
+    margin-right: 6px;
+  }
+}
+
+.k-switch-on .k-switch-container {
+  color: #fff;
+  background-color: green;
+}

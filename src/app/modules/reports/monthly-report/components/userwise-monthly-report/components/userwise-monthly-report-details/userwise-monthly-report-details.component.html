@@ -1,0 +1,153 @@
+<kendo-grid [data]="gridView" [resizable]="true" [pageSize]="state.take" [skip]="state.skip" [pageable]="userAttendanceList.length > state.take" [filterable]="false" [filter]="state.filter" [sortable]="true" [sort]="state.sort" [loading]="loading" (dataStateChange)="dataStateChange($event)">
+    <kendo-grid-column title="In Date Time" field="checkin_datetime">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            {{ dataItem.checkin_datetime | date: "medium" }}
+
+            <span style="color: red"> ({{ dataItem.status }}) </span>
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column title="In Message">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <span *ngIf="dataItem.checkout_message == null" style="color: red; font-style: italic">(not set)</span
+      >
+      <span *ngIf !="dataItem.checkout_message == null"
+        >{{ dataItem.checkout_message }}
+      </span>
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column title="Out Date Time">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            {{ dataItem.checkout_datetime | date: "medium" }}
+
+            <span style="color: red">({{ dataItem.status_out }})</span>
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column title="Out Message">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <span *ngIf="dataItem.message == null" style="color: red; font-style: italic">(not set)</span
+      >
+      <span *ngIf="dataItem.message !== null">{{ dataItem.message }}</span>
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column title="Message">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <span *ngIf="dataItem.message == null" style="color: red; font-style: italic">(not set)</span
+      >
+      <span *ngIf="dataItem.message !== null">{{ dataItem.message }}</span>
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column title="W. Hours">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <span *ngIf="dataItem.tot_work == null" style="color: red; font-style: italic">(not set)</span
+      >
+      {{ dataItem.tot_work }}
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column title="Action" *ngIf="authService.currentUserRoleValue !== 'staff'">
+    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+      <a
+        tooltip="Force Change"
+        class="btn"
+        (click)="openCorrectionModal(ForceChangeRef, dataItem)"
+      >
+        <i style="color: rgb(212, 140, 7)" class="fa fa-edit"></i>
+      </a>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column title="Remarks" *ngIf="authService.currentUserRoleValue == 'staff'">
+    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+      <a
+        tooltip="Request change"
+        class="btn"
+        (click)="openRequestModal(RequestChangeRef, dataItem)"
+      >
+        <i style="color: rgb(212, 140, 7)" class="fa fa-edit"></i>
+      </a>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid>
+
+<ng-template #ForceChangeRef>
+  <form [formGroup]="forceChangeForm">
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">Review Attendance</h3>
+      <!-- app-custom-datetimelocal-picker -->
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>{{ selectedAttendance.status }}</label>
+                    <app-custom-datetimelocal-picker [controlName]="'checkin_datetime'" [formGroup]="forceChangeForm" [datepickerSetting]="customDateTimeLocalPickerSettingsForLunchIn" (valueOnChanges)="onLunchInValue($event)"></app-custom-datetimelocal-picker>
+
+                    <!-- <input class="form-control" type="datetime-local" style="width: 100%" formControlName="checkin_datetime" /> -->
+                </div>
+                <div class="form-group">
+                    <label>{{ selectedAttendance.status_out }}</label>
+                    <app-custom-datetimelocal-picker [controlName]="'checkout_datetime'" [formGroup]="forceChangeForm" [datepickerSetting]="customDateTimeLocalPickerSettingsForLunchOut"></app-custom-datetimelocal-picker>
+
+                    <!-- <input class="form-control" type="datetime-local" style="width: 100%" formControlName="checkout_datetime" /> -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" (click)="onSubmitForceChange()">
+        Submit
+      </button>
+                <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+            </div>
+            </form>
+        </ng-template>
+
+        <ng-template #RequestChangeRef>
+            <form [formGroup]="requestChangeForm">
+                <div class="modal-header">
+                    <h3 class="modal-title pull-left">Review Attendance</h3>
+
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Checkin Datetime</label>
+                        <app-custom-datetimelocal-picker [controlName]="'in_datetime'" [formGroup]="requestChangeForm" [datepickerSetting]="customDateTimeLocalPickerSettingsForCheckIn" (valueOnChanges)="onCheckInValue($event)"></app-custom-datetimelocal-picker>
+
+                        <!-- <input class="form-control" type="datetime-local" style="width: 100%" formControlName="in_datetime" /> -->
+                    </div>
+                    <div class="form-group">
+                        <label>Checkout Datetime</label>
+                        <app-custom-datetimelocal-picker [controlName]="'out_datetime'" [formGroup]="requestChangeForm" [datepickerSetting]="customDateTimeLocalPickerSettingsForCheckOut"></app-custom-datetimelocal-picker>
+
+                        <!-- <input class="form-control" type="datetime-local" style="width: 100%" formControlName="out_datetime" /> -->
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea class="form-control" formControlName="message"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" (click)="onSubmitRequestChange()">
+        Submit
+      </button>
+                    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+                </div>
+            </form>
+        </ng-template>

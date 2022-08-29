@@ -1,0 +1,334 @@
+<div class="box box-default box-shadow">
+  <div class="head">
+    <h3><b>All Users Break Report</b></h3>
+  </div>
+
+  <form [formGroup]="breakReportForm">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="user">User</label>
+          <select class="form-control" id="user" formControlName="id">
+            <option disabled selected value="">Search User...</option>
+            <option *ngFor="let staff of staffList" value="{{ staff.user_id }}">
+              {{ staff.first_name }}
+              {{ staff.middle_name ? staff.middle_name : "" }}
+              {{ staff.last_name }} ({{ staff.username }})
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-6 col-xs-6">
+        <label>From</label>
+        <div class="input-group date">
+          <span class="input-group-addon kv-date-calendar" title="From">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </span>
+          <!-- english date picker -->
+          <div *ngIf="dateSetting.GS_DATE == 'E'">
+            <input
+              type="text"
+              class="form-control"
+              id="input1"
+              name="input1"
+              bsDatepicker
+              autocomplete="off"
+              formControlName="date_from"
+              [bsConfig]="datePickerConfig"
+            />
+          </div>
+          <!-- nepali date-picker -->
+          <div *ngIf="dateSetting.GS_DATE == 'N'">
+            <np-datepicker
+              inputClass="form-control"
+              language="en"
+              formControlName="date_from"
+              [dateFormatter]="dateFormatter"
+            ></np-datepicker>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-6 col-xs-6">
+        <label>To</label>
+        <div class="input-group date">
+          <span class="input-group-addon kv-date-calendar" title="To">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </span>
+          <!-- english date picker -->
+          <div *ngIf="dateSetting.GS_DATE == 'E'">
+            <input
+              type="text"
+              class="form-control"
+              id="input1"
+              name="input1"
+              bsDatepicker
+              formControlName="date_to"
+              autocomplete="off"
+              [bsConfig]="datePickerConfig"
+            />
+          </div>
+          <!-- nepali date-picker -->
+          <div *ngIf="dateSetting.GS_DATE == 'N'">
+            <np-datepicker
+              inputClass="form-control"
+              formControlName="date_to"
+              language="en"
+              [dateFormatter]="dateFormatter"
+            ></np-datepicker>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-6 col-xs-6">
+        <button
+          (click)="searchBreakReport()"
+          class="btn btn-success btn-oval"
+          id="search-button"
+        >
+          <b>Search</b>
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div class="box-body">
+    <kendo-grid [data]="user" [selectable]="true" [loading]="loading">
+      <ng-template kendoGridToolbarTemplate>
+        <button kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
+        <button type="button" class="k-button" (click)="excelexport.save()">
+          Export To Excel
+        </button>
+      </ng-template>
+
+      <kendo-grid-column
+        title="User[Device Id]"
+        field="first_name"
+        width="150"
+        [headerStyle]="{
+          'font-weight': 'bold',
+          'background-color': '#666',
+          color: '#fff'
+        }"
+        [style]="{ 'background-color': 'rgb(203, 221, 236)' }"
+        [locked]="true"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+          <p>
+            <strong> {{ dataItem.first_name }}</strong>
+            <strong> {{ dataItem.middle_name }}</strong>
+            <strong>{{ dataItem.last_name }}</strong>
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Status"
+        [headerStyle]="{
+          'font-weight': 'bold',
+          'background-color': '#666',
+          color: '#fff'
+        }"
+        [style]="{ 'background-color': 'rgb(203, 221, 236)' }"
+        width="100"
+        [locked]="true"
+      >
+        <ng-template kendoGridCellTemplate>
+          <strong>In</strong> <br /><br />
+          <strong>Out</strong> <br />
+          <br />
+          <strong>Total(Hrs</strong>
+        </ng-template>
+      </kendo-grid-column>
+      <div *ngFor="let item of reportList; let i = index">
+        <kendo-grid-column
+          title="{{ item.date | dayNumberPipe: dateSetting.GS_DATE }}"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          width="50"
+          class="no-padding"
+        >
+          <ng-template kendoGridCellTemplate>
+            <span class="whole-cell" [style.backgroundColor]="colorCode(item)">
+              <div *ngIf="item.weekend !== ''">
+                <p>WD</p>
+              </div>
+              <div *ngIf="item.attendance == '00:00' && item.weekend == ''">
+                <p>A</p>
+              </div>
+
+              <div *ngIf="item.attendance !== '00:00'">
+                <p>{{ item.in }}</p>
+                <p>{{ item.out }}</p>
+                <p>{{ item.attendance }}</p>
+              </div>
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+      </div>
+      <kendo-grid-column
+        title="Holidays"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        width="100"
+      >
+        <ng-template kendoGridCellTemplate>
+          <strong>{{ holidayCount }}</strong>
+        </ng-template>
+      </kendo-grid-column>
+
+      <!-- <kendo-grid-column
+      title="Weekend"
+      [headerStyle]="{ 'font-weight': 'bold' }"
+      width="100"
+    >
+      <ng-template kendoGridCellTemplate>
+        <strong>{{ responseCount - workingDays }}</strong>
+      </ng-template>
+    </kendo-grid-column> -->
+      <kendo-grid-column
+        title="Present"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        width="100"
+      >
+        <ng-template kendoGridCellTemplate>
+          <strong>{{ presentCount }}</strong>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Leave"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        width="100"
+      >
+        <ng-template kendoGridCellTemplate>
+          <strong>{{ totalleaveCount }}</strong>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Absent"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        width="100"
+      >
+        <ng-template kendoGridCellTemplate>
+          <strong>{{ absentCount }}</strong>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Work Days"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        width="100"
+      >
+        <ng-template kendoGridCellTemplate>
+          <strong>{{ workingDays }}</strong>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Total(hrs)"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        width="100"
+      >
+        <ng-template kendoGridCellTemplate>
+          <strong>{{ totalHours | hoursAndMinutesPipe }}</strong>
+        </ng-template>
+      </kendo-grid-column>
+
+      <!--kendo pdf template -->
+      <kendo-grid-pdf
+        fileName="MonthlyChart.pdf"
+        [allPages]="true"
+        paperSize="A4"
+        [repeatHeaders]="true"
+        [landscape]="true"
+        [scale]="0.3"
+      >
+        <kendo-grid-pdf-margin
+          top="2cm"
+          left="1cm"
+          right="1cm"
+          bottom="2cm"
+        ></kendo-grid-pdf-margin>
+        <ng-template
+          kendoGridPDFTemplate
+          let-pageNum="pageNum"
+          let-totalPages="totalPages"
+        >
+          <div class="page-template">
+            <div class="header">
+              <div style="float: right">Users Attendance Chart</div>
+            </div>
+            <div class="footer">Page {{ pageNum }} of {{ totalPages }}</div>
+          </div>
+        </ng-template>
+      </kendo-grid-pdf>
+
+      <!-- kendo export to excel -->
+      <!-- 
+    <kendo-grid-excel fileName="MonthlyChart.xlsx" [data]="reportList">
+    </kendo-grid-excel> -->
+      <kendo-excelexport
+        [data]="reportList"
+        fileName="Report.xlsx"
+        #excelexport
+      >
+        <div *ngFor="let item of user">
+          <kendo-excelexport-column-group
+            title="{{ item.first_name }}"
+            [headerCellOptions]="{ textAlign: 'center' }"
+          >
+            <kendo-excelexport-column
+              [locked]="true"
+              title="Date"
+              field="date"
+              [width]="200"
+            >
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              [locked]="true"
+              title="Check In"
+              field="in"
+              [width]="200"
+            >
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              [locked]="true"
+              title="Check Out"
+              field="out"
+              [width]="200"
+            >
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              [locked]="true"
+              title="Total hours Worked"
+              field="attendance"
+              [width]="200"
+            >
+            </kendo-excelexport-column>
+          </kendo-excelexport-column-group>
+        </div>
+      </kendo-excelexport>
+    </kendo-grid>
+
+    <div class="table-responsive text-nowrap" style="margin-top: 20px">
+      <table class="table border">
+        <thead>
+          <tr>
+            <th scope="col">Color</th>
+            <th style="background-color: #9bc4db"></th>
+            <th style="background-color: rgba(123, 240, 154, 0.68)"></th>
+            <th style="background-color: #fff"></th>
+            <th style="background-color: rgb(228, 91, 91)"></th>
+            <th style="background-color: rgb(255, 255, 123)"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Notification</th>
+            <td>Holiday</td>
+            <td>Meet Work Hrs</td>
+            <td>Absent</td>
+            <td>Dosen't Meet Work Hrs</td>
+            <td>Leave</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

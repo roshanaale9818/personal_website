@@ -1,0 +1,177 @@
+<div class="box box-default box-shadow btn-oval">
+    <div class="box-header with-border" *ngIf="!hideTopHeading">
+        <button class="btn btn-success btn-oval" (click)="openAddModal(clientLocationModal)">
+      <b> <i class="fa fa-plus-circle"></i> Create Client Location</b>
+    </button>
+    </div>
+
+    <div class="box-body mt-3">
+        <kendo-grid [data]="gridView" [pageSize]="10" [resizable]="true" [skip]="skip" [pageable]="
+        gridView ? (gridView.total <= pageLimit ? false : true) : false
+      " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" [loading]="ClientLocationListLoading" (dataStateChange)="dataStateChange($event)">
+            <kendo-grid-column title="S.N" width="50" [minResizableWidth]="30" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }">
+                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                    <p>{{ rowIndex + 1 }}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Location Name" field="name" [width]="150" [headerStyle]="{ 'font-weight': 'bold' }">
+            </kendo-grid-column>
+
+            <ng-container *ngIf="!hideDetails">
+                <kendo-grid-column title="Details" field="details" [width]="150" [headerStyle]="{ 'font-weight': 'bold' }"></kendo-grid-column>
+            </ng-container>
+
+            <ng-container *ngIf="!hideTimeZone">
+                <kendo-grid-column title="Timezone" field="timezone" [width]="150" [headerStyle]="{ 'font-weight': 'bold' }"></kendo-grid-column>
+            </ng-container>
+
+            <kendo-grid-column title="Status" field="status" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                <ng-template kendoGridFilterCellTemplate>
+                    <kendo-dropdownlist [defaultItem]="defaultItem" [data]="statusList" [textField]="'text'" [valueField]="'value'" (valueChange)="searchStatus($event)">
+                    </kendo-dropdownlist>
+                </ng-template>
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <span *ngIf="dataItem.status == '1'" class="badge bg-green-gradient">Active</span
+          >
+          <span *ngIf="dataItem.status == '0'" class="badge bg-red"
+            >Inactive</span
+          >
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Action"
+        [width]="120"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+          <a
+            class="btn"
+            (click)="openViewModal(clientLocationViewModal, dataItem)"
+          >
+            <i class="fa fa-eye"></i
+          ></a>
+          <a class="btn" (click)="openEditModel(dataItem, clientLocationModal)"
+            ><i class="fa fa-edit"></i
+          ></a>
+          <a class="btn" (click)="openConfirmationDialogue(dataItem)"
+            ><i class="fa fa-trash"></i
+          ></a>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- create client location modal -->
+<form [formGroup]="clientLocationForm">
+  <ng-template #clientLocationModal>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+                    </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="title">Location Name <sup>*</sup></label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter Client Location Name" formControlName="name" appFormControlValidationMsg />
+                    <!-- <span class="form-error-msg" *ngIf="formErrors.name && submitted">{{
+              formErrors.name
+            }}</span> -->
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="status">Status<sup>*</sup></label>
+                    <select class="form-control" id="status" data-placeholder="Select Status" formControlName="status" appFormControlValidationMsg>
+              <option value="">Select Status</option>
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+                    <!-- <span
+              class="form-error-msg"
+              *ngIf="formErrors.status && submitted"
+              >{{ formErrors.status }}</span
+            > -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="timeZone">Time Zone <sup>*</sup></label>
+                    <ng-select appearance="outline" #agreeSelect labelForId="name" [searchable]="true" formControlName="timezone" placeholder="Select Timezone" appFormControlValidationMsg>
+                        <ng-option value="" selected>Select Time Zone</ng-option>
+                        <ng-option *ngFor="let timeList of timeZoneLocationList" [value]="timeList.name">{{ timeList.name }}</ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea2">Detail</label>
+                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" name="description" formControlName="details"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal body -->
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+        <button class="btn btn-success" type="submit" (click)="onSubmitClientLocation()" appFormSubmitValidationMsg [validationControl]="clientLocationForm">
+        Submit
+      </button>
+    </div>
+    </ng-template>
+    </form>
+
+    <!-- view client location modal -->
+    <ng-template #clientLocationViewModal>
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">Client branch Detail</h4>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+        </div>
+        <div class="modal-body">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th scope="row">Location Name</th>
+                        <td>{{ clientLocationDetail.name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Details</th>
+                        <td>{{ clientLocationDetail.details }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Status</th>
+                        <td>
+                            <!-- {{ clientLocationDetail.status }} -->
+                            <span *ngIf="clientLocationDetail.status == '1'" class="badge bg-green-gradient">Active</span
+                            >
+                            <span *ngIf="clientLocationDetail.status == '0'" class="badge bg-red"
+                              >Inactive</span
+                            >
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+        </div>
+    </ng-template>

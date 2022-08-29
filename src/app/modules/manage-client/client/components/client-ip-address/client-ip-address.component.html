@@ -1,0 +1,232 @@
+<div class="box box-default box-shadow">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <i class="fa fa-server mr-3"></i> <b>Client IP Address</b>
+      </h3>
+    </div>
+
+    <div class="panel-body">
+      <div class="box-header with-border" style="background-color: #eee">
+        <button
+          class="btn btn-success btn-oval"
+          (click)="openAddModal(addClientIp)"
+        >
+          <i class="fa fa-plus-circle mr-2"></i><b>Add IP Address</b>
+        </button>
+      </div>
+      <div class="box-body mt-3">
+        <kendo-grid
+          [data]="gridView"
+          [resizable]="true"
+          [pageSize]="15"
+          [skip]="skip"
+          [pageable]="
+            gridView ? (gridView.total <= pageLimit ? false : true) : false
+          "
+          [loading]="listLoading"
+        >
+          <kendo-grid-column
+            title="Client Location"
+            field="client_location_id"
+            [width]="110"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Ip Address"
+            field="ip_address"
+            [width]="150"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            title="Isp Name"
+            field="isp_name"
+            [width]="150"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            title="Status"
+            field="status"
+            [width]="150"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <span
+                *ngIf="dataItem.status == '1'"
+                class="badge bg-green-gradient"
+                >Active</span
+              >
+              <span *ngIf="dataItem.status == '0'" class="badge bg-red"
+                >InActive</span
+              >
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Action"
+            width="70"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <!-- <a class="btn" (click)="openViewModal(dataItem)">
+                <i class="fa fa-eye"></i
+              ></a> -->
+              <a
+                class="btn"
+                tooltip="Update"
+                (click)="openEditModal(dataItem, addClientIp)"
+                ><i class="fa fa-edit"></i
+              ></a>
+
+              <a
+                class="btn"
+                tooltip="Delete"
+                (click)="openConfirmationDialogue(dataItem)"
+                ><i class="fa fa-trash"></i
+              ></a>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- add client ip modal -->
+<form [formGroup]="clientIpForm">
+  <ng-template #addClientIp>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="loc">Client Location</label>
+            <select
+              id="loc"
+              class="form-control"
+              formControlName="client_location_id"
+              appFormControlValidationMsg
+            >
+              <option
+                *ngFor="let location of clientBranchLocation"
+                value="{{ location.client_location_id }}"
+              >
+                {{ location.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="email">Ip Address<sup>*</sup></label>
+            <input
+              type="text"
+              id="email"
+              class="form-control"
+              formControlName="ip_address"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="div">Client Divison</label>
+            <select
+              id="div"
+              class="form-control"
+              formControlName="client_division_id"
+              appFormControlValidationMsg
+            >
+              <option
+                *ngFor="let division of divisionList"
+                value="{{ division.client_division_id }}"
+              >
+                {{ division.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="depart">Client Department</label>
+            <select
+              id="depart"
+              class="form-control"
+              formControlName="client_department_id"
+              appFormControlValidationMsg
+            >
+              <option
+                *ngFor="let department of clientDepartmentList"
+                value="{{ department.client_department_id }}"
+              >
+                {{ department.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="isp_name">Isp Name<sup>*</sup></label>
+            <input
+              type="text"
+              id="isp_name"
+              class="form-control"
+              formControlName="isp_name"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select
+              id="status"
+              class="form-control"
+              formControlName="status"
+              appFormControlValidationMsg
+            >
+              <option value="" selected>Select Status...</option>
+              <option value="1">Active</option>
+              <option value="0">InActive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-success"
+        type="submit"
+        (click)="onSubmit()"
+        appFormSubmitValidationMsg
+        [validationControl]="clientIpForm"
+      >
+        Submit
+      </button>
+    </div>
+  </ng-template>
+</form>

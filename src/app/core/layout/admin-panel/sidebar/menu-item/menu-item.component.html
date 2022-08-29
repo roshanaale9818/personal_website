@@ -1,0 +1,153 @@
+<!-- search form -->
+<div class="sidebar-form">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Search..." autocomplete="off" [(ngModel)]="term" (keyup)="setExpandedTrue($event)" />
+        <span class="input-group-btn">
+      <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+        <i class="fa fa-search"></i>
+      </button>
+    </span>
+    </div>
+</div>
+
+<!-- /.search form -->
+
+<ul class="sidebar-menu" data-widget="tree">
+    <li class="header">MAIN NAVIGATION</li>
+    <!--
+  <ng-container *ngFor="let item of navItems | filter: term">
+    <li *ngIf="!item.children" style="cursor: pointer">
+      Menu Item
+      <a
+        routerLink="/{{ item.route }}"
+        routerLinkActive="active"
+        (click)="setTitle(item.displayName)"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="{{ item.iconName }} mr-1"></i>
+        <span>{{ item.displayName }}</span>
+      </a>
+    </li>
+
+    For Children iteration
+    <li
+      class="treeview"
+      [ngClass]="{ 'menu-open': expanded }"
+      *ngIf="item?.children"
+      style="cursor: pointer"
+    >
+      <a>
+        <i class="{{ item.iconName }} mr-1"></i>
+        <span>{{ item.displayName }}</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+
+      <ul
+        class="treeview-menu"
+        [ngStyle]="{ display: expanded ? 'block' : 'none' }"
+      >
+        <ng-container *ngFor="let childItem of item?.children">
+          <li *ngIf="!childItem.children">
+            <a
+              routerLink="/{{ childItem.route }}"
+              routerLinkActive="active"
+              (click)="setTitle(childItem.displayName)"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <i class="{{ childItem.iconName }} mr-1"></i>
+              {{ childItem.displayName }}
+            </a>
+          </li>
+
+           children of children  navItems iteration
+          <li
+            class="treeview"
+            [ngClass]="{ 'menu-open': expanded }"
+            *ngIf="childItem?.children"
+            style="cursor: pointer"
+          >
+            <a>
+              <i class="{{ childItem.iconName }} mr-1"></i>
+              <span>{{ childItem.displayName }}</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul
+              class="treeview-menu"
+              [ngStyle]="{ display: expanded ? 'block' : 'none' }"
+            >
+              <ng-container *ngFor="let childItem2 of childItem?.children">
+                <li>
+                  <a
+                    routerLink="/{{ childItem2.route }}"
+                    routerLinkActive="active"
+                    (click)="setTitle(childItem2.displayName)"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                  >
+                    <i class="{{ childItem2.iconName }} mr-1"></i>
+                    {{ childItem2.displayName }}
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </li>
+  </ng-container> -->
+    <ng-container *ngFor="let item of navItemsByGroup | filter: term">
+        <!-- <li *ngIf="!item.children" style="cursor: pointer">
+            Menu Item
+            <a routerLink="/{{ item.route }}" routerLinkActive="active" (click)="setTitle(item.displayName)" [routerLinkActiveOptions]="{ exact: true }">
+                <i class="{{ item.iconName }} mr-1"></i>
+                <span>{{ item.displayName }}</span>
+            </a>
+        </li> -->
+
+        <!-- For Children iteration -->
+        <li class="treeview" [ngClass]="{ 'menu-open': expanded }" *ngIf="item?.groupItem" style="cursor: pointer">
+            <a *ngIf="item.parent_name">
+                <i class="{{ item.iconName }} mr-1"></i>
+                <span>{{ item.parent_name }}</span>
+                <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+            </a>
+
+            <ul class="treeview-menu" [ngStyle]="{ display: expanded ? 'block' : 'none' }">
+                <ng-container *ngFor="let childItem of item?.groupItem">
+                    <li *ngIf="childItem">
+                        <ng-container *ngIf="(childItem.name !== 'Add Employee' && (childItem.angular_route !=='/staff/manage-user/archive-list'))">
+                            <a routerLink="/{{ childItem.angular_route }}" routerLinkActive="active" (click)="setTitle(childItem.name)" [routerLinkActiveOptions]="{ exact: true }">
+                                <i class="{{ childItem.icon }} mr-1"></i> {{ childItem.name }}
+                            </a>
+                        </ng-container>
+                    </li>
+
+                    <!-- children of children  navItems iteration -->
+                    <li class="treeview" [ngClass]="{ 'menu-open': expanded }" *ngIf="childItem?.groupItem" style="cursor: pointer">
+                        <a>
+                            <i class="{{ childItem.icon }} mr-1"></i>
+                            <span>{{ childItem.name }}</span>
+                            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+                        </a>
+                        <ul class="treeview-menu" [ngStyle]="{ display: expanded ? 'block' : 'none' }">
+                            <ng-container *ngFor="let childItem2 of childItem?.groupItem">
+                                <li>
+                                    <a routerLink="/{{ childItem2.angular_route }}" routerLinkActive="active" (click)="setTitle(childItem2.name)" [routerLinkActiveOptions]="{ exact: true }">
+                                        <i class="{{ childItem2.icon }} mr-1"></i> {{ childItem2.name }}
+                                    </a>
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </li>
+                </ng-container>
+            </ul>
+        </li>
+    </ng-container>
+</ul>

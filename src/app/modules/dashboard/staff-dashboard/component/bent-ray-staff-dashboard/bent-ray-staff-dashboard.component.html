@@ -1,0 +1,273 @@
+<div class="container-fluid">
+    <!-- <p style="text-align: center; font-size: 26px; font-weight: 500;">
+    Welcome {{ staffName }}!
+  </p> -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="info-box bg-aqua">
+                <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text" style="color: #000"><b>Date & Time</b></span
+          >
+          <div
+            style="
+              font-family: Verdana, Arial, Helvetica, sans-serif;
+              font-size: 12px;
+            "
+          >
+            <p *ngIf="dateSetting.GS_DATE == 'E'">
+              {{ todaysDateInEnglish | date }}
+            </p>
+            <p *ngIf="dateSetting.GS_DATE == 'N'">
+              {{ currentNepaliDate }}
+            </p>
+          </div>
+          <div style="font-size: large; font-weight: 700">
+            <span #time></span>
+                </div>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-md-3">
+        <div class="info-box bg-yellow">
+            <span class="info-box-icon"><i class="fa fa-check-square-o"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text" style="color: #000; margin-bottom: 20px"><b>Attendance</b></span
+          >
+
+          <!-- <button
+            type="submit"
+            class="btn btn-success btn-xs"
+            name="checkin"
+            style="margin-right: 8px;"
+          >
+            Check IN
+          </button> -->
+          <button
+            type="submit"
+            id="element"
+            class="btn btn-primary btn-xs"
+            name="checkout"
+            (click)="navigateToAttendance()"
+          >
+            Check IN / Check OUT
+          </button>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <div class="col-md-3">
+      <div class="info-box bg-green">
+        <span class="info-box-icon"><i class="fa fa-check-square"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text" style="color: #000"><b>Attendance Request</b></span
+          >
+          <span class="info-box-number">{{staffDashboardSummaryObj.att_correction_pending?staffDashboardSummaryObj.att_correction_pending:"0"}} times</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 50%"></div>
+                    </div>
+                    <span class="progress-description"> A = 0, P = 0 </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <div class="col-md-3">
+            <div class="info-box bg-red">
+                <span class="info-box-icon"><i class="fa fa-paper-plane-o"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text" style="color: #000"><b>Leave Request</b></span
+          >
+          <span class="info-box-number">{{staffDashboardSummaryObj.pending_leave ? staffDashboardSummaryObj.pending_leave : '0'}} days</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 70%"></div>
+                    </div>
+                    <span class="progress-description"> A = 0 times, P = 0, D = 0 </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+    </div>
+    <!-- info box section ends here -->
+
+    <!-- panel section starts here... -->
+    <div class="box box-default">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-lg-3 col-md-3 col-xs-6">
+                                <img src="../../../../../../assets/images/check.png" style="height: 80px; cursor: pointer" (click)="navigateToAttendance()" />
+                                <caption>
+                                    <strong>Attendance</strong>
+                                </caption>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-xs-6">
+                                <img src="../../../../../../assets/images/att.png" alt="" style="height: 80px; cursor: pointer" (click)="navigateToCorrection()" />
+                                <caption>
+                                    <strong>Correction</strong>
+                                </caption>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-xs-6">
+                                <img src="../../../../../../assets/images/request.png" alt="" style="height: 80px; cursor: pointer" (click)="navigateToLeaveRequest()" id="leave" />
+                                <caption>
+                                    <strong>Leave</strong>
+                                </caption>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-xs-6">
+                                <img src="../../../../../../assets/images/report.png" style="height: 80px; cursor: pointer" (click)="navigateToReport()" />
+                                <caption>
+                                    <strong>Report</strong>
+                                </caption>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- (click)="navigateToYearlyReport()" -->
+
+                            <div class="col-lg-3 col-md-3 col-xs-6">
+                                <a class="quick-btn" style="padding: 10px" data-toggle="tooltip" title="Yeary/Monthly Attendance Report" style="padding: 15px; cursor: pointer">
+                                    <i class="fa fa-file-o badge1" data-badge="12M"></i><br />
+                                    <span style="padding: 15px">
+                    <b
+                      >Report
+                      <p style="color: green; margin-left: 20px">Y/M</p></b
+                    >
+                  </span>
+                                </a>
+
+                                <!-- <span class="label label-success badge">12 M </span> -->
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-xs-6">
+                                <!-- (click)="navigateToMessage()" -->
+
+                                <a class="quick-btn" data-toggle="tooltip" title="Direct Message to Staff" style="padding: 15px; cursor: pointer">
+                                    <i class="fa fa-envelope-o badge2" data-badge="0"></i><br />
+                                    <span style="padding: 15px">
+                    <b
+                      >Direct
+                      <p style="color: green; margin-left: 15px">Message</p></b
+                    >
+                  </span>
+                                    <!-- <span class="label label-danger">0 </span> -->
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-xs-6">
+                                <a class="quick-btn" data-toggle="tooltip" title="English Date Formate">
+                                    <i class="fa fa-calendar-o badge3" data-badge="Now"></i><br />
+                                    <span *ngIf="dateSetting.GS_DATE == 'N'">
+                    <b
+                      >Date Format
+                      <p style="color: green">Nepali</p></b
+                    ></span
+                  >
+                  <span *ngIf="dateSetting.GS_DATE == 'E'">
+                    <b
+                      >Date Format
+                      <p style="color: green">English</p></b
+                    ></span
+                  >
+                  <!-- <span class="label label-default">Now</span> -->
+                                </a>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-xs-6">
+                                <p class="bg-blue" style="text-align: center; padding: 5px; margin-bottom: 0px">
+                                    <b>Special Holiday</b>
+                                </p>
+                                <div class="info-box" style="
+                    overflow: scroll;
+                    background-color: #fff;
+                    border: 1px solid #ccc;
+                  ">
+                                    <ng-container *ngFor="let item of upcommingHolidays">
+                                        <p style="text-align: center; border-bottom: 1px solid #ccc; padding-bottom: 9px;">{{item.date}}, <b style="background-color: #0073b7; padding:4px; color: #fff;">{{item.title}}</b></p>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!--panel box section ends here  -->
+
+    <!-- calender and convert date section starts here -->
+    <div class="row">
+        <div class="col-md-2">
+            <div class="box box-success direct-chat direct-chat-success">
+                <div class="box-header with-border">
+                    <i *ngIf="dateSetting.GS_DATE == 'E'" class="fa fa-calendar" style="font-size: 30px; cursor: pointer" bsDatepicker></i>
+                    <i *ngIf="dateSetting.GS_DATE == 'N'" class="fa fa-calendar" style="font-size: 30px; cursor: pointer" [popover]="nepaliCalender" placement="right" #pop="bs-popover" [outsideClick]="true"></i>
+
+                    <!-- <np-datepicker language="en"></np-datepicker> -->
+
+                    Calendar
+                </div>
+            </div>
+        </div>
+        <form [formGroup]="dateConvertForm">
+            <div class="col-md-5">
+                <div class="box box-warning direct-chat direct-chat-warning">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" placeholder="Ex. 1994-06-30" formControlName="ad" />
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <button class="btn btn-primary" (click)="convertToBs()" [popover]="dateInBs" placement="right" #pop="bs-popover" [outsideClick]="true">
+                    Convert To BS
+                  </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="box box-primary direct-chat direct-chat-primary">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" placeholder="Ex. 2051-03-16" formControlName="bs" />
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-primary" (click)="convertToAd()" [popover]="dateInAd" placement="right" #pop="bs-popover" [outsideClick]="true">
+                  Convert To Ad
+                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- calender and convert dates section ends here -->
+
+    <app-monthly-chart [isSingleReport]="true"></app-monthly-chart>
+</div>
+
+<ng-template #nepaliCalender>
+    <iframe src="https://www.hamropatro.com/widgets/calender-small.php" frameborder="0" scrolling="no" marginwidth="0" marginheight="0" style="border: none; overflow: hidden; width: 200px; height: 290px" allowtransparency="true"></iframe>
+</ng-template>
+
+<ng-template #dateInBs>
+    <p>
+        Converted Date in BS is <strong>{{ convertedDateInBs }}</strong>
+    </p>
+</ng-template>
+<ng-template #dateInAd>
+    <p>
+        Converted Date in AD is <strong>{{ convertedDateInAd }}</strong>
+    </p>
+</ng-template>

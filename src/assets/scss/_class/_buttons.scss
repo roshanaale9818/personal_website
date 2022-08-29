@@ -1,0 +1,10 @@
+@import '../_variables/color';
+
+.class-button{
+    background: $button-color;
+    color: #fff;
+}
+
+.multiple_button {
+    @include btn-generator(red);
+  }

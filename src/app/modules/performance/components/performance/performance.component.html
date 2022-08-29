@@ -1,0 +1,403 @@
+<!-- <p>performance works!</p> -->
+<div class="wrap">
+    <form [formGroup]="performanceForm">
+        <ng-container *ngIf="datePickerFormat == 'E'">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="username">From Date <sup>*</sup></label>
+                        <!-- <input type="text" id="username" class="form-control" formControlName="date_from" /> -->
+                        <input name="datefrom" [placeholder]="datePickerConfig.dateInputFormat" formControlName="from_date" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" bsDatepicker />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="username">To Date <sup>*</sup></label>
+                        <!-- <input type="text" id="username" class="form-control" formControlName="date_to" /> -->
+                        <input name="dateTo" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfigForTo" [placement]="'bottom'" formControlName="to_date" bsDatepicker />
+
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="datePickerFormat == 'N'">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="month">Date From<sup>*</sup></label>
+                        <nepali-date-picker name="nepaliDateFrom" [id]="'nepaliDatefrom'" (change)="changeDate($event.detail.value, 'dateFrom')" [label]="this.datePickerConfig.dateInputFormat" formControlName="from_date" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDateFrom">
+                        </nepali-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="month">Date To<sup>*</sup></label>
+                        <nepali-date-picker name="nepaliDateTo" [id]="'nepaliDateTo'" (change)="changeDate($event.detail.value, 'dateTo')" [label]="this.datePickerConfig.dateInputFormat" formControlName="to_date" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDateTo"
+                            [disableBefore]="disableBefore">
+                        </nepali-date-picker>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <div class="con">
+            <table cellspacing="0" class="Table" style="border-collapse:collapse; border: solid #d9d9d9 1.0pt; width:100.0%">
+                <tbody>
+                    <tr>
+                        <td style="vertical-align:top; width:275.4pt">
+                            <p style="margin-left:0in; margin-right:0in">
+                                <!-- <img src="/img/brtlogo.png" style="height:43px; width:154px"> -->
+                                <ng-container *ngIf="!detail">
+                                    <img style="height:43px; width:154px" src="../../../../../assets/images/flexyearlogo.png" />
+                                </ng-container>
+
+                                <ng-container *ngIf="detail && detail.company_logo">
+                                    <img style="height:43px; width:154px" src="{{ imageUrl }}{{ detail?.company_logo }}" />
+                                </ng-container>
+                            </p>
+                        </td>
+                        <td style="vertical-align:top; width:275.4pt">
+                            <p style="margin-left:0in; margin-right:0in; text-align:right"><span style="color:#404040"><strong>
+                          {{companyInfo ? companyInfo.company_name:""}}
+                        </strong></span></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><b>Employee Performance Review</b></p>
+
+            <span class="tag" style="background-color:#595959; padding: 0 2px 2px 2px; margin-bottom: 2px;"><span style="color:white"><b>Employee Information</b></span></span>
+
+            <table border="1" cellspacing="0" class="Table" style="border-collapse:collapse;border: solid #d9d9d9 1.0pt; width:100%">
+                <thead>
+                    <tr>
+                        <td style="height:20.15pt; vertical-align:bottom; width:63.2pt; padding: 5px;">
+                            <p><b>Name</b></p>
+                        </td>
+                        <td style="height:20.15pt; vertical-align:bottom; width:274.2pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"><b>Roshan Aale Magar</b></p>
+                        </td>
+                        <td style="height:20.15pt; vertical-align:bottom; width:57.9pt; padding: 5px;">
+                            <p><b>Perf. Date</b></p>
+                        </td>
+                        <td style="height:20.15pt; vertical-align:bottom; width:144.7pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in">
+                                <ng-container *ngIf="performanceDetail">
+                                    {{ performanceDetail.month }}
+
+                                </ng-container>
+
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:20.15pt; vertical-align:bottom; width:63.2pt; padding: 5px;">
+                            <p><b>Department</b></p>
+                        </td>
+                        <td style="height:20.15pt; vertical-align:bottom; width:274.2pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in">
+                                <!-- Development -->
+                                <ng-container *ngIf="performanceDetail">
+                                    {{ performanceDetail ? performanceDetail.department:"Development" }}
+                                </ng-container>
+                                <ng-container *ngIf="!performanceDetail">
+                                    Development
+                                </ng-container>
+                            </p>
+                        </td>
+                        <td style="height:20.15pt; vertical-align:bottom; width:57.9pt; padding: 5px;">
+                            <p><b>Emp Type</b></p>
+                        </td>
+                        <td style="height:20.15pt; vertical-align:bottom; width:144.7pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"></p>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+            <br>
+            <span class="tag" style="background-color:#595959; padding: 0 2px 2px 2px; margin-bottom: 2px;"><span style="color:white"><b>Ratings</b></span></span>
+
+            <table border="1" cellspacing="0" class="Table" style="border-collapse:collapse;     border: solid #d9d9d9 1.0pt;width:100%">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="height:20.15pt; width:2.4in; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in">&nbsp;</p>
+                        </td>
+                        <td style="height:20.15pt; width:73.25pt; padding: 5px;">
+                            <p>1 = Poor</p>
+                        </td>
+                        <td style="height:20.15pt; width:73.3pt; padding: 5px;">
+                            <p>2 = Fair</p>
+                        </td>
+                        <td style="height:20.15pt; width:73.3pt; padding: 5px;">
+                            <p>3 = Satisfy</p>
+                        </td>
+                        <td style="height:20.15pt; width:73.3pt; padding: 5px;">
+                            <p>4 = Good</p>
+                        </td>
+                        <td style="height:20.15pt; width:74.05pt; padding: 5px;">
+                            <p>5 = Excellent</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height:.2in; width:2.4in; padding: 5px;">
+                            <p><b>Job Knowledge</b></p>
+                        </td>
+                        <td style="height:.2in; width:73.25pt; padding: 5px;">
+                            <input type="radio" formControlName="job_know" value="1">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="job_know" value="2">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="job_know" value="3">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="job_know" value="4">
+                        </td>
+                        <td style="height:.2in; width:74.05pt; padding: 5px;">
+                            <input type="radio" formControlName="job_know" value="5">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:20.15pt; width:49.5pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"><b>Comments</b></p>
+                        </td>
+                        <td colspan="6" style="height:20.15pt; width:490.5pt; padding: 5px;">
+                            <p>
+                                <input type="text" formControlName="job_know_commrnt" class="form-control">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height:.2in; width:2.4in; padding: 5px;">
+                            <p><b>Work Quality</b></p>
+                        </td>
+                        <td style="height:.2in; width:73.25pt; padding: 5px;">
+                            <input type="radio" formControlName="quality" value="1">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="quality" value="2">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="quality" value="3">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="quality" value="4">
+                        </td>
+                        <td style="height:.2in; width:74.05pt; padding: 5px;">
+                            <input type="radio" formControlName="quality" value="5">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:20.15pt; width:49.5pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"><b>Comments</b></p>
+                        </td>
+                        <td colspan="6" style="height:20.15pt; width:490.5pt; padding: 5px;">
+                            <p>
+                                <input type="text" formControlName="quality_comment" class="form-control">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height:.2in; width:2.4in; padding: 5px;">
+                            <p><b>Attendance/Punctuality</b></p>
+                        </td>
+                        <td style="height:.2in; width:73.25pt; padding: 5px;">
+                            <input type="radio" formControlName="punctuality" value="1">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="punctuality" value="2">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="punctuality" value="3">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="punctuality" value="4">
+                        </td>
+                        <td style="height:.2in; width:74.05pt; padding: 5px;">
+                            <input type="radio" formControlName="punctuality" value="5">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:20.15pt; width:49.5pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"><b>Comments</b></p>
+                        </td>
+                        <td colspan="6" style="height:20.15pt; width:490.5pt; padding: 5px;">
+                            <input type="text" class="form-control" formControlName="punctuality_comment">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height:.2in; width:2.4in; padding: 5px;">
+                            <p><b>Productivity</b></p>
+                        </td>
+                        <td style="height:.2in; width:73.25pt; padding: 5px;">
+                            <input type="radio" formControlName="productivity" value="1">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="productivity" value="2">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="productivity" value="3">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="productivity" value="4">
+                        </td>
+                        <td style="height:.2in; width:74.05pt; padding: 5px;">
+                            <input type="radio" formControlName="productivity" value="5">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:20.15pt; width:49.5pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"><b>Comments</b></p>
+                        </td>
+                        <td colspan="6" style="height:20.15pt; width:490.5pt; padding: 5px;">
+                            <input type="text" class="form-control" formControlName="productivity_comment">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height:.2in; width:2.4in; padding: 5px;">
+                            <p><b>Comm./Listening Skills</b></p>
+                        </td>
+                        <td style="height:.2in; width:73.25pt; padding: 5px;">
+                            <input type="radio" formControlName="communication" value="1">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="communication" value="2">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="communication" value="3">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" formControlName="communication" value="4">
+                        </td>
+                        <td style="height:.2in; width:74.05pt; padding: 5px;">
+                            <input type="radio" formControlName="communication" value="5">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:20.15pt; width:49.5pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"><b>Comments</b></p>
+                        </td>
+                        <td colspan="6" style="height:20.15pt; width:490.5pt; padding: 5px;">
+                            <input type="text" class="form-control" formControlName="communication_comment">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height:.2in; width:2.4in; padding: 5px;">
+                            <p><b>Dependability</b></p>
+                        </td>
+                        <td style="height:.2in; width:73.25pt; padding: 5px;">
+                            <input type="radio" value="1" formControlName="dependability">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" value="2" formControlName="dependability">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" value="3" formControlName="dependability">
+                        </td>
+                        <td style="height:.2in; width:73.3pt; padding: 5px;">
+                            <input type="radio" value="4" formControlName="dependability">
+                        </td>
+                        <td style="height:.2in; width:74.05pt; padding: 5px;">
+                            <input type="radio" value="5" formControlName="dependability">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:20.15pt; width:49.5pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"><b>Comments</b></p>
+                        </td>
+                        <td colspan="6" style="height:20.15pt; width:490.5pt; padding: 5px;">
+                            <input type="text" class="form-control" formControlName="dependability_comment">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <span class="tag" style="background-color:#595959; padding: 0 2px 2px 2px; margin-bottom: 2px;"><span style="color:white"><b>Evaluation</b></span></span>
+
+            <table border="1" cellspacing="0" class="Table" style="border-collapse:collapse; border:solid #d9d9d9 1.0pt; width:100%">
+                <tbody>
+                    <tr>
+                        <td style="vertical-align:top; width:110.25pt; padding: 5px;">
+                            <p><b>Additional Comments</b></p>
+                        </td>
+                        <td style="vertical-align:top; width:430.25pt; padding: 5px;">
+                            <input class="form-control" formControlName="additional_comment">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top; width:110.25pt; padding: 5px;">
+                            <p><b>Employee Goals:</b></p>
+                        </td>
+                        <td style="vertical-align:top; width:430.25pt; padding: 5px;">
+                            <input type="text" class="form-control" formControlName="goal_comment">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <span class="tag" style="background-color:#595959; padding: 0 2px 2px 2px; margin-bottom: 2px;"><span style="color:white"><b>Verification of Review</b></span></span>
+
+            <table border="1" cellspacing="0" class="Table" style="border-collapse:collapse; border:solid #d9d9d9 1.0pt; width:100%">
+                <tbody>
+                    <!--
+            <tr>
+              <td colspan="4" style="height:26.7pt; width:540.55pt; padding: 5px;">
+              <p style="margin-left:0in; margin-right:0in"><em>By signing this form, you confirm that you have discussed this review in detail with your supervisor. Signing this form does not necessarily indicate that you agree with this evaluation.</em></p>
+              </td>
+            </tr>
+            <tr>
+              <td style="height:20.15pt; vertical-align:bottom; width:111.05pt; padding: 5px;">
+              <p style="margin-left:0in; margin-right:0in"><b>Employee Signature</b></p>
+              </td>
+              <td style="height:20.15pt; vertical-align:bottom; width:3.15in; padding: 5px;">
+                        </td>
+              <td style="height:20.15pt; vertical-align:bottom; width:33.8pt; padding: 5px;">
+              <p style="margin-left:0in; margin-right:0in"><b>Date</b></p>
+              </td>
+              <td style="height:20.15pt; vertical-align:bottom; width:168.9pt; padding: 5px;">
+                        </td>
+            </tr>
+           -->
+                    <tr>
+                        <td style="height:20.15pt; vertical-align:bottom; width:111.05pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"><b>Supervisor Signature</b></p>
+                        </td>
+                        <td style="height:20.15pt; vertical-align:bottom; width:3.15in; padding: 5px;">
+                            <input type="text" class="form-control" formControlName="s_name">
+                        </td>
+                        <td style="height:20.15pt; vertical-align:bottom; width:33.8pt; padding: 5px;">
+                            <p style="margin-left:0in; margin-right:0in"><b>Date</b></p>
+                        </td>
+                        <td style="height:20.15pt; vertical-align:bottom; width:168.9pt; padding: 5px;">
+                            <!-- <input type="text" class="form-control" formControlName="s_date"> -->
+                            <ng-container *ngIf="datePickerFormat == 'E'">
+                                <input name="dateTo" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfigForTo" [placement]="'bottom'" formControlName="s_date" bsDatepicker />
+
+                            </ng-container>
+                            <ng-container *ngIf="datePickerFormat == 'N'">
+                                <nepali-date-picker name="sdata" [id]="'s_date'" (change)="changeDate($event.detail.value, 's_date')" [label]="this.datePickerConfig.dateInputFormat" formControlName="s_date" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDateFrom">
+                                </nepali-date-picker>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <ng-container *ngIf="!currentUrl.includes('view')">
+            <div class="footer-wrapn mt-3">
+                <button class="btn btn-primary" (click)="onSavePerformance()">
+        Save
+      </button>
+                <button class="btn btn-danger ml-2" (click)="onCancel()">
+        Cancel
+      </button>
+            </div>
+        </ng-container>
+    </form>
+
+
+
+</div>

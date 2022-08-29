@@ -1,0 +1,60 @@
+.row.company-register {
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    background-color: #337ab7;
+    height: 100vh;
+    .modal-header {
+        border: none;
+        background: #36b37e !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .row.company-register {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .bkg-green {
+            padding: 0;
+        }
+    }
+}
+
+.bkg-green {
+    // background-color: #36b37e;
+    background-color: #fff;
+    // padding: 0;
+}
+
+// input,
+// select {
+//     padding: 0 20px;
+//     height: 40px;
+//     border-radius: 5px;
+//     width: 100%;
+//     border: 1px solid;
+//     border-color: hsla(0, 0%, 40%, .5);
+//     color: #333;
+//     font-weight: 300;
+// }
+input,
+select {
+    padding: 0 20px;
+    height: 40px;
+    border-radius: 5px;
+    width: 100%;
+    border: 1px solid;
+    border-color: hsla(0, 0%, 40%, .5);
+    color: #333;
+    font-weight: 300;
+}
+
+.suggested {
+    font-weight: 600;
+    padding-top: 10px;
+}
+
+// * {
+//     color: #fff;
+// }

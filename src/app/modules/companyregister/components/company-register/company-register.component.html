@@ -1,0 +1,216 @@
+<div class="company-wrap">
+    <div class="inner-wrap">
+        <div class="row company-register">
+            <div class="col-md-8 col-sm-12 bkg-green">
+                <form [formGroup]="companyForm">
+                    <div class="modal-header">
+                        <h3 class="modal-title pull-left">Add Company</h3>
+                    </div>
+
+                    <div class="modal-body">
+                        <fieldset>
+                            <legend>Company Info</legend>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="name">Company Name<sup>*</sup></label>
+                                        <input type="text" appInputRestriction="allowSpaceWithNoSpecialchars" formControlName="company_name" id="name" class="form-control" placeholder="Enter Company Name" appFormControlValidationMsg />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="address">Address<sup>*</sup></label>
+                                        <input type="text" formControlName="address" id="address" class="form-control" placeholder="Enter Address" appFormControlValidationMsg />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="email">Email<sup>*</sup></label>
+                                        <input type="email" formControlName="email" id="email" class="form-control" placeholder="Eg.john@123.com" appFormControlValidationMsg />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="phone">Phone<sup>*</sup></label>
+                                        <input type="text" formControlName="phone" id="phone" class="form-control" [textMask]="phoneMask" placeholder="Eg. +9779836663773" appFormControlValidationMsg />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="subdomain">Subdomain<sup>*</sup></label>
+                                        <input type="text" appInputRestriction="noSpecialChars" formControlName="subdomain" id="subdomain" class="form-control subdomain-parent" />
+                                        <span class="subdomain-child">
+                                    <b>
+                                      .flexyear.com
+                                    </b>
+                                  </span>
+                                        <span class="error-msg" *ngIf="subdomainMessage">{{subdomainMessage}}</span>
+                                        <div class="mt-1 " *ngIf="subdomainSuggestions&&subdomainSuggestions.length > 0">
+                                            <h2 class="subdomain-suggestion-heading">
+                                                <b>Subdomain suggestions:</b>
+                                            </h2>
+                                            <div class="sub-wrap">
+                                                <div class="subdomain-suggestion  mt-1" *ngFor="let item of subdomainSuggestions" (click)="setSubdomainValue(item)">
+                                                    <!-- <b> -->
+                                                    {{item}}
+                                                    <!-- </b> -->
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div *ngIf="companyForm.invalid && subdomain.touched">
+                                            <span class="error-msg" *ngIf="subdomain.errors?.invalidDomain">Subdomain must be in lowercase text.</span
+            >
+            <span class="error-msg" *ngIf="subdomain.errors?.required"
+              >Subdomain is required.</span
+            >
+
+          </div>
+
+
+        </div>
+      </div>
+                            </div>
+                        </fieldset>
+                        <!-- <div class="row"> -->
+
+
+
+
+
+                                    <fieldset>
+                                        <legend>User Auth</legend>
+                                     <div class="row">
+                                      <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="name">Username<sup>*</sup></label>
+                                            <input type="text" formControlName="username" id="username" class="form-control" placeholder="Enter Username" appFormControlValidationMsg />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="address">Password<sup>*</sup></label>
+                                            <input type="password" formControlName="password" id="password" class="form-control" />
+                                            <span style="color: red;" class="mt-1" *ngIf="passwordValidationMessage && companyForm.get('password')?.touched">
+                                            {{passwordValidationMessage}}
+                                          </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="address">Confirm Password<sup>*</sup></label>
+                                            <input type="password" formControlName="verify_password" id="vpassword" class="form-control" />
+                                            <span *ngIf="companyForm.get('verify_password')?.errors?.confirmedValidator == true" style="color: red;">Password do not match.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                        </fieldset>
+
+
+                        <!-- </div> -->
+                        <div class="row">
+                            <!-- comment the remarks part for now  -->
+                            <!-- <div class="col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="remarks">Remarks</label>
+                                        <textarea formControlName="remarks" id="remarks" rows="3" class="form-control rounded-0" appFormControlValidationMsg>
+                        </textarea>
+                                    </div>
+                                </div> -->
+
+                        </div>
+
+
+                        <div class="captcha">
+                            <!-- 6LdXkf8cAAAAALdDb85wGcoKZ-0ka3_RUH9Nja2A -->
+                            <re-captcha (resolved)="resolved($event)" siteKey="6LdXkf8cAAAAALdDb85wGcoKZ-0ka3_RUH9Nja2A">
+                            </re-captcha>
+                        </div>
+                        <div class="bottom">
+                            <button class="btn btn-danger" type="button" (click)="onCancel()">
+          Cancel
+        </button>
+                            <button class="btn btn-success ml-2" type="submit" (click)="onSubmitCompany()" [disabled]="companyForm.invalid">
+        <!-- || captchaIsResolved == false -->
+         Create
+        </button>
+                            <a class="btn btn-success ml-2" type="submit" (click)="backToLogin()">
+      Already Have a Company ? Back To Login
+      </a>
+                        </div>
+                        </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <ng-template #registerUser>
+        <!-- user credentials modal -->
+        <div>
+            <div class="modal-header">
+                <h3 class="modal-title pull-left">Add Company User</h3>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+                                        </button>
+            </div>
+            <form [formGroup]="userCredentialsForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" class="form-control" formControlName="username" appFormControlValidationMsg />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" class="form-control" formControlName="password" appFormControlValidationMsg />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="password">Confirm Password</label>
+                                <input type="password" id="password" class="form-control" formControlName="verify_password" appFormControlValidationMsg />
+                                <!-- // SHOW ERROR IF MISMATCH -->
+                                <span *ngIf="userCredentialsForm.get('verify_password')?.errors?.confirmedValidator == true" style="color: red;">Password do not match.</span
+  >
+                                                        <!-- <span *ngIf="userCredentialsForm.get('verify_password')?.errors.required" style="color: red;">Confirm password is required.</span> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="onCancelUserRegister()">
+                                  Cancel
+                                </button>
+
+            <button (click)="onSaveUser()" class="btn btn-primary" appFormSubmitValidationMsg [validationControl]="userCredentialsForm">
+Save And Login
+</button>
+        </div>
+
+    </ng-template>

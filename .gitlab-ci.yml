@@ -1,0 +1,38 @@
+image: trion/ng-cli-karma
+
+cache:
+  paths:
+    - node_modules/
+before_script:
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - touch ~/.ssh/known_hosts
+  - ssh-keyscan -H 68.183.237.66 >> ~/.ssh/known_hosts
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+deploy_stage:
+  stage: deploy
+  environment: Development
+  only:
+    - develop
+  script:
+    - rm ./package-lock.json
+    - npm install
+    - node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build -c dev --prod --build-optimizer
+    - cd dist/flex-year/
+    - ls
+    - scp -o StrictHostKeyChecking=no -P 22 -r * flexyear@68.183.237.66:/home/flexyear/domains/dev.flexyear.com/public_html/
+
+deploy_production:
+  stage: deploy
+  environment: Production
+  only:
+    - master
+  script:
+    - rm ./package-lock.json
+    - npm install
+    - node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prod --build-optimizer
+    - cd dist/flex-year/
+    - ls
+    - scp -o StrictHostKeyChecking=no -P 22 -r * flexyear@68.183.237.66:/home/flexyear/domains/flexdeploy.flexyear.com/public_html/

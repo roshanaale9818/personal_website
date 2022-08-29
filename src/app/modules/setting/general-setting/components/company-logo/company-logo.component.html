@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-primary mt-4">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <b>Company Logo</b>
+        </h3>
+      </div>
+
+      <div class="panel-body">
+        <div>
+          <img
+            *ngIf="companyLogoDtl?.company_logo"
+            src="{{ baseIp }}{{ companyLogoDtl?.company_logo }}"
+            width="300"
+            height="240"
+          />
+          <img
+            *ngIf="!companyLogoDtl?.company_logo || url"
+            [src]="
+              url ? url : '../../../../../../assets/images/profile_img.jpg'
+            "
+            width="200"
+            height="200"
+          />
+        </div>
+
+        <br />
+        <input
+          style="display: none"
+          #fileInput
+          type="file"
+          accept=".jpg"
+          (change)="onFileSelect($event)"
+        />
+
+        <div class="button-wrapper row" style="margin-left: 50px">
+          <button
+            class="btn btn-success btn-xs"
+            (click)="fileInput.click()"
+            style="margin-top: 10px"
+          >
+            Upload Image
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5">
+    <button
+      (click)="uploadCompanyLogo()"
+      class="btn btn-primary btn-oval"
+      type="submit"
+    >
+      <i class="fa fa-save"> </i>&nbsp;<b>Save</b>
+    </button>
+  </div>
+</div>

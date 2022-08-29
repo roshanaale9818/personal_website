@@ -1,0 +1,176 @@
+<div class="box box-default">
+    <button class="btn btn-success btn-oval" (click)="openAddModal(addIpModal)">
+    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+    <b>
+      Add Allowed Ip
+    </b>
+    <!-- <i class="fa fa-plus"></i> -->
+  </button>
+    <div class="box-body grid-wrapper">
+        <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="limit" [loading]="allowedIpListLoading" [skip]="skip" [pageable]="
+        gridView ? (gridView.total <= pageLimit ? false : true) : false
+      " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" (dataStateChange)="dataStateChange($event)">
+            <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="50" [minResizableWidth]="30">
+                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                    <p>{{ rowIndex + 1 }}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Ip Address" field="ip_address" [headerStyle]="{ 'font-weight': 'bold' }" [width]="195">
+            </kendo-grid-column>
+            <kendo-grid-column title="Isp Name" field="isp_name" [headerStyle]="{ 'font-weight': 'bold' }" [width]="195"></kendo-grid-column>
+            <kendo-grid-column title="Status" field="status" [headerStyle]="{ 'font-weight': 'bold' }" [width]="100">
+                <ng-template kendoGridFilterCellTemplate>
+                    <kendo-dropdownlist [defaultItem]="defaultItem" [data]="statusDropdown" [textField]="'text'" [valueField]="'value'" (valueChange)="searchStatus($event)">
+                    </kendo-dropdownlist>
+                </ng-template>
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <a class="btn" *ngIf="dataItem.status == 'enable'">
+                        <i class="fa fa-check"></i
+          ></a>
+          <a class="btn" *ngIf="dataItem.status == 'disable'">
+            <i class="fa fa-close"></i
+          ></a>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        title="Action"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+        [width]="100"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+          <a class="btn" (click)="openViewModal(allowIpViewModal, dataItem)">
+            <i class="fa fa-eye"></i
+          ></a>
+          <a class="btn" (click)="openEditModel(dataItem, addIpModal)"
+            ><i class="fa fa-edit"></i
+          ></a>
+          <a class="btn" (click)="openConfirmationDialogue(dataItem)"
+            ><i class="fa fa-trash"></i
+          ></a>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- add ip modal -->
+<form [formGroup]="allowedIpForm">
+  <ng-template #addIpModal>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="title">Ip Address<sup>*</sup></label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              placeholder="Enter Ip Address"
+              formControlName="ip_address"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="title">Isp Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              placeholder="Enter Isp Name"
+              formControlName="isp_name"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="allowanceType">Status<sup>*</sup></label>
+            <select
+              class="form-control"
+              id="sel1"
+              data-placeholder="Select Allowance Type"
+              formControlName="status"
+              appFormControlValidationMsg
+            >
+             <option value="">Select Status</option>
+              <option value="enable">Enable</option>
+              <option value="disable">Disable</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- modal body -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-success"
+        (click)="onSubmitAllowedIp()"
+        type="submit"
+        appFormSubmitValidationMsg
+        [validationControl]="allowedIpForm"
+      >
+        {{ submitButton }}
+      </button>
+    </div>
+  </ng-template>
+</form>
+
+<ng-template #allowIpViewModal>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">View Allowed Ip</h3>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">Ip Address</th>
+          <td>{{ allowedIpDetail.ip_address }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Isp Name</th>
+          <td>{{ allowedIpDetail.isp_name }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Status</th>
+          <td>{{ allowedIpDetail.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

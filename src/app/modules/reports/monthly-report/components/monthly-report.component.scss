@@ -1,0 +1,125 @@
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  .flex-item {
+    margin-right: 10px;
+    margin-top: 8px;
+  }
+}
+
+.flex-content {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  .flex-item {
+    margin-right: 10px;
+    margin-top: 8px;
+  }
+}
+
+.k-grid tr.weekend {
+  background-color: #9bc4db !important;
+}
+.k-grid tr.absent {
+  background-color: rgb(253, 210, 207) !important;
+}
+.k-grid tr.present {
+  background-color: rgba(151, 233, 173, 0.68) !important;
+}
+.k-grid tr.checkout {
+  background-color: rgb(248 219 112 / 75%) !important;
+}
+
+.modal {
+  z-index: 998 !important;
+}
+.modal-backdrop {
+  z-index: 976 !important;
+}
+
+.border {
+  width: 400px;
+  border: 0.5px solid black;
+  th {
+    border: 0.5px solid black !important;
+  }
+  td {
+    border: 0.5px solid black !important;
+  }
+}
+
+.grid-wrapper {
+  position: relative;
+}
+
+.k-i-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 64px;
+  background-color: #ff6757 !important;
+  color: #ff6757 !important;
+}
+
+td,
+th {
+  padding: 5px;
+}
+
+.float-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  will-change: transform;
+  top: 153px;
+  left: -8px;
+  transform: translate3d(-123px, -129px, 0px);
+  z-index: 9999;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+// modal width
+@media (min-width: 580px) {
+  .modal-dialog {
+    max-width: 580px !important;
+    width: 580px !important;
+    margin-top: 64px;
+  }
+}
+
+// .btn-success:focus {
+//   background-color: #367fa9 !important;
+// }
+
+// .blue-input:focus {
+//   background-color: #1976d2 !important;
+
+//   color: blue;
+// }
+
+.btn-secondary {
+  border-radius: 20px;
+}

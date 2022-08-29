@@ -1,0 +1,128 @@
+<div class="box-body">
+    <button class="btn btn-success btn-oval mb-2" (click)="openAddModal(addPayperiod)">
+    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+    <b> Add PayPeriod </b>
+    <!-- <i class="fa fa-plus"></i> -->
+  </button>
+
+    <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="limit" [loading]="loading" [skip]="skip" [pageable]="
+  gridView ? (gridView.total <= pageLimit ? false : true) : false
+" [filterable]="false" [filter]="state.filter" [sortable]="true" [sort]="sort" [selectable]="false" (dataStateChange)="onDataStateChange($event)">
+        <kendo-grid-column title="S.N" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="10">
+            <ng-template kendoGridCellTemplate let-rowIndex="rowIndex ">
+                <p>{{ rowIndex + 1 }}</p>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column title="Group Type" [headerStyle]="{ 'font-weight': 'bold' }" [width]="50">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p>
+                    {{dataItem.group_name}}
+                </p>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column title="Pay Period" [headerStyle]="{ 'font-weight': 'bold' }" [width]="50">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <p>
+                    <ng-container *ngIf="this.datePickerFormat=='E'">
+                        {{dataItem.date_from}} {{dataItem?"to":""}} {{dataItem.date_to}}
+                    </ng-container>
+                    <ng-container *ngIf="this.datePickerFormat =='N'">
+                        {{dataItem.date_from | nepaliDatePipe:this.datePickerConfig.datePickerFormat }} {{dataItem?"to":""}} {{dataItem.date_to | nepaliDatePipe:this.datePickerConfig.datePickerFormat }}
+                    </ng-container>
+                </p>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="80">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <a class="btn btn-primary" style="color: #fff;" *ngIf="dataItem.generate_status == 0" appSingleClick (onClick)="onPayrollGenerateConfimation($event,dataItem)">Generate</a>
+                <a class="btn btn-success view-btn" *ngIf="dataItem.generate_status == 1" (click)="onViewClicked(dataItem)">
+                  View
+                   <!-- <i class="fa fa-eye"></i> -->
+                  </a>
+                <flexyear-delete-confirmation-modal [title]="dataItem.group_name" [action]="'delete'" [data]="dataItem" [showConfirmationInput]="true" (onShowConfirmation)="setConfirmationDialogMethods($event)" [data]="dataItem" (onConfirm)="deletePayrollPeriod($event)"
+                    [showButton]="true"></flexyear-delete-confirmation-modal>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+</div>
+
+<!-- add parameter template starts here  -->
+<ng-template #addPayperiod>
+    <form [formGroup]="payperiodForm">
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">Add Pay Period</h3>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+        </div>
+        <div class="modal-body">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="allowanceType">Group Type<sup>*</sup></label>
+                        <select class="form-control" id="sel1" data-placeholder="Select Allowance Type" formControlName="type" (change)="onTypeChange($event.target.value)" appFormControlValidationMsg>
+        <option value="">Select</option>
+        <option *ngFor="let item of parametersList" [value]="item.parameter_id">{{item.title}}</option>
+      </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="title">Date From<sup>*</sup></label>
+                        <ng-container *ngIf="this.datePickerFormat =='E'">
+                            <input name="datefrom" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" formControlName="date_from" (ngModelChange)="onDateChange($event,'dateFrom')" bsDatepicker appFormControlValidationMsg
+                            />
+                        </ng-container>
+
+
+                        <!-- nepali date picker starts here  -->
+                        <ng-container *ngIf="this.datePickerFormat == 'N'">
+                            <nepali-date-picker name="nepaliDateFrom" #nepalifrom [id]="'nepaliDatefrom'" (change)="changeDate($event.detail.value, 'dateFrom')" [label]="this.datePickerConfig.dateInputFormat" appFormControlValidationMsg formControlName="date_from" [nepaliDatePickerSettings]="
+            nepaliDatePickerSettingsForDateFrom
+          " [customValidation]="'required'">
+                            </nepali-date-picker>
+                        </ng-container>
+                        <!-- nepali date picker ends here -->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="title">Date To<sup>*</sup></label>
+
+                        <ng-container *ngIf="this.datePickerFormat == 'E'">
+                            <input name="datefrom" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfigForTo" [placement]="'top'" formControlName="date_to" bsDatepicker appFormControlValidationMsg/>
+                        </ng-container>
+
+                        <ng-container *ngIf="this.datePickerFormat == 'N'">
+                            <nepali-date-picker name="nepaliDateto" #nepaliDateto [id]="'nepaliDateTo'" (change)="changeDate($event.detail.value, 'dateTo')" [label]="this.datePickerConfig.dateInputFormat" formControlName="date_to" [disableBefore]="disableBefore" appFormControlValidationMsg
+                                [nepaliDatePickerSettings]="
+          nepaliDatePickerSettingsForDateTo
+        " [isInvalid]="
+        payperiodForm.get('date_to').invalid
+        " [customValidation]="'required'">
+                            </nepali-date-picker>
+                        </ng-container>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- modal body -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Close
+    </button>
+            <button class="btn btn-success" appSingleClick (onClick)="onSave()" appFormSubmitValidationMsg [validationControl]="payperiodForm" type="submit">
+      Save
+    </button>
+        </div>
+    </form>
+</ng-template>
+<!-- add parameter template ends here  -->

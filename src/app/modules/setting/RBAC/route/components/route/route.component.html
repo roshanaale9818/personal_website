@@ -1,0 +1,253 @@
+<div class="box box-default box-shadow">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <strong>
+              <i class="fa fa-bars mr-2" aria-hidden="true"></i>
+              Route Management</strong
+            >
+          </h3>
+        </div>
+
+        <div class="panel-body">
+          <div class="box-header with-border">
+            <!-- <button
+              class="btn btn-success btn-oval"
+              (click)="openCreateModal(addRouteRef)"
+            >
+              <i class="fa fa-plus-circle mr-2"> </i>
+              <strong>Create</strong>
+            </button> -->
+            <flexyear-add-modal
+              [buttonName]="'Create'"
+              [modalTitle]="'Create Route'"
+              (click)="clearModal()"
+              (onSubmit)="addRoute()"
+              [formValid]="routeForm.valid"
+            >
+              <ng-template [ngTemplateOutlet]="addRouteRef"></ng-template>
+            </flexyear-add-modal>
+          </div>
+
+          <div class="box-body mt-2">
+            <kendo-grid
+              [data]="gridView"
+              [resizable]="true"
+              [pageSize]="limit"
+              [skip]="skip"
+              [pageable]="
+                gridView ? (gridView.total <= pageLimit ? false : true) : false
+              "
+              [filterable]="false"
+              [filter]="state.filter"
+              [sortable]="true"
+              [sort]="sort"
+              [loading]="loading"
+              (dataStateChange)="dataStateChange($event)"
+            >
+              <kendo-grid-column title="S.N." [width]="60">
+                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                  <p>{{ rowIndex + 1 }}</p>
+                </ng-template>
+              </kendo-grid-column>
+
+              <kendo-grid-column title="Name" field="name"> </kendo-grid-column>
+
+              <kendo-grid-column title="Parent" field="parent_name">
+              </kendo-grid-column>
+
+              <kendo-grid-column title="Order" field="order">
+              </kendo-grid-column>
+
+              <kendo-grid-column title="Angular Route" field="angular_route">
+              </kendo-grid-column>
+
+              <kendo-grid-command-column title="Action" [width]="150">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                  <!-- edit role  -->
+                  <flexyear-add-modal
+                    [type]="'edit'"
+                    [modalTitle]="'Update Route'"
+                    (click)="setRoute(dataItem)"
+                    (onSubmit)="updateRoute()"
+                    [formValid]="routeForm"
+                  >
+                    <ng-template [ngTemplateOutlet]="addRouteRef"></ng-template>
+                  </flexyear-add-modal>
+
+                  <!-- Delete button -->
+                  <flexyear-delete-confirmation-modal
+                    [data]="dataItem"
+                    [title]="dataItem.name"
+                    [action]="'delete'"
+                    (onConfirm)="deleteRoutes(dataItem)"
+                  >
+                  </flexyear-delete-confirmation-modal>
+                </ng-template>
+              </kendo-grid-command-column>
+            </kendo-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #addRouteRef>
+  <div class="modal-body">
+    <form [formGroup]="routeForm">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="name">Name<sup>*</sup></label>
+            <input
+              id="name"
+              placeholder="Route Name"
+              class="form-control"
+              formControlName="name"
+            />
+            <div
+              class="form-error-msg"
+              *ngIf="
+                routeForm.controls?.name?.invalid &&
+                routeForm.controls?.name?.touched
+              "
+            >
+              Name is required.
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="icon">Icon</label>
+            <input
+              placeholder="Icon Name"
+              id="icon"
+              class="form-control"
+              formControlName="icon"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Parent Name</label>
+            <!-- <input
+              class="form-control"
+              placeholder="Select Parent Id"
+              formControlName="parent"
+            /> -->
+            <ng-select
+              appearance="outline"
+              #agreeSelect
+              [searchable]="true"
+              formControlName="parent"
+              placeholder="Select Parent Name"
+            >
+              <ng-option value="" selected>Select Parent Name</ng-option>
+              <ng-option *ngFor="let list of menuList" [value]="list.id">
+                {{ list.name }}
+              </ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="order">Order</label>
+            <input
+              placeholder="Order No."
+              id="order"
+              class="form-control"
+              formControlName="order"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="angularRoute">Route</label>
+            <input
+              placeholder="Angular Route"
+              class="form-control"
+              formControlName="angular_route"
+              id="angularRoute"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!-- <div class="card-body">
+  <div class="row">
+    <div class="col-md-5">
+      <input
+        style="width: 23em"
+        type="text"
+        class="form-control"
+        placeholder="Search Name"
+        [(ngModel)]="fieldSearchTerm"
+      />
+      <label for="box1"> Field </label>
+      <div id="box1">
+        <ul style="list-style-type: none">
+          <li></li>
+        </ul>
+        <span *ngIf="listLoading">Loading</span>
+        <span *ngIf="noResult">No Result</span>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="button-area">
+        <div class="buttons">
+          <button type="button" class="btn btn-success btn-md">>></button>
+        </div>
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary btn-sm">></button>
+        </div>
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary btn-sm"><</button>
+        </div>
+        <div class="buttons">
+          <button type="button" class="btn btn-danger btn-md"><<</button>
+        </div>
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary btn-md">
+            Move Up
+          </button>
+        </div>
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary btn-md">
+            Move Down
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <input
+        style="width: 23em"
+        type="text"
+        class="form-control"
+        placeholder="Search Name"
+        [(ngModel)]="selectedSearchTerm"
+      />
+      <label for="box2">Selected</label>
+      <div id="box2">
+        <ul style="list-style-type: none">
+          <li></li>
+        </ul>
+        <span *ngIf="candidatePoolLoading">Loading</span>
+        <span *ngIf="noResult">NoResult</span>
+      </div>
+    </div>
+  </div>
+</div> -->

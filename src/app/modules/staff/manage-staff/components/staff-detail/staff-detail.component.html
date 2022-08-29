@@ -1,0 +1,724 @@
+<div class="box box-default box-shadow">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <b>{{ staffDetail?.staff.first_name }} Details</b>
+            </h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6 col-xs-6">
+                    <div style="padding: 10px" class="flex-container">
+                        <button *ngIf="noUpdateButton !== true" class="btn btn-success btn-oval flex-item" (click)="navigateToEdit()">
+              <i class="fa fa-edit"></i>Update
+            </button>
+                        <!-- <button class="btn btn-success flex-item">Change Password</button>
+              <button class="btn btn-success flex-item">Change Pin</button> -->
+
+                        <div class="flex-item">
+                            <button (click)="openChangePasswordModal(PasswordRef)" class="btn btn-success btn-oval">
+                <i class="fa fa-key" aria-hidden="true"></i>Change Password
+              </button>
+                        </div>
+
+                        <div class="flex-item">
+                            <button (click)="openChangePinModal(PinRef)" class="btn btn-success btn-oval">
+                <i class="fa fa-map-pin" aria-hidden="true"></i>
+                Change Pins
+              </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-xs-3">
+                    <div class="box box-primary box-shadow">
+                        <div class="box-body box-profile">
+                            <img *ngIf="staffDetail?.staff.staff_photo" class="profile-user-img img-responsive img-circle" src="{{ baseImageUrl }}{{ staffDetail?.staff.staff_photo }}" />
+                            <!-- <img
+                style="margin-left: 7rem"
+                *ngIf="!staffDetail?.staff.staff_photo || url"
+                [src]="
+                  url ? url : '../../../../../../assets/images/profile_img.jpg'
+                "
+                width="200"
+                height="200"
+              /> -->
+                            <div *ngIf="!staffDetail?.staff.staff_photo" style="padding: 10px" class="profile-user-img img-circle">
+                                <ngx-avatar name="{{ staffDetail?.staff.first_name }}" size="70"></ngx-avatar>
+                            </div>
+                            <!-- <div style="padding: 10px; text-align: center">
+                <button
+                  (click)="openImageModal(ImageModalRef)"
+                  class="btn btn-xs btn-primary btn-oval"
+                >
+                  <i class="fa fa-edit"></i>&nbsp;<b>Update Image</b>
+                </button>
+              </div> -->
+
+                            <h3 class="profile-username text-center">
+                                {{ staffDetail?.staff.first_name }} {{ staffDetail?.staff.middle_name }} {{ staffDetail?.staff.last_name }}
+                            </h3>
+
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>Mobile</b>
+                                    <a class="pull-right">{{ staffDetail?.staff.mobile }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Phone</b>
+                                    <a class="pull-right">{{ staffDetail?.staff.phone }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Email</b>
+                                    <a class="pull-right">{{
+                    staffDetail?.staff.email_address
+                  }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="box box-warning box-shadow">
+                        <div class="tab-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#home">
+                                        <i class="fa fa-user"></i>
+                                        <strong> General Information</strong>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a data-toggle="tab" href="#menu1">
+                                        <i class="fa fa-university"></i>
+                                        <strong> Official Information</strong>
+                                    </a>
+                                </li>
+
+                                <!-- <li>
+                  <a data-toggle="tab" href="#menu2">
+                    <i class="fa fa-wrench"></i>
+                    <strong> Work Experience </strong>
+                  </a>
+                </li> -->
+
+                                <!-- <li>
+                  <a data-toggle="tab" href="#menu3">
+                    <i class="fa fa-graduation-cap"></i>
+                    <strong> Academic Qualification</strong>
+                  </a>
+                </li> -->
+
+                                <li>
+                                    <a data-toggle="tab" href="#menu4">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                        <strong> Attachment</strong>
+                                    </a>
+                                </li>
+
+                                <!-- <li>
+                  <a data-toggle="tab" href="#menu5">
+                    <i class="fa fa-language"></i>
+                    <strong> Language</strong>
+                  </a>
+                </li> -->
+                            </ul>
+                            <div class="tab-content">
+                                <div id="home" class="tab-pane fade in active">
+                                    <div style="padding: 20px">
+                                        <div class="row margin-bottom-20">
+                                            <div class="col-sm-4"><b>Address 1:</b></div>
+                                            <div class="col-sm-8">
+                                                <a>{{ staffDetail?.per_address?.address_line1 }}
+
+                        </a>
+
+                                            </div>
+                                        </div>
+                                        <div class="row margin-bottom-20">
+                                            <div class="col-sm-4"><b>Address 2 :</b></div>
+                                            <div class="col-sm-8">
+                                                <a> {{ staffDetail?.per_address?.address_line2 }}
+                      </a>
+                                            </div>
+                                        </div>
+                                        <div class="row margin-bottom-20">
+                                            <div class="col-sm-4"><b>City  :</b></div>
+                                            <div class="col-sm-8">
+                                                <a>{{ staffDetail?.per_address?.city }}
+                      </a>
+                                            </div>
+                                        </div>
+                                        <div class="row margin-bottom-20">
+                                            <div class="col-sm-4"><b>Zip Code  :</b></div>
+                                            <div class="col-sm-8">
+                                                <a>{{ staffDetail?.per_address?.zip_code }}
+                    </a>
+                                            </div>
+                                        </div>
+                                        <div class="row margin-bottom-20">
+                                            <div class="col-sm-4"><b>State  :</b></div>
+                                            <div class="col-sm-8">
+                                                <a>{{ staffDetail?.per_address?.state }}
+                  </a>
+                                            </div>
+                                        </div>
+                                        <div class="row margin-bottom-20">
+                                            <div class="col-sm-4"><b>Country  :</b></div>
+                                            <div class="col-sm-8">
+                                                <a>{{ staffDetail?.per_country_name }}
+                </a>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="row margin-bottom-20">
+                      <div class="col-sm-4"><b>Citizenship No :</b></div>
+                      <div class="col-sm-8">
+                        <a>{{ staffDetail?.staff.citizenship_no }}</a>
+                        <a *ngIf="!staffDetail?.staff.citizenship_no" class="not-set"
+                          >(not set)</a
+                        >
+                      </div>
+                    </div> -->
+                                        <!-- <div class="row margin-bottom-20">
+                      <div class="col-sm-4"><b>Gender :</b></div>
+                      <div class="col-sm-8">
+                        <a *ngIf="staffDetail?.staff.gender == 'M'">Male</a>
+                        <a *ngIf="staffDetail?.staff.gender == 'F'">Female</a>
+                      </div>
+                    </div>
+                    <div class="row margin-bottom-20">
+                      <div class="col-sm-4"><b> Marital Status :</b></div>
+                      <div class="col-sm-8">
+                        <a>{{ staffDetail?.staff.marital_status }}</a>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-4 control-label"><b>Date Of Birth :</b></div>
+                      <div class="col-sm-8">
+                        <a>{{ staffDetail?.staff.dob }}</a>
+                      </div>
+                    </div> -->
+                                    </div>
+                                </div>
+                                <!-- Official Information -->
+
+                                <div id="menu1" class="tab-pane fade">
+                                    <!-- <div style="padding: 20px">
+                    <ul class="list-group list-group-unbordered">
+                      <li class="list-group-item">
+                        <b>Hire Date :</b>
+
+                        <a class="pull-right" style="margin-right: 60%">
+                          {{ staffDetail?.staff.hire_date }}
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>End Date :</b>
+
+                        <a class="pull-right" style="margin-right: 60%">
+                          {{ staffDetail?.staff.expiry_date }}
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <label>Employee Type :</label>
+
+                        <a class="pull-right" style="margin-right: 60%">
+                          {{ staffDetail?.staff.employee_type }}
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <label>Normal Salary Rate :</label>
+
+                        <a class="pull-right" style="margin-right: 63%">
+                          {{ staffDetail?.staff.normal_salary_rate }}
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <label>Salary Period :</label>
+
+                        <a class="pull-right" style="margin-right: 65%">
+                          {{ staffDetail?.staff.salary_period }}
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <label>Payment Type :</label>
+
+                        <a class="pull-right" style="margin-right: 60%">
+                          {{ staffDetail?.staff.payment_type }}
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <label>Designation :</label>
+
+                        <a class="pull-right" style="margin-right: 60%">
+                          {{ staffDetail?.staff.designation_id }}
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <label>Manager :</label>
+
+                        <a class="pull-right" style="margin-right: 60%">
+                          {{ staffDetail?.staff.manager_id }}
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <label>Checkin Restriction :</label>
+
+                        <a class="pull-right" style="margin-right: 60%">
+                          {{ staffDetail?.staff.checkinRestrictiontime }}
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <label>Remarks :</label>
+
+                        <a class="pull-right" style="margin-right: 60%">
+                          {{ staffDetail?.staff.remarks }}
+                        </a>
+                      </li>
+                    </ul>
+                  </div> -->
+                                    <table class="table mt-5">
+                                        <tbody>
+                                            <tr>
+                                                <th>Hire Date</th>
+                                                <td>{{ staffDetail?.staff.hire_date }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>End Date</th>
+                                                <td>{{ staffDetail?.staff.expiry_date }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Employee Type</th>
+                                                <td>{{ staffDetail?.employee_type }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Normal Salary Rate</th>
+                                                <td>{{ staffDetail?.staff.normal_salary_rate }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Salary Period</th>
+                                                <td>{{ staffDetail?.staff.salary_period }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Payment Type</th>
+                                                <td>{{ staffDetail?.staff.payment_type }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Designation</th>
+                                                <td>{{ staffDetail?.staff.designation_id }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Normal Salary Rate</th>
+                                                <td>{{ staffDetail?.staff.normal_salary_rate }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Manager</th>
+                                                <td>{{ staffDetail?.staff.manager_id }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Working Shifts</th>
+                                                <td>test</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Checkin Restrictiontime</th>
+                                                <td>{{ staffDetail?.staff.checkinRestrictiontime }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Remarks</th>
+                                                <td>{{ staffDetail?.staff.remarks }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Work experiance -->
+                                <div id="menu2" class="tab-pane fade">
+                                    <div style="padding: 10px">
+                                        <kendo-grid [data]="experiences" [resizable]="true" [loading]="listLoading">
+                                            <kendo-grid-column title="Designation" field="designation" [headerStyle]="{ 'font-weight': 'bold' }" [width]="100" [minResizableWidth]="30">
+                                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                                    {{ dataItem.designation }}
+                                                    <span *ngIf="!dataItem?.designation" class="not-set">(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+
+                      <kendo-grid-column
+                        title="Company Name"
+                        field="company_name"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.company_name }}
+                          <span *ngIf="!dataItem?.company_name" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+                      <kendo-grid-column
+                        title="Worked From"
+                        field="worked_from"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.worked_from }}
+                          <span *ngIf="!dataItem?.worked_from" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+                      <kendo-grid-column
+                        title="Worked To"
+                        field="worked_to"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.worked_to }}
+                          <span *ngIf="!dataItem?.worked_to" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+                      <kendo-grid-column
+                        title="Experiance Year"
+                        field="email_address"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.email_address }}
+                          <span *ngIf="!dataItem?.email_address" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template></kendo-grid-column
+                      >
+                      <kendo-grid-column
+                        title="Work Description"
+                        field="work_description"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.work_description }}
+                          <span
+                            *ngIf="!dataItem?.work_description"
+                            class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template></kendo-grid-column
+                      >
+                    </kendo-grid>
+                  </div>
+                </div>
+
+                <!-- Academic Qualifications -->
+                <div id="menu3" class="tab-pane fade">
+                  <div style="padding: 10px">
+                    <kendo-grid
+                      [data]="academics"
+                      [resizable]="true"
+                      [loading]="listLoading"
+                    >
+                      <kendo-grid-column
+                        title="Qualification"
+                        field="qualification"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                        [minResizableWidth]="30"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.qualification }}
+                          <span *ngIf="!dataItem?.qualification" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+
+                      <kendo-grid-column
+                        title="Passing Year"
+                        field="passing_year"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.passing_year }}
+                          <span *ngIf="!dataItem?.passing_year" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+                      <kendo-grid-column
+                        title="Institute Name"
+                        field="institute_name"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.institute_name }}
+                          <span
+                            *ngIf="!dataItem?.institute_name"
+                            class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+                      <kendo-grid-column
+                        title="Result"
+                        field="result"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.result }}
+                          <span *ngIf="!dataItem?.result" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+                    </kendo-grid>
+                  </div>
+                </div>
+
+                <!-- Attachment -->
+                <div id="menu4" class="tab-pane fade">
+                  <div style="padding: 10px">
+                    <kendo-grid
+                      [data]="attachments"
+                      [resizable]="true"
+                      [loading]="listLoading"
+                    >
+                      <kendo-grid-column
+                        title="Attachment Name"
+                        field="attachment_name"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                        [minResizableWidth]="30"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.attachment_name }}
+                          <span
+                            *ngIf="!dataItem?.attachment_name"
+                            class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+
+                      <kendo-grid-column
+                        title="Description"
+                        field="description"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.description }}
+                          <span *ngIf="!dataItem?.description" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+                    </kendo-grid>
+                  </div>
+                </div>
+                <!-- laguage -->
+                <div id="menu5" class="tab-pane fade">
+                  <div style="padding: 10px">
+                    <kendo-grid
+                      [data]="languages"
+                      [resizable]="true"
+                      [loading]="listLoading"
+                    >
+                      <kendo-grid-column
+                        title="Language Name"
+                        field="language_name"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                        [minResizableWidth]="30"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.language_name }}
+                          <span *ngIf="!dataItem?.language_name" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+
+                      <kendo-grid-column
+                        title="Level"
+                        field="level"
+                        [headerStyle]="{ 'font-weight': 'bold' }"
+                        [width]="100"
+                      >
+                        <ng-template
+                          kendoGridCellTemplate
+                          let-dataItem="dataItem"
+                        >
+                          {{ dataItem.level }}
+                          <span *ngIf="!dataItem?.level" class="not-set"
+                            >(not set)</span
+                          >
+                        </ng-template>
+                      </kendo-grid-column>
+                    </kendo-grid>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <ng-template #ImageModalRef>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">View Allowance</h4>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label>Upload you photo</label>
+                                                <kendo-fileselect formControlName="" (select)="selectEventHandler($event)" [restrictions]="uploadRestrictions" [multiple]="false">
+                                                </kendo-fileselect>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button class="btn btn-success btn-oval">Save</button>
+                                        <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+                                    </div>
+                                    </ng-template> -->
+
+                                    <ng-template #PasswordRef>
+                                        <div class="modal-header">
+                                            <h4 class="modal-title pull-left"><b>Change Password</b></h4>
+
+                                            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form [formGroup]="passwordForm">
+                                                <div class="form-group">
+                                                    <label>Old Password<sup>*</sup></label>
+                                                    <input class="form-control" type="password" formControlName="old_password" appFormControlValidationMsg />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>New Password</label>
+                                                    <input class="form-control" type="password" formControlName="password" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Confirm Password</label>
+                                                    <input class="form-control" type="password" formControlName="verify_password" />
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+                                            <button class="btn btn-success btn-oval" (click)="updatePassword()" [validationControl]="passwordForm" appFormSubmitValidationMsg>
+      Save
+    </button>
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template #PinRef>
+                                        <div class="modal-header">
+                                            <h4 class="modal-title pull-left"><b>Change Pin</b></h4>
+
+                                            <button type="button" class="close pull-right" aria-label="Close" (click)="onCancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <form [formGroup]="pinChangeForm">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label>Pin
+            <a style="color: red">(Please note the pin in safe place)</a>
+          </label>
+                                                        <input type="hidden" class="form-control" formControlName="pin" />
+                                                        <h3 *ngIf="showPin">
+                                                            {{ randomNumber }}
+                                                        </h3>
+                                                        <p *ngIf="!showPin">&nbsp;</p>
+
+                                                        <a class="badge bg-blue-gradient" (click)="returnRandomNmber()"><i class="fa fa-refresh" style="margin-right: 5px"></i>Generate</a
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="onCancel()">
+      Cancel
+    </button>
+    <button
+      class="btn btn-success btn-oval"
+      (click)="changePin()"
+      [validationControl]="pinChangeForm"
+      appFormSubmitValidationMsg
+    >
+      Save
+    </button>
+  </div>
+</ng-template>

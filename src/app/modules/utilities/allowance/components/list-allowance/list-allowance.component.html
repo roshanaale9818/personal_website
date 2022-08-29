@@ -1,0 +1,197 @@
+<div class="box box-default box-shadow">
+    <button class="btn btn-success btn-oval" (click)="openAddModal(allowanceModal)">
+  <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+    Add Allowance
+  </button>
+    <div class="box-body">
+        <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="limit" [skip]="skip" [pageable]="
+        gridView ? (gridView.total <= pageLimit ? false : true) : false
+      " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" [loading]="allowanceListLoading" (dataStateChange)="dataStateChange($event)">
+            <kendo-grid-column title="S.N" [width]="50" [minResizableWidth]="30" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }">
+                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                    <p>{{ rowIndex + 1 }}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="title" field="title" [headerStyle]="{ 'font-weight': 'bold' }" [width]="150">
+            </kendo-grid-column>
+            <kendo-grid-column title="Allowance Type" field="allowance_type" [headerStyle]="{ 'font-weight': 'bold' }" [width]="110">
+                <ng-template kendoGridFilterCellTemplate>
+                    <kendo-dropdownlist [defaultItem]="defaultItem" [data]="allowanceTypeList" [textField]="'text'" [valueField]="'value'" (valueChange)="searchAllowanceType($event)">
+                    </kendo-dropdownlist>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column title="Remarks" field="remarks" [headerStyle]="{ 'font-weight': 'bold' }" [width]="150"></kendo-grid-column>
+            <kendo-grid-column title="Recurring" field="recurring" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }" [width]="60">
+            </kendo-grid-column>
+            <kendo-grid-column title="Action" [headerStyle]="{ 'font-weight': 'bold' }" [width]="100">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <a tooltip="View" class="btn" (click)="openViewModal(allowanceViewModal, dataItem)">
+                        <i class="fa fa-eye"></i
+          ></a>
+          <a
+            tooltip="Update"
+            class="btn"
+            (click)="openEditModel(dataItem, allowanceModal)"
+            ><i class="fa fa-edit"></i
+          ></a>
+          <a
+            tooltip="Delete"
+            class="btn"
+            (click)="openConfirmationDialogue(dataItem)"
+            ><i class="fa fa-trash"></i
+          ></a>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- Add allowance Modal -->
+<form [formGroup]="allowanceForm">
+  <ng-template #allowanceModal>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="title">Title<sup>*</sup></label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              placeholder="Enter Title Here"
+              formControlName="title"
+              appFormControlValidationMsg
+            />
+            <!-- <span
+              class="form-error-msg"
+              *ngIf="formErrors.title && submitted"
+              >{{ formErrors.title }}</span
+            > -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="allowanceType">Allowance Type<sup>*</sup></label>
+            <select
+              class="form-control"
+              id="sel1"
+              data-placeholder="Select Allowance Type"
+              formControlName="allowance_type"
+              appFormControlValidationMsg
+            >
+              <option value="">Select Allowance Type</option>
+              <option value="1">Additive</option>
+              <option value="0">Decremental</option>
+            </select>
+            <!-- <span
+              class="form-error-msg"
+              *ngIf="formErrors.allowance_type && submitted"
+              >{{ formErrors.allowance_type }}</span
+            > -->
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="exampleFormControlTextarea2">Remarks</label>
+            <textarea
+              class="form-control rounded-0"
+              id="exampleFormControlTextarea2"
+              rows="3"
+              name="description"
+              formControlName="remarks"
+            ></textarea>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="checkbox">
+              <label for="recurring">
+                <input
+                  type="checkbox"
+                  id="recurring"
+                  formControlName="recurring"
+                />
+                Recurring
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- modal body -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-success"
+        (click)="onSubmitAllowance()"
+        type="submit"
+        appFormSubmitValidationMsg
+        [validationControl]="allowanceForm"
+      >
+        {{ submitButton }}
+      </button>
+    </div>
+  </ng-template>
+</form>
+
+<!-- allowance view modal -->
+<ng-template #allowanceViewModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">View Allowance</h4>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">Title</th>
+          <td>{{ allowanceDetail.title }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Allowance Type</th>
+          <td>{{ allowanceDetail.allowance_type }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Recurring</th>
+          <td>{{ allowanceDetail.recurring }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Remarks</th>
+          <td>{{ allowanceDetail.remarks }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

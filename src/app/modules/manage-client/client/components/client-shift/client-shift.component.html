@@ -1,0 +1,438 @@
+<div class="box box-default box-shadow mt-4">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <i class="fa fa-clock-o mr-3"></i> <b>Client Shift</b>
+      </h3>
+    </div>
+
+    <div class="panel-body">
+      <div class="box-header with-border" style="background-color: #eee">
+        <button
+          class="btn btn-success btn-oval"
+          (click)="openAddModal(addClientShift)"
+        >
+          <i class="fa fa-plus-circle"></i>&nbsp;<b>Add Client Shift</b>
+        </button>
+      </div>
+      <div class="box-body mt-3">
+        <kendo-grid
+          [data]="gridView"
+          [loading]="loading"
+          [pageSize]="state.take"
+          [skip]="state.skip"
+          [sort]="state.sort"
+          [filter]="state.filter"
+          [sortable]="true"
+          [pageable]="clientShiftList.length > state.take"
+          [filterable]="true"
+          (dataStateChange)="dataStateChange($event)"
+        >
+          <kendo-grid-column title="Name" field="name"> </kendo-grid-column>
+
+          <kendo-grid-column title="Shift From" field="shift_from">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.shift_from }}
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Shift To" field="shift_to">
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Action"
+            [width]="120"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <!-- <a class="btn" (click)="openViewModal(dataItem)">
+                  <i class="fa fa-eye"></i
+                ></a> -->
+              <a
+                class="btn"
+                tooltip="Update"
+                (click)="openEditModal(dataItem, addClientShift)"
+                ><i class="fa fa-edit"></i
+              ></a>
+
+              <a
+                class="btn"
+                tooltip="Delete"
+                (click)="openConfirmationDialogue(dataItem)"
+                ><i class="fa fa-trash"></i
+              ></a>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- add division modal -->
+
+<form [formGroup]="clientShiftForm">
+  <ng-template #addClientShift>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="name">Name <sup>*</sup></label>
+            <input
+              type="text"
+              placeholder="Client Shift Name"
+              id="name"
+              class="form-control"
+              formControlName="name"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="email">Shift From<sup>*</sup></label>
+            <input
+              formControlName="shift_from"
+              class="form-control"
+              type="time"
+              id="shift"
+              name="shift"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="status">Shift To</label>
+            <input
+              class="form-control"
+              type="time"
+              id="status"
+              name="shifts"
+              formControlName="shift_to"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>&nbsp;</label>
+
+            <div class="checkbox">
+              <label>
+                <input
+                  (change)="checkOverTime($event)"
+                  type="checkbox"
+                  name="allow_ot"
+                  formControlName="allow_ot"
+                />
+                Allow over Time
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <label>Working Days</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input
+                  style="margin-right: 15px"
+                  type="checkbox"
+                  name="monday"
+                  id="saveUserNameCheckBox"
+                  formControlName="monday"
+                  (change)="checkMonday()"
+                />
+                Monday
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input
+                  style="margin-right: 15px"
+                  type="checkbox"
+                  name="tuesday"
+                  id="optionsRadios2"
+                  value="option2"
+                  formControlName="tuesday"
+                  (change)="checkTuesday()"
+                />
+                Tuesday
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input
+                  style="margin-right: 15px"
+                  type="checkbox"
+                  name="Wednesday"
+                  id="optionsRadios3"
+                  value="option3"
+                  formControlName="wednesday"
+                  (change)="checkWednesday()"
+                />
+                Wednesday
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input
+                  style="margin-right: 15px"
+                  type="checkbox"
+                  name="thursday"
+                  id="optionsRadios4"
+                  value="option4"
+                  formControlName="thursday"
+                  (change)="checkThursday()"
+                />
+                Thursday
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input
+                  style="margin-right: 15px"
+                  type="checkbox"
+                  name="friday"
+                  id="optionsRadios5"
+                  value="option5"
+                  formControlName="friday"
+                  (change)="checkFriday()"
+                />
+                Friday
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input
+                  style="margin-right: 15px"
+                  type="checkbox"
+                  name="saturday"
+                  id="optionsRadios6"
+                  value="option6"
+                  formControlName="saturday"
+                  (change)="checkSaturday()"
+                />
+                Saturday
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input
+                  style="margin-right: 15px"
+                  type="checkbox"
+                  name="sunday"
+                  id="optionsRadios7"
+                  value="option7"
+                  formControlName="sunday"
+                  (change)="checkSunday()"
+                />
+                Sunday
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Late Warn Time</label>
+            <input
+              class="form-control"
+              type="time"
+              id="time"
+              name="time"
+              formControlName="late_warn_time"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Checkin Restriction</label>
+            <input
+              class="form-control"
+              type="time"
+              id="restriction"
+              name="restriction"
+              formControlName="check_in_restriction"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="flex-item">
+            <div class="flex-content">
+              <label>Breaks</label>
+            </div>
+            <div class="flex-content ml-3">
+              <button
+                class="btn btn-success btn-xs"
+                tooltip="Add"
+                (click)="addBreakType()"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th colspan="1" style="padding: 10px; background-color: #eee">
+                  Type
+                </th>
+                <th colspan="1" style="padding: 10px; background-color: #eee">
+                  Time
+                </th>
+                <th colspan="1" style="padding: 10px; background-color: #eee">
+                  Status
+                </th>
+                <th colspan="1" style="padding: 10px; background-color: #eee">
+                  Action
+                </th>
+              </tr>
+            </thead>
+
+            <tbody
+              formArrayName="break"
+              *ngFor="
+                let breakList of clientShiftForm.get('break')['controls'];
+                let i = index
+              "
+            >
+              <tr [formGroupName]="i">
+                <td>
+                  <div class="form-group">
+                    <select
+                      class="form-control"
+                      formControlName="att_type_id"
+                      appFormControlValidationMsg
+                    >
+                      <option value="" selected>Select Break Type...</option>
+                      <option *ngFor="let item of breakLists" [value]="item.id">
+                        {{ item.title }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="time"
+                    class="form-control"
+                    formControlName="time"
+                  />
+                </td>
+                <td>
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label>
+                        <input
+                          style="margin-right: 15px"
+                          type="checkbox"
+                          name="tuesday"
+                          id="optionsRadios2"
+                          value="true?1:0"
+                          formControlName="status"
+                        />
+                        Paid
+                      </label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex-item">
+                    <div class="flex-content"></div>
+                    <div class="flex-content">
+                      <a
+                        tooltip="Remove"
+                        style="color: red"
+                        (click)="removeBreakType(i, breakList)"
+                        class="btn"
+                      >
+                        <i class="fa fa-remove"></i>
+                      </a>
+                    </div>
+                  </div>
+                </td>
+                <!-- </tr> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+        <button
+          class="btn btn-success"
+          type="submit"
+          (click)="onSubmit()"
+          appFormSubmitValidationMsg
+          [validationControl]="clientShiftForm"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</form>

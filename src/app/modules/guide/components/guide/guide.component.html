@@ -1,0 +1,332 @@
+<body class="hold-transition skin-blue-light sidebar-mini">
+    <app-guide-topbar></app-guide-topbar>
+
+    <div class="row" style="margin-top: 25px;">
+        <div class="col-md-12 root">
+            <div class="col-md-8">
+                <!-- col-md-offset-2 -->
+                <form [formGroup]="personalDetails" id="msform">
+                    <!-- progressbar -->
+                    <ul id="progressbar" class="progressbar">
+                        <li [ngClass]="step>=1 ? 'active ' : 'inactive'">Working Days</li>
+                        <li [ngClass]="step>=2 ? 'active' : 'inactive'">Working hours</li>
+                        <li [ngClass]="step==3 ? 'active' : 'inactive'">Fund Types</li>
+                        <!-- <li [ngClass]="step==4 ? 'active' : 'inactive'">Settings</li> -->
+                    </ul>
+                    <!-- fieldsets -->
+
+                    <fieldset *ngIf="step == 1">
+                        <!-- <app-list-weekend></app-list-weekend> -->
+                        <div>
+                            <h2 class="fs-title">What are your company working days?</h2>
+                            <!-- <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': personal_step && personal.name.errors }" placeholder="Full Name" />
+                        <div *ngIf="personal_step && personalDetails.controls.name.errors">
+                            <div *ngIf="personal.name.errors?.required">Name is required</div>
+                        </div>
+                        <input type="text" formControlName="email" name="email" placeholder="Email" />
+                        <div *ngIf="personal_step && personalDetails.controls.email.errors">
+                            <div *ngIf="personal.email.errors?.required">Email is required</div>
+                        </div>
+                        <input type="text" formControlName="phone" name="phone" placeholder="Phone" />
+                        <div *ngIf="personal_step && personalDetails.controls.phone.errors">
+                            <div *ngIf="personal.phone.errors?.required">Phone is required</div>
+                        </div> -->
+                            <div class="row working-wrap">
+                                <div class="col-md-4" *ngFor="let item of dayList;let i = index;">
+
+                                    <p>
+                                        <input type="checkbox" class="mr-3" style="transform: scale(1.5);" [value]="item.day" [checked]="item.is_remove == 0" (change)="selectWeekendForSave($event.target.checked, item)" name="item{{i}}" id="item{{i}}">                                        <span>{{item.day}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr class="hr">
+                            <button (click)="onWeekendSubmit()" type="button" class="next action-button">
+                Save
+                </button>
+                            <button (click)="next()" type="button" class="next action-button">
+                          Next
+                        </button>
+                        </div>
+                    </fieldset>
+                </form>
+                <form [formGroup]="workingShiftForm" id="msform">
+                    <fieldset *ngIf="step == 2" style="padding:10px;">
+                        <h2 class="fs-title">Manage working hours</h2>
+                        <div class="workhour-wrap">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="title">Shift Name <sup>*</sup></label>
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title Here" formControlName="name" appFormControlValidationMsg />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="shiftFrom">Shift From <sup>*</sup></label>
+                                        <input class="form-control" type="time" formControlName="shift_from" appFormControlValidationMsg />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="shiftFrom">Shift To<sup>*</sup></label>
+                                        <input class="form-control" type="time" formControlName="shift_to" appFormControlValidationMsg />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="shiftFrom">Late Warning Time<sup>*</sup></label>
+                                        <input class="form-control" type="time" formControlName="late_warn_time" appFormControlValidationMsg />
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="shiftFrom">Check In Restriction</label>
+                                        <input class="form-control" type="time" formControlName="check_in_restriction" />
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label> Break Time</label>
+                                        <input class="form-control" type="time" formControlName="break_time" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="button-wrap text-left">
+                            <!-- <button class="add btn-primary" (click)="onSubmitShift()">
+                        Save
+                      </button> -->
+                            <button (click)="onSubmitShift()" type="button" class="next action-button">
+                        Save
+                        </button>
+                        </div>
+                        <div class="list-wrap">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Shift Name</th>
+                                        <th scope="col">Shift from</th>
+                                        <th scope="col">Shift To</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of shiftList;let i = index;">
+                                        <th scope="row">{{i+1}}</th>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.shift_from}}</td>
+                                        <td>{{item.shift_to}}</td>
+                                        <td>
+                                            <a class='action' (click)="onShiftEdit(item)">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a class="action" (click)="openDeleteShiftConfirmation(item)">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <th scope="row">2</th>
+                                        <td>Jacob</td>
+                                        <td>Thornton</td>
+                                        <td>
+                                            <a class='action'>
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a class="action">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>Larry</td>
+                                        <td>the Bird</td>
+                                        <td>
+                                            <a class='action'>
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a class="action">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr> -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr class="hr">
+                        <button (click)="previous()" type="button" class="next action-button">
+                      Previous
+                      </button>
+                        <!-- <button (click)="savePersonal()" type="button" class="next action-button">
+            Save
+            </button> -->
+                        <button (click)="next()" type="button" class="next action-button">
+                      Next
+                    </button>
+                    </fieldset>
+                </form>
+                <form [formGroup]="fundTypeForm" id="msform">
+                    <fieldset *ngIf="step == 3">
+                        <h2 class="fs-title">Add Fund Types</h2>
+
+                        <div class="fund-type-wrap">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="employeetype">Fund Type<sup>*</sup></label>
+                                        <input type="text" class="form-control" id="employeetype" placeholder="Enter Fund Type" formControlName="title" appFormControlValidationMsg />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Apply From</label>
+                                        <select class="form-control" formControlName="tax_apply" appFormControlValidationMsg>
+                            <option value="" selected>Select Apply From</option>
+                            <option value="gross">Gross Salary</option>
+                            <option value="net">Net Salary</option>
+                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea2">Description<sup>*</sup></label
+                          >
+                          <textarea
+                            class="form-control rounded-0"
+                            id="exampleFormControlTextarea2"
+                            rows="3"
+                            placeholder="Enter Description"
+                            formControlName="details"
+                            appFormControlValidationMsg
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="list-wrap">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title </th>
+                            <th scope="col">Apply From</th>
+                            <th>Details</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of fundTypeList;let i = index;">
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{item.title}}</td>
+                            <td>{{item.tax_apply}}</td>
+                            <td>{{item.details}}</td>
+                            <td>
+                            <a class='action'>
+                              <i class="fa fa-edit"(click)="onFundEditClick(item)"></i>
+                            </a>
+                            <a class="action">
+                              <i class="fa fa-trash"></i>
+                            </a>
+
+                            </td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                      </div>
+                    <hr class="hr">
+                     <button (click)="previous()" type="button" class="next action-button">
+                      Previous
+                      </button>
+                    <button (click)="onSubmitFundType()" type="button" class="next action-button">
+            Save
+            </button>
+                    <!-- <button (click)="next()" type="button" class="next action-button">
+                      Next
+                    </button> -->
+
+                </fieldset>
+            </form>
+            <!-- <form [formGroup]="fundTypeForm" id="msform">
+              <fieldset *ngIf="step == 4">
+                  <h2 class="fs-title">Add Fund Types</h2>
+
+                  <div class="fund-type-wrap">
+
+                      <div class="row">
+                          <div class="col-md-12">
+                              <div class="form-group">
+                                  <label for="employeetype">Fund Type<sup>*</sup></label>
+                                        <input type="text" class="form-control" id="employeetype" placeholder="Enter Fund Type" formControlName="title" appFormControlValidationMsg />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Apply From</label>
+                                        <select class="form-control" formControlName="tax_apply" appFormControlValidationMsg>
+                          <option value="" selected>Select Apply From</option>
+                          <option value="gross">Gross Salary</option>
+                          <option value="net">Net Salary</option>
+                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea2">Description<sup>*</sup></label
+                        >
+                        <textarea
+                          class="form-control rounded-0"
+                          id="exampleFormControlTextarea2"
+                          rows="3"
+                          placeholder="Enter Description"
+                          formControlName="details"
+                          appFormControlValidationMsg
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <hr class="hr">
+                  <button (click)="previous()" type="button" class="next action-button">
+                    Previous
+                    </button>
+                  <button (click)="savePersonal()" type="button" class="next action-button">
+          Save
+          </button>
+                  <button (click)="next()" type="button" class="next action-button">
+                    Next
+                  </button>
+
+              </fieldset>
+
+          </form> -->
+
+        </div>
+    </div>
+</div>
+</body>

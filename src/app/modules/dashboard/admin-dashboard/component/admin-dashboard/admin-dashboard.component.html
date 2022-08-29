@@ -1,0 +1,302 @@
+<div class="row">
+    <div class="col-md-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-default box-shadow">
+                    <div class="box-header with-border" style="text-align: center; color: #00a65a">
+                        <h3 class="box-title">
+                            <strong>Total</strong>
+                        </h3>
+                    </div>
+                    <div>
+                        <div style="text-align: center">
+                            <h2 *ngIf="summaryDataObj.totalstaff !== null">{{summaryDataObj.totalstaff}}</h2>
+                        </div>
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-default box-shadow">
+                    <div class="box-header with-border" style="text-align: center; color: #00a65a">
+                        <h3 class="box-title">
+                            <strong>Active</strong>
+                        </h3>
+                    </div>
+                    <div>
+                        <div style="text-align: center">
+                            <h2 *ngIf="summaryDataObj.activeusers !== null">{{summaryDataObj.activeusers}}</h2>
+                        </div>
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-default box-shadow">
+                    <div class="box-header with-border" style="text-align: center; color: #00a65a">
+                        <h3 class="box-title">
+                            <strong>Present</strong>
+                        </h3>
+                    </div>
+                    <div>
+                        <div style="text-align: center">
+                            <h2 *ngIf="summaryDataObj.today_present_staff !== null">{{summaryDataObj.today_present_staff}}</h2>
+                        </div>
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-default box-shadow">
+                    <div class="box-header with-border" style="text-align: center; color: #dd4b39">
+                        <h3 class="box-title">
+                            <strong>Absent</strong>
+                        </h3>
+                    </div>
+                    <div>
+                        <div style="text-align: center">
+                            <h2 *ngIf="summaryDataObj.today_present_staff !== null">{{+summaryDataObj.activeusers - (+summaryDataObj.today_present_staff)}}</h2>
+                        </div>
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-red" style="width: 20%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-6">
+                <div class="box box-default box-shadow">
+                    <div class="box-header with-border" style="text-align: center; color: #f39c12">
+                        <h3 class="box-title">
+                            <strong>Late</strong>
+                        </h3>
+                    </div>
+                    <div>
+                        <div style="text-align: center">
+                            <h2>7</h2>
+                        </div>
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-default box-shadow">
+                    <div class="box-header with-border" style="text-align: center; color: #337ab7">
+                        <h3 class="box-title">
+                            <strong>Forgot to Checkout</strong>
+                        </h3>
+                    </div>
+                    <div>
+                        <div style="text-align: center">
+                            <h2>4</h2>
+                        </div>
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-blue" style="width: 4%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <div class="col-md-7">
+        <div class="box box-default box-shadow">
+            <div class="box-header with-border">
+                <div class="col-md-6">
+                    <h4 class="box-title">
+                        <strong><i class="fa fa-check-square-o"></i>Attendance of Today</strong
+            >
+          </h4>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon" style="background-color: #ecf0f5">
+              <i class="fa fa-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control input-sm"
+              placeholder="Employee Search"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="box-body" style="height: 260px"></div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5">
+    <div class="box box-default box-shadow">
+      <div class="box-header with-border">
+        <h4 class="box-title">
+          <strong><i class="fa fa-bar-chart-o"></i> Personal Attendance</strong>
+                    </h4>
+                </div>
+
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-success">
+              <i class="fa fa-clock-o"></i> Check In
+            </button>
+                            <button class="btn btn-danger" style="margin-top: 10px">
+              <i class="fa fa-clock-o"></i>Check Out
+            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-success">
+              <i class="fa fa-bicycle"></i>Break In
+            </button>
+                            <button class="btn btn-danger" style="margin-top: 10px">
+              <i class="fa fa-bicycle"></i>Break Out
+            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-success">
+              <i class="fa fa-cutlery"></i>Lunch In
+            </button>
+                            <button class="btn btn-danger" style="margin-top: 10px">
+              <i class="fa fa-cutlery"></i>Lunch OUt
+            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end of personal attendance -->
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="box box-default box-shadow">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">
+                                <strong><i class="fa fa-plane"></i>Holidays</strong>
+                            </h4>
+                        </div>
+
+                        <div class="box-body" style="height: 95px">
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <a><span class="label label-primary">4</span> International
+                  Labours Day</a
+                >
+              </div>
+              <div class="flex-item">
+                <a><span class="label label-primary">1</span> New Year</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="box box-default box-shadow">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">
+                                <strong><i class="fa fa-calendar"></i>Date Converter</strong>
+                            </h4>
+                        </div>
+                        <div class="box-body" style="height: 95px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- end of pending request section... -->
+    </div>
+
+    <div class="row">
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-default box-shadow">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">
+                                <strong><i class="fa fa-check-square"></i>Pending Attendance
+                Requests</strong
+              >
+            </h4>
+            <span class="label label-danger pull-right">4</span>
+          </div>
+          <div class="box-body table-responsive">
+            <table class="table table-hover">
+              <tr>
+                <td>
+                  <strong>John Doe</strong>
+                                </td>
+                                <td>11-7-2014</td>
+                                <td><span class="label label-success">Approved</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Alexander Pierce</strong></td>
+                                    <td>11-7-2014</td>
+                                    <td><span class="label label-warning">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bob Doe</strong></td>
+                                    <td>11-7-2014</td>
+                                    <td><span class="label label-primary">Approved</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mike Doe</strong></td>
+                                    <td>11-7-2014</td>
+                                    <td><span class="label label-danger">Denied</span></td>
+                                </tr>
+                                </table>
+                                <button class="btn btn-success">Browse All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-default box-shadow">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">
+                                <strong><i class="fa fa-plane"></i>Pending Leave Requests</strong>
+                            </h4>
+                            <span class="label label-danger pull-right">{{summaryDataObj.pending_leave ? summaryDataObj.pending_leave:0}}</span>
+                        </div>
+                        <div class="box-body table-responsive">
+                            <table class="table table-hover">
+                                <tr>
+                                    <td>
+                                        <strong>John Doe</strong>
+                                    </td>
+                                    <td>11-7-2014</td>
+                                    <td><span class="label label-success">Approved</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Alexander Pierce</strong></td>
+                                    <td>11-7-2014</td>
+                                    <td><span class="label label-warning">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bob Doe</strong></td>
+                                    <td>11-7-2014</td>
+                                    <td><span class="label label-primary">Approved</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mike Doe</strong></td>
+                                    <td>11-7-2014</td>
+                                    <td><span class="label label-danger">Denied</span></td>
+                                </tr>
+                            </table>
+                            <button class="btn btn-success">Browse All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

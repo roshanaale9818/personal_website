@@ -1,0 +1,122 @@
+<!-- <ng-template #registerUser>
+
+<div>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">Add Company User</h3>
+    <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+(click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form [formGroup]="userCredentialsForm">
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="username">Username</label>
+                                                        <input type="text" id="username" class="form-control" formControlName="username" appFormControlValidationMsg />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="password">Password</label>
+                                                        <input type="password" id="password" class="form-control" formControlName="password" appFormControlValidationMsg />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="password">Confirm Password</label>
+                                                        <input type="password" id="password" class="form-control" formControlName="verify_password" appFormControlValidationMsg />
+
+                                                        <span *ngIf="userCredentialsForm.get('verify_password')?.errors?.confirmedValidator == true" style="color: red;">Password do not match.</span
+  >
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger" type="button" (click)="onCancelUserRegister()">
+                                  Cancel
+                                </button>
+
+                                    <button (click)="onSaveUser()" class="btn btn-primary" appFormSubmitValidationMsg [validationControl]="userCredentialsForm">
+Save And Login
+</button>
+                                </div>
+
+                                </ng-template> -->
+
+
+
+<div class="company-wrap">
+    <div class="inner-wrap">
+        <div class="row company-register">
+            <div class="col-md-4 col-sm-12 bkg-green">
+                <form [formGroup]="userCredentialsForm">
+                    <div class="modal-header">
+                        <h3 class="modal-title pull-left">Add User</h3>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" id="username" class="form-control" formControlName="username" appFormControlValidationMsg />
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" class="form-control" formControlName="password" appFormControlValidationMsg />
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" class="form-control" formControlName="password" appFormControlValidationMsg />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="password">Confirm Password</label>
+                                    <input type="password" id="password" class="form-control" formControlName="verify_password" appFormControlValidationMsg />
+                                    <!-- // SHOW ERROR IF MISMATCH -->
+                                    <span *ngIf="userCredentialsForm.get('verify_password')?.errors?.confirmedValidator == true" style="color: red;">Password do not match.</span>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div>
+                            <button class="btn btn-danger mr-2" type="button" (click)="onCancelUserRegister()">
+                          Reset
+                        </button>
+
+                            <button (click)="onSaveUser()" class="btn btn-primary" appFormSubmitValidationMsg [validationControl]="userCredentialsForm">
+Add
+</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

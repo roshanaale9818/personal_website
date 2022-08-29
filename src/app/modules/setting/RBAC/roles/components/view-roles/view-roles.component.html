@@ -1,0 +1,164 @@
+<div class="box box-default box-shadow">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <i class="fa fa-info-circle mr-2"></i>
+                <strong>
+          <ng-container *ngIf="selectedRoles">{{
+            selectedRoles?.name
+          }}</ng-container>
+          Details
+        </strong>
+            </h3>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>{{ selectedRoles?.name }}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>
+                            {{ selectedRoles?.description }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="box-header with-border">
+                <h4>
+                    <strong><i class="fa fa-tasks mr-2"></i> Assign Routes</strong>
+                </h4>
+            </div>
+            <div class="card-body box-body">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" placeholder="Search Name" [(ngModel)]="fieldSearchTerm" />
+                        <label for="box1"> Field </label>
+                        <div id="box1">
+                            <!-- <ul class="ul-wrap" *ngIf="allRouteList" style="list-style-type: none"> -->
+                            <ng-container *ngIf="allRouteList">
+                                <div class="pointer-cursor" *ngFor="let item of allRouteList | filter:fieldSearchTerm" (click)="selectRoute(item.angular_route)" [ngClass]="
+                    item.angular_route == selectedRoute ? 'isSelected' : null
+                  ">
+                                    <ng-container *ngIf="item.show"><span> {{ item.angular_route }}</span></ng-container>
+                                </div>
+                            </ng-container>
+                            <!-- </ul> -->
+                            <span *ngIf="listLoading">Loading</span>
+                            <span *ngIf="!allRouteList || allRouteList.length == 0">No Result</span
+              >
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <!-- Button goes here -->
+            <div class="button-area">
+              <div class="buttons">
+                <button
+                  style="border-radius: 20px; padding: 10px 20px"
+                  tooltip="Assign Route"
+                  type="button"
+                  class="btn btn-success btn-md"
+                  (click)="assignRoute()"
+                >
+                  <strong>>></strong>
+                </button>
+              </div>
+              <!-- <div class="buttons">
+                          <button type="button" class="btn btn-secondary btn-sm">></button>
+                      </div>
+                      <div class="buttons">
+                          <button type="button" class="btn btn-secondary btn-sm"><</button>
+                      </div> -->
+              <div class="buttons">
+                <button
+                  style="border-radius: 20px; padding: 10px 20px"
+                  tooltip="Remove Route"
+                  placement="bottom"
+                  type="button"
+                  class="btn btn-danger btn-md"
+                  (click)="removeRoute()"
+                >
+                  <strong><<</strong>
+                </button>
+              </div>
+              <!-- <div class="buttons">
+                          <button type="button" class="btn btn-secondary btn-md">
+                Move Up
+              </button>
+                      </div>
+                      <div class="buttons">
+                          <button type="button" class="btn btn-secondary btn-md">
+                Move Down
+              </button>
+                      </div> -->
+            </div>
+          </div>
+          <div class="col-md-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search Name"
+              [(ngModel)]="selectedSearchTerm"
+            />
+            <label for="box2">Selected</label>
+            <div id="box2">
+              <!-- <ul style="list-style-type: none"> -->
+              <ng-container *ngIf="assignedRouteList">
+                <!-- <li *ngFor="let item of assignedRouteList">
+                                  {{item.child}}
+                              </li> -->
+                <div
+                  class="pointer-cursor"
+                  *ngFor="let item of assignedRouteList| filter:selectedSearchTerm"
+                  (click)="selectRoute(item.child)"
+                  [ngClass]="item.child == selectedRoute ? 'isSelected' : null"
+                >
+                  <span> {{ item.child }}</span>
+                        </div>
+                        </ng-container>
+                        <!-- </ul> -->
+                        <span *ngIf="candidatePoolLoading">Loading</span>
+                        <span *ngIf="!assignedRouteList || assignedRouteList.length == 0">NoResult</span
+              >
+            </div>
+          </div>
+
+          <div class="col-md-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- (click)="navigateToEditRoles(selectedRoles)" -->
+
+<!-- <div class="button-wrapper">
+        <button class="btn btn-primary" (click)="assignRoute()">
+      Update
+    </button>
+        <button style="margin-left: 10px" class="btn btn-danger" (click)="removeRoute()">Delete</button>
+    </div> -->
+
+<!-- Modal part -->
+<ng-template #RolesRef>
+  <form [formGroup]="RolesForm">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input class="form-control" id="name" formControlName="name" />
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        formControlName="description"
+      ></textarea>
+    </div>
+  </form>
+</ng-template>

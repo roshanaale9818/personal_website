@@ -1,0 +1,380 @@
+<div class="client-contact-wrap">
+    <!-- <div class="mid-line"></div> -->
+    <div class="box box-default box-shadow">
+        <div class="inner-contents">
+            <div class="line-icon">
+                <span><i class="fa fa-user bg-blue"></i></span>
+            </div>
+            <div class="box-header with-border" style="background-color: #eee">
+                <h3 class="box-title" style="font-size: 14px">
+                    <h3 class="box-title"><strong>Contact Persons Detail</strong></h3>
+                </h3>
+                <button style="float: right" class="btn btn-success btn-xs btn-oval" (click)="openAddModal(addContact)">
+          + Add Contact
+        </button>
+            </div>
+
+            <div class="box-body">
+                <kendo-grid [data]="contactGridView" [resizable]="true" [pageSize]="limit" [skip]="skip" [pageable]="
+            contactGridView
+              ? contactGridView.total <= pageLimit
+                ? false
+                : true
+              : false
+          " [filterable]="false" [filter]="state.filter" [sortable]="true" [sort]="sort" [loading]="listLoading" (dataStateChange)="dataStateChange($event)">
+                    <kendo-grid-column title="Name" field="name" [width]="110" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Email" field="email" [width]="150" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Mobile" field="mobile" [width]="150" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Action" width="70" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- <a class="btn" (click)="navigateToClientDetailView(dataItem)">
+        <i class="fa fa-eye"></i
+      ></a> -->
+                            <a class="btn" (click)="openEditModal(dataItem, addContact)"><i class="fa fa-edit"></i
+              ></a>
+
+                            <a class="btn" (click)="openConfirmationDialogue(dataItem)"><i class="fa fa-trash"></i
+              ></a>
+                        </ng-template>
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+        </div>
+
+        <!-- <div class="inner-contents">
+      <div class="line-icon">
+        <span><i class="fa fa-globe bg-green"></i></span>
+      </div>
+      <div class="box-header with-border" style="background-color: #eee">
+        <h3 class="box-title" style="font-size: 14px">
+          <h3 class="box-title"><strong>IP Detail</strong></h3>
+        </h3>
+        <button
+          style="float: right"
+          class="btn btn-success btn-xs btn-oval"
+          (click)="openAddIpModal(addClientIp)"
+        >
+          + Add IP
+        </button>
+      </div>
+
+      <div class="box-body">
+        <kendo-grid
+          [data]="ipGridView"
+          [resizable]="true"
+          [pageSize]="15"
+          [skip]="skip"
+          [pageable]="
+            ipGridView ? (ipGridView.total <= pageLimit ? false : true) : false
+          "
+          [loading]="listLoading"
+          [filterable]="false"
+          [filter]="state.filter"
+          [sortable]="true"
+          [sort]="sort"
+          [loading]="listLoading"
+          (dataStateChange)="dataStateChange($event)"
+        >
+          <kendo-grid-column
+            title="Ip Address"
+            field="ip_address"
+            [width]="150"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Isp Name"
+            field="isp_name"
+            [width]="150"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Client Location"
+            field="client_location_id"
+            [width]="110"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Status"
+            field="status"
+            [width]="150"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <span
+                *ngIf="dataItem.status == '1'"
+                class="badge bg-green-gradient"
+                >Active</span
+              >
+              <span *ngIf="dataItem.status == '0'" class="badge bg-red"
+                >Inactive</span
+              >
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Action"
+            width="70"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <a class="btn" (click)="openEditIpModal(dataItem, addClientIp)"
+                ><i class="fa fa-edit"></i
+              ></a>
+
+              <a class="btn" (click)="openIpConfirmationDialogue(dataItem)"
+                ><i class="fa fa-trash"></i
+              ></a>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div> -->
+
+        <!-- for client branch list -->
+        <div class="inner-contents">
+            <div class="line-icon">
+                <span><i class="fa fa-globe bg-green"></i></span>
+            </div>
+            <div class="box-header with-border" style="background-color: #eee">
+                <h3 class="box-title" style="font-size: 14px">
+                    <h3 class="box-title"><strong>Location ({{branchName}})</strong></h3>
+                </h3>
+                <button style="float: right" class="btn btn-success btn-xs btn-oval" (click)="onOpenBranchModal()">
+          + Add Location
+        </button>
+            </div>
+
+            <app-add-client-location [hideTopHeading]="true" [hideTimeZone]="true" [hideDetails]="true" [id]="branchId">
+            </app-add-client-location>
+        </div>
+
+        <!-- for client branch ends here  -->
+
+        <div class="inner-contents">
+            <div class="line-icon">
+                <span><i class="fa fa-calendar bg-yellow"></i></span>
+            </div>
+            <div class="box-header with-border" style="background-color: #eee">
+                <h3 class="box-title" style="font-size: 14px">
+                    <h3 class="box-title"><strong>Working Days</strong></h3>
+                </h3>
+            </div>
+
+            <div class="box-body">
+                <kendo-grid [data]="daysGridView" [resizable]="true" [pageSize]="limit" [skip]="skip" [pageable]="
+            daysGridView
+              ? daysGridView.total <= pageLimit
+                ? false
+                : true
+              : false
+          " [filterable]="false" [filter]="state.filter" [sortable]="true" [sort]="sort" [loading]="listLoading" (dataStateChange)="dataStateChange($event)">
+                    <kendo-grid-column title="Sunday" field="sunday" [width]="90" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Monday" field="monday" [width]="90" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Tuesday" field="tuesday" [width]="90" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Wednesday" field="wednesday" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Thursday" field="thursday" [width]="90" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Friday" field="friday" [width]="90" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Saturday" field="saturday" [width]="90" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- add employe modal -->
+<form [formGroup]="clientContactForm">
+    <ng-template #addContact>
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Employee Name <sup>*</sup></label>
+                        <input type="text" id="name" class="form-control" formControlName="name" appFormControlValidationMsg />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email">Email<sup>*</sup></label>
+                        <input type="text" id="email" class="form-control" formControlName="email" appFormControlValidationMsg />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="phone">Phone<sup>*</sup></label>
+                        <input type="text" id="phone" class="form-control" [textMask]="phoneMask" formControlName="phone" appFormControlValidationMsg />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="mobile">Mobile<sup>*</sup></label>
+                        <input type="text" id="mobile" class="form-control" [textMask]="phoneMask" formControlName="mobile" appFormControlValidationMsg />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="address">Address<sup>*</sup></label>
+                        <input type="text" id="address" class="form-control" formControlName="address" appFormControlValidationMsg />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="post">Post<sup>*</sup></label>
+                        <input type="text" id="post" class="form-control" formControlName="post" appFormControlValidationMsg />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" class="form-control" formControlName="status" [(ngModel)]="defaultStatus">
+              <option value="1">Active</option>
+              <option value="0">InActive</option>
+            </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+                <button class="btn btn-success btn-oval" type="submit" (click)="onSubmit()" appFormSubmitValidationMsg [validationControl]="clientContactForm">
+          Submit
+        </button>
+            </div>
+        </div>
+    </ng-template>
+</form>
+
+<!-- add client ip modal -->
+<form [formGroup]="clientIpForm">
+    <ng-template #addClientIp>
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="loc">Client Location</label>
+                        <select id="loc" class="form-control" formControlName="client_location_id" appFormControlValidationMsg>
+              <option
+                *ngFor="let location of clientLocationList"
+                value="{{ location.client_location_id }}"
+              >
+                {{ location.name }}
+              </option>
+            </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email">Ip Address<sup>*</sup></label>
+                        <input type="text" id="email" class="form-control" formControlName="ip_address" appFormControlValidationMsg />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="div">Client Divison</label>
+                        <select id="div" class="form-control" formControlName="client_division_id" appFormControlValidationMsg>
+              <option
+                *ngFor="let division of divisionList"
+                value="{{ division.client_division_id }}"
+              >
+                {{ division.name }}
+              </option>
+            </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="depart">Client Department</label>
+                        <select id="depart" class="form-control" formControlName="client_department_id" appFormControlValidationMsg>
+              <option
+                *ngFor="let department of clientDepartmentList"
+                value="{{ department.client_department_id }}"
+              >
+                {{ department.name }}
+              </option>
+            </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="isp_name">Isp Name<sup>*</sup></label>
+                        <input type="text" id="isp_name" class="form-control" formControlName="isp_name" appFormControlValidationMsg />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" class="form-control" formControlName="status" appFormControlValidationMsg [(ngModel)]="defaultStatus">
+              <option value="1">Active</option>
+              <option value="0">InActive</option>
+            </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+                <button class="btn btn-success btn-oval" type="submit" (click)="onIpSubmit()" appFormSubmitValidationMsg [validationControl]="clientIpForm">
+          Submit
+        </button>
+            </div>
+        </div>
+    </ng-template>
+</form>

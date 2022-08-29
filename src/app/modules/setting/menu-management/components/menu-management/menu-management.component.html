@@ -1,0 +1,167 @@
+<flexyear-add-modal
+  [buttonName]="'Create Menu'"
+  [modalTitle]="'Create Menu'"
+  (click)="clearModal()"
+  (onSubmit)="addMenu()"
+>
+  <ng-template [ngTemplateOutlet]="MenuRef"></ng-template>
+</flexyear-add-modal>
+
+<div class="box box-default box-shadow mt-4 grid-wrapper">
+  <kendo-grid
+    [data]="gridView"
+    [pageSize]="state.take"
+    [skip]="state.skip"
+    [sort]="state.sort"
+    [filter]="state.filter"
+    [sortable]="true"
+    [pageable]="menuList.length > state.take"
+    [filterable]="true"
+    (dataStateChange)="dataStateChange($event)"
+  >
+    <kendo-grid-column title="#" [width]="60">
+      <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+        <p>{{ rowIndex + 1 }}</p>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="name" title="Name"></kendo-grid-column>
+
+    <kendo-grid-column field="parent_name" title="Parent"></kendo-grid-column>
+
+    <kendo-grid-column field="route" title="Route"></kendo-grid-column>
+
+    <kendo-grid-column
+      field="order"
+      title="Order"
+      [width]="100"
+    ></kendo-grid-column>
+
+    <kendo-grid-command-column title="Action" width="150">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        <div style="text-align: center">
+          <!-- View Menu Detail  -->
+          <a
+            class="btn"
+            (click)="openViewModal(viewMenuRef, dataItem)"
+            tooltip="View"
+            ><i class="fa fa-eye"></i
+          ></a>
+
+          <!-- Edit Menu  -->
+          <flexyear-add-modal
+            [type]="'edit'"
+            [modalTitle]="'Edit Menu'"
+            (click)="setMenu(dataItem)"
+            (onSubmit)="updateMenu(dataItem)"
+          >
+            <ng-template [ngTemplateOutlet]="MenuRef"></ng-template>
+          </flexyear-add-modal>
+
+          <!--  Delete Menu -->
+          <flexyear-delete-confirmation-modal
+            [data]="dataItem"
+            [title]="dataItem.name"
+            [action]="'delete'"
+            (onConfirm)="deleteMenu(dataItem)"
+          >
+          </flexyear-delete-confirmation-modal>
+        </div>
+      </ng-template>
+    </kendo-grid-command-column>
+  </kendo-grid>
+</div>
+
+<!-- Modal  -->
+<ng-template #MenuRef>
+  <form [formGroup]="menuForm">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="name">Name<sup>*</sup></label>
+          <input class="form-control" id="name" formControlName="name" />
+          <div
+            class="form-error-msg"
+            *ngIf="
+              menuForm.controls?.name?.invalid &&
+              menuForm.controls?.name?.touched
+            "
+          >
+            Name is required.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6"></div>
+      <div class="form-group">
+        <label for="parentName">Parent Name</label>
+        <input
+          class="form-control"
+          id="parentName"
+          formControlName="parent_name"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="route">Route</label>
+      <input class="form-control" id="route" formControlName="route" />
+    </div>
+    <div class="form-group">
+      <label for="order">Order</label>
+      <input class="form-control" id="order" formControlName="order" />
+    </div>
+    <div class="form-group">
+      <label for="data">Data</label>
+      <textarea
+        class="form-control"
+        id="data"
+        formControlName="data"
+      ></textarea>
+    </div>
+  </form>
+</ng-template>
+
+<!-- Menu Mangement View Modal -->
+<ng-template #viewMenuRef>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      <b>Leads Detail</b>
+    </h4>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">Name</th>
+          <td>{{ selectedViewMenu.name }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Parent</th>
+          <td>{{ selectedViewMenu.parent_name }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Route</th>
+          <td>{{ selectedViewMenu.route }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Order</th>
+          <td>{{ selectedViewMenu.order }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,980 @@
+<!-- tabset -->
+<div class="box box-default box-shadow">
+    <form [formGroup]="settingForm">
+        <tabset #tabset id="tabset">
+            <!-- Mail setting tab............................................................................ -->
+            <tab id="tab" heading="Mail Setting">
+                <!-- general Email setting section -->
+                <!-- <div class="head mt-4">
+          <h3><b>General Email Setting</b></h3>
+        </div> -->
+                <div class="panel panel-primary mt-4">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><b>General Email Setting</b></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="sel1">Mail Type</label>
+                                    <select class="form-control" id="sel1" formControlName="GE_MAIL_TYPE">
+                    <option>PHP(mail)</option>
+                    <option>SMTP</option>
+                  </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="page_reload">Page Reload Interval <sup>*</sup></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="page_reload"
+                    name="page_reload"
+                    formControlName="GE_RELOAD_INTERVAL"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_RELOAD_INTERVAL && submitted"
+                    >{{ formErrors.GE_RELOAD_INTERVAL }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="no_of_mail"
+                    >No Of Mail At A Time <sup>*</sup></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="no_of_mail"
+                    name="no_of_mail"
+                    formControlName="GE_MAIL_NO"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_MAIL_NO && submitted"
+                    >{{ formErrors.GE_MAIL_NO }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="mail_encoding"
+                    >Mail Encoding Bit <sup>*</sup></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="mail_encoding"
+                    name="mail_encoding"
+                    formControlName="GE_MAIL_ENCODE_BIT"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_MAIL_ENCODE_BIT && submitted"
+                    >{{ formErrors.GE_MAIL_ENCODE_BIT }}</span
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- end of first row of general email setting -->
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="admin_email">Admin Email <sup>*</sup></label>
+                                    <input type="text" class="form-control" id="admin_email" name="admin_email" formControlName="GE_PHP_RETURN_PATH" />
+                                    <span class="form-error-msg" *ngIf="formErrors.GE_PHP_RETURN_PATH && submitted">{{ formErrors.GE_PHP_RETURN_PATH }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="manager_email">Manager Email <sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="manager_email"
+                    name="manager_email"
+                    formControlName="GE_PHP_ALTERNATIVE_PATH"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_PHP_ALTERNATIVE_PATH && submitted"
+                    >{{ formErrors.GE_PHP_ALTERNATIVE_PATH }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- end of general setting -->
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <b>Setting For Mail Using SMTP Server</b>
+            </h3>
+          </div>
+
+          <div class="panel-body">
+            <div class="row mt-3">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="host_name">Host Name <sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="host_name"
+                    name="host_name"
+                    formControlName="GE_SERVER_HOST"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_SERVER_HOST && submitted"
+                    >{{ formErrors.GE_SERVER_HOST }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="username">Username <sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    formControlName="GE_SERVER_USERNAME"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_SERVER_USERNAME && submitted"
+                    >{{ formErrors.GE_SERVER_USERNAME }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="sender_name">Sender Name<sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="sender_name"
+                    name="sender_name"
+                    formControlName="GE_SENDER_NAME"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_SENDER_NAME && submitted"
+                    >{{ formErrors.GE_SENDER_NAME }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="encription_type"
+                    >Encription Type <sup>*</sup></label
+                  >
+
+                  <select
+                    class="form-control"
+                    id="encription_type"
+                    formControlName="GE_SERVER_ENC_TYPE"
+                  >
+                    <option>tls</option>
+                    <option>ssl</option>
+                    <option>none</option>
+                  </select>
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_SERVER_ENC_TYPE && submitted"
+                    >{{ formErrors.GE_SERVER_ENC_TYPE }}</span
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- end of first row -->
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="port_no">Port No <sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="port_no"
+                    name="port_no"
+                    formControlName="GE_SERVER_PORT"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_SERVER_PORT && submitted"
+                    >{{ formErrors.GE_SERVER_PORT }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    formControlName="GE_SERVER_PASSWORD"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_SERVER_PASSWORD && submitted"
+                    >{{ formErrors.GE_SERVER_PASSWORD }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="from">From <sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="from"
+                    name="from"
+                    formControlName="GE_PHP_FROM"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_PHP_FROM && submitted"
+                    >{{ formErrors.GE_PHP_FROM }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="reply_to">Reply To<sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="reply_to"
+                    name="reply_to"
+                    formControlName="GE_PHP_REPLY_TO"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.GE_PHP_REPLY_TO && submitted"
+                    >{{ formErrors.GE_PHP_REPLY_TO }}</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- end of setting for mail using SMTP server -->
+            <div class="row">
+              <div class="col-md-3">
+                <label>Admin</label>
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="checkbox1">
+                      <input
+                        type="checkbox"
+                        id="checkbox1"
+                        formControlName="GS_SEND_ATTN_EMAIL"
+                      />
+                      Send Attendance Email
+                    </label>
+                  </div>
+                </div>
+                <!-- ............................ -->
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="checkbox2">
+                      <input
+                        type="checkbox"
+                        id="checkbox2"
+                        formControlName="GS_LATE_ATTENDANCE_EMAIL"
+                      />
+                      Send Late Attendance Email
+                    </label>
+                  </div>
+                </div>
+                <!-- ............................ -->
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="checkbox3">
+                      <input
+                        type="checkbox"
+                        id="checkbox3"
+                        formControlName="GS_SEND_LEAVE_RQ_MAIL"
+                      />
+                      Send Leave Request Mail
+                    </label>
+                  </div>
+                </div>
+                <!-- ............................ -->
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="checkbox4">
+                      <input
+                        type="checkbox"
+                        id="checkbox4"
+                        formControlName="GS_SEND_ATTN_CORR_RQ_MAIL"
+                      />
+                      Send Attendance Correction Request
+                    </label>
+                  </div>
+                </div>
+                <!-- ............................ -->
+              </div>
+              <div class="col-md-3">
+                <label>Manager</label>
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="checkbox5">
+                      <input
+                        type="checkbox"
+                        id="checkbox5"
+                        formControlName="GS_SEND_ATTN_EMAIL_MANAGER"
+                      />
+                      Send Attendance Mail
+                    </label>
+                  </div>
+                </div>
+                <!-- ............................ -->
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="checkbox6">
+                      <input
+                        type="checkbox"
+                        id="checkbox6"
+                        formControlName="GS_MANAGER_LATE_ATTENDANCE_EMAIL"
+                      />
+                      Send Late Attendance Email
+                    </label>
+                  </div>
+                </div>
+                <!-- ............................ -->
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="checkbox7">
+                      <input
+                        type="checkbox"
+                        id="checkbox7"
+                        formControlName="GS_SEND_LEAVE_RQ_MAIL_MANAGER"
+                      />
+                      Send Leave Request Mail
+                    </label>
+                  </div>
+                </div>
+                <!-- ............................ -->
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="checkbox8">
+                      <input
+                        type="checkbox"
+                        id="checkbox8"
+                        formControlName="GS_SEND_ATTN_CORR_RQ_MAIL_MANAGER"
+                      />
+                      Send Attendance Correction Mail
+                    </label>
+                  </div>
+                </div>
+                <!-- ............................ -->
+              </div>
+            </div>
+
+            <!-- end of admin and manager checkbox section -->
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <button class="btn btn-primary btn-oval" (click)="OnSave()">
+              <i class="fa fa-save"></i>&nbsp;<b>Save</b>
+            </button>
+          </div>
+        </div>
+      </tab>
+      <!-- end of mail setting tab ...................................................................-->
+
+      <!-- Company Information  tab -->
+      <tab id="tab" heading="Company Information">
+        <div class="panel panel-primary mt-4">
+          <div class="panel-heading">
+            <h3 class="panel-title"><b>Information About Company</b></h3>
+          </div>
+
+          <div class="panel-body">
+            <div class="row mt-3">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="company_name">Company Name <sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="company_name"
+                    name="company_name"
+                    formControlName="COMP_NAME"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.COMP_NAME && submitted"
+                    >{{ formErrors.COMP_NAME }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="address">Address <sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="address"
+                    name="address"
+                    formControlName="COMP_ADDR"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.COMP_ADDR && submitted"
+                    >{{ formErrors.COMP_ADDR }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="country">Country</label>
+                  <ng-select
+                    appearance="outline"
+                    labelForId="country"
+                    [searchable]="true"
+                    placeholder="Select Country"
+                    formControlName="COMP_COUNTRY"
+                  >
+                    <ng-option disabled value="">Select Country</ng-option>
+                    <ng-option
+                      *ngFor="let list of countryList"
+                      [value]="list.country_id"
+                      >{{ list.name }}</ng-option
+                    >
+                  </ng-select>
+                  <!-- <select
+                    class="form-control"
+                    id="country"
+                    formControlName="COMP_COUNTRY"
+                  >
+                    <option
+                      *ngFor="let country of countriesList; let i = index"
+                      value="{{ i + 1 }}"
+                    >
+                      {{ country.name }}
+                    </option>
+                  </select> -->
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="phone">Phone<sup>*</sup></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="phone"
+                    name="phone"
+                    formControlName="COMP_PHONE"
+                  />
+                  <span
+                    class="form-error-msg"
+                    *ngIf="formErrors.COMP_PHONE && submitted"
+                    >{{ formErrors.COMP_PHONE }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <button class="btn btn-primary btn-oval" (click)="OnSave()">
+              <i class="fa fa-save"></i>&nbsp;<b>Save</b>
+            </button>
+          </div>
+        </div>
+      </tab>
+      <!-- end of company information tab .........................................................-->
+
+      <!-- general setting tab -->
+
+      <tab id="tab" heading="General Setting">
+        <div class="panel panel-primary mt-4">
+          <div class="panel-heading">
+            <h3 class="panel-title"><b>General Setting</b></h3>
+          </div>
+
+          <div class="panel-body">
+            <div class="row mt-3">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="date_type">Date Type</label>
+                  <ng-select
+                    appearance="outline"
+                    labelForId="category"
+                    [searchable]="true"
+                    [clearable]="false"
+                    formControlName="GS_DATE"
+                    placeholder="Select Category"
+                    (change)="switchMonthType($event)"
+                  >
+                    <ng-option disabled value="">Select Category</ng-option>
+                    <ng-option
+                      *ngFor="let item of monthSelectList"
+                      [value]="item.value"
+                      >{{ item.name }}</ng-option
+                    >
+                  </ng-select>
+                  <!-- <select
+                    class="form-control"
+                    id="date_type"
+                    formControlName="GS_DATE"
+                    (change)="switchMonthType($event.target.value)"
+                  >
+                    <option value="E">English Date</option>
+                    <option value="N">Nepali Date</option>
+                  </select> -->
+                </div>
+              </div>
+              <div class="col-md-3" *ngIf="settingForm.value.GS_DATE == 'E'">
+                <div class="form-group">
+                  <label for="date_formate">Date Format</label>
+                  <select
+                    class="form-control"
+                    id="date_formate"
+                    formControlName="GS_DT_FORMAT"
+                  >
+                    <option
+                      *ngFor="let item of dateFormatList"
+                      [value]="item.value"
+                    >
+                      {{ item.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3" *ngIf="settingForm.value.GS_DATE == 'N'">
+                <div class="form-group">
+                  <label for="date_formate">Date Format</label>
+                  <select
+                    class="form-control"
+                    id="date_formate"
+                    formControlName="GS_DT_FORMAT"
+                  >
+                    <option
+                      *ngFor="let item of dateFormatLists"
+                      [value]="item.value"
+                    >
+                      {{ item.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="time_zone">Time Zone</label>
+                  <ng-select
+                    appearance="outline"
+                    labelForId="time_zone"
+                    [searchable]="true"
+                    [clearable]="false"
+                    formControlName="GS_TIME_ZONE"
+                    placeholder="Select Time Zone"
+                  >
+                    <ng-option disabled value="">Select Time Zone</ng-option>
+                    <ng-option
+                      *ngFor="let item of timeZone"
+                      [value]="item.name"
+                      >{{ item.name }}</ng-option
+                    >
+                  </ng-select>
+                  <!-- <select
+                    class="form-control"
+                    id="time_zone"
+                    formControlName="GS_TIME_ZONE"
+                  >
+                    <option *ngFor="let item of timeZone" value="{{ item.name }}">
+                      {{ item.name }}
+                    </option>
+                  </select> -->
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="month">Leave Review Month</label>
+                  <ng-select
+                    appearance="outline"
+                    labelForId="month"
+                    [searchable]="true"
+                    [clearable]="false"
+                    formControlName="GS_LEAVE_REVIEW_MONTH"
+                    placeholder="Select..."
+                  >
+                    <ng-option disabled value="">Select...</ng-option>
+                    <ng-option
+                      *ngFor="let month of monthType"
+                      [value]="month.value.length > 1 ? month.value:'0'+month.value"
+                      >{{ month.month }}</ng-option
+                    >
+                  </ng-select>
+                  <!-- <select
+                    class="form-control"
+                    id="month"
+                    formControlName="GS_LEAVE_REVIEW_MONTH"
+                  >
+                    <option
+                      *ngFor="let month of monthType"
+                      value="{{ month.value }}"
+                    >
+                      {{ month.month }}
+                    </option>
+                  </select> -->
+                </div>
+              </div>
+            </div>
+            <!-- end of first row -->
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="date_formate">Name Showing Type</label>
+                  <!-- name_format -->
+                  <select
+                    class="form-control"
+                    id="date_formate"
+                    formControlName="name_format">
+                    <option value="fml">
+                     Fist Name First
+                    </option>
+                    <option value="lmf">
+                     Last Name First
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="date_formate">Negative Showing Type</label>
+                  <select
+                    class="form-control"
+                    id="date_formate"
+                    formControlName="negative_format">
+                    <!-- negative_format -->
+                    <option value="bracket_color">
+                     Bracket(with redcolor)
+                    </option>
+                    <option value="n_sign">
+                     Negative Sign(-)
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <!-- <div class="col-md-3">
+                <div class="form-group">
+                  <label for="date_formate">Images Ratio</label>
+
+
+                </div>
+              </div> -->
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="setting_checkbox1">
+                      <input
+                        type="checkbox"
+                        id="setting_checkbox1"
+                        formControlName="GM_STAFF_PRESENT"
+                      />
+                      Show Present Staff In Attendance
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="setting_checkbox2">
+                      <input
+                        type="checkbox"
+                        id="setting_checkbox2"
+                        formControlName="GM_ATT_ALERT"
+                      />
+                      Attendance Alert Message
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="setting_checkbox3">
+                      <input
+                        type="checkbox"
+                        id="setting_checkbox3"
+                        formControlName="GS_LATE"
+                      />
+                      Late Time Attendance restrict
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label for="setting_checkbox4">
+                      <input
+                        type="checkbox"
+                        id="setting_checkbox4"
+                        formControlName="GS_IP"
+                      />
+                      Allow Ip Address
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+                <!-- <div class="col-md-3">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label for="setting_checkbox1">
+                        <input
+                          type="checkbox"
+                          id="setting_checkbox1"
+                          formControlName="OT_Allow"
+
+                        />
+                        Allow Overtime Working
+                      </label>
+                    </div>
+                  </div>
+                </div> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <button class="btn btn-primary btn-oval" (click)="OnSave()">
+              <i class="fa fa-save"></i>&nbsp; <b>Save</b>
+            </button>
+          </div>
+        </div>
+      </tab>
+      <!-- end of general setting tab.................................................................. -->
+
+      <!-- company logo tab -->
+      <tab id="tab" heading="Company Logo">
+        <app-company-logo></app-company-logo>
+      </tab>
+      <!-- end of company logo tab.................................................................... -->
+  <!-- company rule starts here       -->
+  <tab id="tab" heading="Company Rule">
+    <div class="panel panel-primary mt-4">
+      <div class="panel-heading">
+        <h3 class="panel-title"><b>Company  Rule</b></h3>
+      </div>
+
+      <div class="panel-body">
+        <div class="row mt-3">
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="date_type">Working Hours Per Day</label>
+           <input class="form-control" type="text" name='CR_WHPD' formControlName = 'CR_WHPD'>
+            </div>
+          </div>
+
+          <ng-container *ngIf="OtAllow == true">
+          <div class="col-md-3">
+
+            <div class="form-group">
+              <label for="time_zone">Over Time Less Than 12 hrs</label>
+              <input class="form-control" type="text" name='CR_WHPD' formControlName = 'CR_OT1'>
+            </div>
+
+          </div>
+        </ng-container>
+
+          <!-- <div class="col-md-3">
+            <div class="form-group">
+              <label for="time_zone">Over Time Less Than 12 hrs</label>
+              <input class="form-control" type="text" name='CR_WHPD' formControlName = 'CR_OT1'>
+            </div>
+          </div> -->
+          <ng-container *ngIf="OtAllow == true">
+          <div class="col-md-3">
+
+            <div class="form-group">
+              <label for="time_zone">Over Time  Over 12 hrs</label>
+              <input class="form-control" type="text" name='CR_WHPD' formControlName = 'CR_OT2'>
+            </div>
+
+          </div>
+        </ng-container>
+
+
+          <ng-container *ngIf="lunchPaid == true">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="time_zone">Lunch Hours Unpaid</label>
+              <input class="form-control" type="text" name='CR_WHPD' formControlName = 'CR_LHU'>
+            </div>
+          </div>
+        </ng-container>
+
+
+
+        </div>
+
+        <!-- checkbox starts here  -->
+        <div class="row mt-3">
+          <div class="col-md-3">
+            <div class="form-group">
+              <!-- <div class="checkbox"> -->
+
+                  <input
+                    type="checkbox"
+                    class="mr-2"
+                    id="setting_checkbox1"
+                    formControlName="OT_Allow"
+
+                  />
+
+                <!-- </label> -->
+                <label for="setting_checkbox1">
+                  Allow Overtime Working
+                </label>
+              <!-- </div> -->
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <input  type="checkbox" class="mr-2" name='CR_LAAW' formControlName = 'CR_LAAW'>
+              <label for="time_zone">Leave Affect After Weekend</label>
+
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <input  type="checkbox" class="mr-2" name='CR_LABW' formControlName = 'CR_LABW'>
+              <label for="time_zone">Leave Affect Before Weekend</label>
+
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <input  type="checkbox" class="mr-2" name='CR_BREAK_PAID' formControlName = 'CR_BREAK_PAID'>
+              <label for="time_zone">Break Paid</label>
+
+            </div>
+          </div>
+          <!-- <div class="col-md-3">
+            <div class="form-group">
+              <input  type="checkbox" class="mr-2" name='CR_LABW' formControlName = 'CR_LABW'>
+              <label for="time_zone">Leave Affect Before Weekend</label>
+
+            </div>
+          </div> -->
+          <div class="col-md-3">
+            <div class="form-group">
+              <input  type="checkbox" class="mr-2" name='CR_WHPD' formControlName = 'CR_LUNCH_PAID'>
+              <label for="time_zone">Lunch Paid</label>
+
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <input  type="checkbox" class="mr-2" name='CR_WHPD' formControlName = 'CR_PUBLIC_PAID'>
+              <label for="time_zone">Public Holiday Paid</label>
+
+            </div>
+          </div>
+
+        </div>
+        <!-- checkbox ends here  -->
+        <!-- end of first row -->
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3">
+        <button class="btn btn-primary btn-oval" (click)="OnSave()">
+          <i class="fa fa-save"></i>&nbsp; <b>Save</b>
+        </button>
+      </div>
+    </div>
+  </tab>
+
+  <!-- company rule ends here .................................. -->
+      <!-- currency setting starts here       -->
+      <tab id="tab" heading="Currency Setting">
+        <div class="panel panel-primary mt-4">
+          <div class="panel-heading">
+            <h3 class="panel-title"><b>Currency Setting</b></h3>
+          </div>
+
+          <div class="panel-body">
+            <div class="row mt-3">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="date_type">Currency Type</label>
+                  <!-- <ng-select
+                  appearance="outline"
+                  labelForId="time_zone"
+                  [searchable]="true"
+                  [clearable]="false"
+                  formControlName="CURRENCY"
+                  placeholder="Currency"
+                >
+                  <ng-option disabled value="">Select Currency </ng-option>
+                  <ng-option
+                    *ngFor="let item of currencyList"
+                    [value]="item.currency_id"
+                    >{{ item.name }}({{item.symbol}})</ng-option
+                  >
+                </ng-select> -->
+                <select class="form-control"  formControlName="CURRENCY">
+                  <option value=" "></option>
+                  <option  *ngFor="let item of currencyList" [value]="item.currency_id">
+                    {{ item.name }}({{item.symbol}})
+                  </option>
+                </select>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="time_zone">Decimal Precison</label>
+                  <select class="form-control" formControlName="DEC_POINT">
+                    <!-- <option value="1">1</option>
+                    <option value="2">2</option> -->
+                    <option *ngFor="let item of decimalPrecision" [value]="item.value">{{item.value}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- end of first row -->
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <button class="btn btn-primary btn-oval" (click)="OnSave()">
+              <i class="fa fa-save"></i>&nbsp; <b>Save</b>
+            </button>
+          </div>
+        </div>
+      </tab>
+
+      <!-- currency setting ends here .................................. -->
+    </tabset>
+  </form>
+</div>

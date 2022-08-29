@@ -1,0 +1,59 @@
+<div class="wrap">
+    <div class="heading" style="margin-bottom:30px">
+        <h2 style="font-weight: 600;font-size: 24px;">Create Performance</h2>
+    </div>
+    <div class="row m-0">
+        <div class="col-md-3">
+            <form [formGroup]="addPerformanceForm">
+                <div class="row">
+                    <div class="form-group">
+                        <label for="staff">Employee Name <sup>*</sup></label>
+                        <ng-select [appendTo]="'body'" [dropdownPosition]="'bottom'" [searchable]="true" placeholder="Select Employee" formControlName="user_id">
+                            <ng-option value="" selected>Select User</ng-option>
+                            <ng-option *ngFor="let list of usersList" [value]="list.staff_id">
+                                {{ list.emp_id }} - {{ list.last_name }}&nbsp;{{ list.middle_name ? list.middle_name : "" }}&nbsp;{{ list.first_name }}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="datefrom">Date From <sup>*</sup></label>
+                        <ng-container *ngIf="datePickerFormat == 'E'">
+                            <input name="datefrom" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfig" [placement]="'bottom'" formControlName="date_from" bsDatepicker />
+
+                        </ng-container>
+                        <ng-container *ngIf="datePickerFormat == 'N'">
+                            <nepali-date-picker name="nepaliDateFrom" [id]="'nepaliDatefrom'" (change)="changeDate($event.detail.value, 'dateFrom')" [label]="this.datePickerConfig.dateInputFormat" formControlName="date_from" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDateFrom">
+                            </nepali-date-picker>
+                        </ng-container>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="Date To">Date To<sup>*</sup></label>
+                        <ng-container *ngIf="datePickerFormat == 'E'">
+                            <input name="dateTo" [placeholder]="datePickerConfig.dateInputFormat" class="form-control" [bsConfig]="datePickerConfigForTo" [placement]="'bottom'" formControlName="date_to" bsDatepicker />
+
+                        </ng-container>
+                        <ng-container *ngIf="datePickerFormat == 'N'">
+                            <nepali-date-picker name="nepaliDateTo" [id]="'nepaliDateTo'" (change)="changeDate($event.detail.value, 'dateTo')" [label]="this.datePickerConfig.dateInputFormat" formControlName="date_to" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForDateTo"
+                                [disableBefore]="disableBefore">
+                            </nepali-date-picker>
+                        </ng-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="button-wrap">
+        <button class="btn btn-primary" (click)="onSave()">
+      Save
+    </button>
+        <button class="btn btn-danger ml-2" (click)="onCancel()">
+      Cancel
+    </button>
+    </div>
+</div>

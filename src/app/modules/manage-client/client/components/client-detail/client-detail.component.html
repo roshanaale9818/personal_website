@@ -1,0 +1,307 @@
+<div class="flex-container">
+    <div class="flex-item">
+        <ngx-avatar name="{{ clientInformation?.name }}" size="40"> </ngx-avatar>
+    </div>
+    <div class="flex-item" style="margin-top: 8px; font-size: 24px">
+        <b style="color: #1976d2; text-transform: uppercase">{{
+      clientInformation?.name
+    }}</b>
+    </div>
+</div>
+
+<div class="box box-default box-shadow mt-4">
+    <!-- <div class="flex-container pull-right">
+    <div class="flex-item">
+      <ngx-avatar name="{{ clientInformation?.name }}" size="40"> </ngx-avatar>
+    </div>
+    <div class="flex-item" style="margin-top: 16px; font-size: 18px">
+      <b style="color: #1976d2; text-transform: uppercase">{{
+        clientInformation?.name
+      }}</b>
+    </div>
+  </div> -->
+    <ul class="nav nav-tabs">
+        <!-- Client Basic Information -->
+        <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a [routerLink]="['/manage-client/client/client-detail/', client_id]">
+                <i class="fa fa-user"></i>&nbsp;
+                <b>Client Basic Information</b>
+            </a>
+        </li>
+
+        <!-- Department -->
+        <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a [routerLink]="['department']">
+                <i class="fa fa-university"></i>&nbsp;
+                <b>Department</b>
+            </a>
+        </li>
+
+        <!-- Division -->
+        <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a [routerLink]="['division']">
+                <i class="fa fa-university"></i>&nbsp;<b>Division</b>
+            </a>
+        </li>
+
+        <!-- Client's Employees -->
+        <li role="presentation" routerLinkActive="active">
+            <a [routerLink]="['clients-employees']">
+                <i class="fa fa-users" aria-hidden="true"></i>&nbsp;<b>Client's Employees</b
+        >
+      </a>
+    </li>
+
+    <!-- Client's IP Address -->
+    <li role="presentation" routerLinkActive="active">
+      <a [routerLink]="['clients-ip-address']">
+        <i class="fa fa-server" aria-hidden="true"></i>&nbsp;<b
+          >Client's IP Address</b
+        >
+      </a>
+    </li>
+
+    <!-- Client Shift -->
+    <li role="presentation" routerLinkActive="active">
+      <a [routerLink]="['client-shift']">
+        <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;<b
+          >Client Shift</b
+        >
+      </a>
+    </li>
+
+    <!-- Client Employee Shift -->
+    <li role="presentation" routerLinkActive="active">
+      <a [routerLink]="['client-employee-shift']">
+        <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;<b
+          >Client Employee Shift</b
+        >
+      </a>
+    </li>
+
+    <!-- Grace Rule -->
+    <li role="presentation" routerLinkActive="active">
+      <a [routerLink]="['grace-rule']">
+        <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;<b
+          >Grace Rule&nbsp;&nbsp;&nbsp;&nbsp;</b
+        >
+      </a>
+    </li>
+  </ul>
+  <router-outlet></router-outlet>
+  <!-- client basic information edit template -->
+
+  <form [formGroup]="clientCreateForm">
+    <ng-template #editClient>
+      <div class="modal-header">
+        <h3 class="modal-title pull-left">Edit Client's Information</h3>
+
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="modalRef.hide()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Client Code</label>
+              <input class="form-control" formControlName="client_code" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="client_name">Client Name <sup>*</sup></label>
+              <input
+                type="text"
+                id="client_name"
+                class="form-control"
+                formControlName="name"
+                appFormControlValidationMsg
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="phone">Phone<sup>*</sup></label>
+              <input
+                type="text"
+                id="phone"
+                class="form-control"
+                formControlName="phone"
+                appFormControlValidationMsg
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="email">Email<sup>*</sup></label>
+              <input
+                type="text"
+                id="email"
+                class="form-control"
+                formControlName="email"
+                appFormControlValidationMsg
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            class="btn btn-danger"
+            type="button"
+            (click)="modalRef.hide()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-success"
+            type="submit"
+            (click)="onEditClient()"
+            appFormSubmitValidationMsg
+            [validationControl]="clientCreateForm"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </form>
+
+  <form [formGroup]="clientCreateForm">
+    <ng-template #editAddress>
+      <div class="modal-header">
+        <h3 class="modal-title pull-left">Edit Client's Address Information</h3>
+
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="modalRef.hide()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="address">Address<sup>*</sup></label>
+              <input
+                type="text"
+                id="address"
+                class="form-control"
+                formControlName="address"
+                appFormControlValidationMsg
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="city">City<sup>*</sup></label>
+              <input
+                type="text"
+                id="city"
+                class="form-control"
+                formControlName="city"
+                appFormControlValidationMsg
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="state">State<sup>*</sup></label>
+              <input
+                type="text"
+                id="state"
+                class="form-control"
+                formControlName="state"
+                appFormControlValidationMsg
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="post_code">Post Code</label>
+              <input
+                type="text"
+                id="post_code"
+                class="form-control"
+                formControlName="post_code"
+                appFormControlValidationMsg
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="branch">Branch<sup>*</sup></label>
+              <select
+                id="branch"
+                class="form-control"
+                formControlName="client_branch_id"
+                appFormControlValidationMsg
+                (change)="onChange($event.target.value)"
+              >
+                <option value="">Select</option>
+                <option
+                  *ngFor="let branch of clientBranchList"
+                  value="{{ branch.client_branch_id }}"
+                >
+                  {{ branch.title }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="location">Location<sup>*</sup></label>
+              <select
+                id="location"
+                class="form-control"
+                formControlName="client_location_id"
+                appFormControlValidationMsg
+              >
+                <option value="">Select Location after branch</option>
+                <option
+                  *ngFor="let location of clientBranchLocation"
+                  value="{{ location.client_location_id }}"
+                >
+                  {{ location.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            class="btn btn-danger"
+            type="button"
+            (click)="modalRef.hide()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-success"
+            type="submit"
+            (click)="onEditClient()"
+            appFormSubmitValidationMsg
+            [validationControl]="clientCreateForm"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </form>
+</div>

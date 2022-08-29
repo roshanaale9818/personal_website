@@ -1,0 +1,169 @@
+<div class="box box-default box-shadow">
+    <button class="btn btn-success" (click)="openAddModal(holidayModal)">
+    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+    <b>Add Holiday</b>
+  </button>
+    <div class="box-body">
+        <kendo-grid [data]="gridView" [pageSize]="limit" [resizable]="true" [skip]="skip" [pageable]="
+        gridView ? (gridView.total <= pageLimit ? false : true) : false
+      " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" [loading]="listLoading" (dataStateChange)="dataStateChange($event)">
+            <kendo-grid-column title="S.N" [width]="50" [minResizableWidth]="30" [filterable]="false" [headerStyle]="{ 'font-weight': 'bold' }">
+                <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                    <p>{{ rowIndex + 1 }}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Title" field="title" width="180" [headerStyle]="{ 'font-weight': 'bold' }">
+            </kendo-grid-column>
+            <kendo-grid-column title="Date" field="date" width="180" [headerStyle]="{ 'font-weight': 'bold' }">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    {{ dataItem.date | dateConversionPipe: dateSetting.GS_DATE }}
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column title="Action" width="80" [headerStyle]="{ 'font-weight': 'bold' }">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <a class="btn" (click)="openViewModal(holidayViewModal, dataItem)">
+                        <i class="fa fa-eye"></i
+          ></a>
+          <a class="btn" (click)="openEditModel(dataItem, holidayModal)"
+            ><i class="fa fa-edit"></i
+          ></a>
+          <a class="btn" (click)="openConfirmationDialogue(dataItem)"
+            ><i class="fa fa-trash"></i
+          ></a>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- !-- Edit Holiday Modal -->
+<form [formGroup]="holidayManagementForm">
+  <ng-template #holidayModal>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button type="button" class="close pull-right">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="title">Title <sup>*</sup> </label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              placeholder="Enter Holiday Title"
+              formControlName="title"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <!-- english date picker -->
+            <div *ngIf="dateSetting.GS_DATE == 'E'">
+              <label>Date:<sup>*</sup> </label>
+              <input
+                type="text"
+                class="form-control"
+                id="input1"
+                formControlName="date"
+                bsDatepicker
+                autocomplete="off"
+                [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+                appFormControlValidationMsg
+              />
+            </div>
+            <!-- nepali date-picker -->
+            <div *ngIf="dateSetting.GS_DATE == 'N'">
+              <label>Date:<sup>*</sup> </label>
+              <np-datepicker
+                formControlName="date"
+                inputClass="form-control"
+                language="en"
+                [dateFormatter]="dateFormatter"
+                appFormControlValidationMsg
+              ></np-datepicker>
+            </div>
+          </div>
+          <!-- /.form group -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="exampleFormControlTextarea2"
+              >Description<sup>*</sup></label
+            >
+            <textarea
+              class="form-control rounded-0"
+              id="exampleFormControlTextarea2"
+              rows="3"
+              formControlName="description"
+              appFormControlValidationMsg
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-success"
+        type="submit"
+        (click)="onSubmitHoliday()"
+        appFormSubmitValidationMsg
+        [validationControl]="holidayManagementForm"
+      >
+        {{ submitButton }}
+      </button>
+    </div>
+  </ng-template>
+</form>
+
+<!-- holiday detail view modal -->
+<ng-template #holidayViewModal>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">
+      Holiday Detail
+    </h3>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">Title</th>
+          <td>{{ holidayDetail.title }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Date</th>
+          <td>{{ holidayDetail.date }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Description</th>
+          <td>{{ holidayDetail.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

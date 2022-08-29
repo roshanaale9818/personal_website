@@ -1,0 +1,193 @@
+<div class="box box-default box-shadow">
+  <div class="box-header with-border" style="background-color: #eee">
+    <button
+      class="btn btn-success btn-xs"
+      (click)="openAddModal(addClientAttendanceThreshold)"
+    >
+      <i class="fa fa-plus"></i> Add Client Attendance Threshold
+    </button>
+  </div>
+  <div class="box-body">
+    <kendo-grid
+      [data]="gridView"
+      [loading]="loading"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [pageable]="clientAttendanceThresholdList.length > state.take"
+      [filterable]="true"
+      (dataStateChange)="dataStateChange($event)"
+    >
+      <kendo-grid-column
+        title="Threshold From (In minutes)"
+        field="threshold_from"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column title="Threshold To (In minutes)" field="threshold_to">
+      </kendo-grid-column>
+
+      <kendo-grid-column title="Rounded Time (In minutes)" field="rounded_time">
+      </kendo-grid-column>
+
+      <kendo-grid-column title="Valid From" field="valid_from">
+      </kendo-grid-column>
+
+      <kendo-grid-column title="Valid To" field="valid_to"> </kendo-grid-column>
+
+      <kendo-grid-column
+        title="Action"
+        [width]="120"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+          <!-- <a class="btn" (click)="openViewModal(dataItem)">
+              <i class="fa fa-eye"></i
+            ></a> -->
+          <a
+            class="btn"
+            (click)="openEditModal(dataItem, addClientAttendanceThreshold)"
+            ><i class="fa fa-edit"></i
+          ></a>
+
+          <a class="btn" (click)="openConfirmationDialogue(dataItem)"
+            ><i class="fa fa-trash"></i
+          ></a>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- add client attendance threshold modal -->
+
+<form [formGroup]="clientAttendanceThresholdForm">
+  <ng-template #addClientAttendanceThreshold>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="thresholdFrom">Threshold From</label>
+            <ng-select
+              appearance="outline"
+              #agreeSelect
+              labelForId="client"
+              [searchable]="true"
+              formControlName="threshold_from"
+              placeholder="Select Minute"
+              appFormControlValidationMsg
+            >
+              <ng-option *ngFor="let list of minuteList"
+                >{{ list }} minutes</ng-option
+              >
+            </ng-select>
+            <!-- <select
+              id="thresholdFrom"
+              class="form-control"
+              formControlName="threshold_from"
+            >
+              <option value="{{ list }}" *ngFor="let list of minuteList">
+                {{ list }} minutes
+              </option>
+            </select> -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="thresholdTo">Threshold To </label>
+            <ng-select
+              appearance="outline"
+              #agreeSelect
+              labelForId="client"
+              [searchable]="true"
+              formControlName="threshold_to"
+              placeholder="Select Minute"
+              appFormControlValidationMsg
+            >
+              <ng-option *ngFor="let list of minuteList"
+                >{{ list }} minutes</ng-option
+              >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="roundedTime">Rounded Time </label>
+
+            <ng-select
+              appearance="outline"
+              #agreeSelect
+              labelForId="client"
+              [searchable]="true"
+              formControlName="rounded_time"
+              placeholder="Select Minute"
+              appFormControlValidationMsg
+            >
+              <ng-option *ngFor="let list of minuteList"
+                >{{ list }} minutes</ng-option
+              >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="dateFrom">Valid From</label>
+            <input
+              id="dateFrom"
+              class="form-control"
+              type="date"
+              formControlName="valid_from"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="dateTo">Valid To</label>
+            <input
+              id="dateTo"
+              class="form-control"
+              type="date"
+              formControlName="valid_to"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+        <button
+          class="btn btn-success"
+          type="submit"
+          appFormSubmitValidationMsg
+          [validationControl]="clientAttendanceThresholdForm"
+          (click)="onSubmit()"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</form>

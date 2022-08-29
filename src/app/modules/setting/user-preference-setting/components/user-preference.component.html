@@ -1,0 +1,209 @@
+<div class="box box-default box-shadow">
+    <form [formGroup]="userPreferenceForm">
+        <tabset #tabset id="tabset">
+            <!-- All Leave Request tab -->
+            <tab id="tab" heading="Time and Date">
+                <div class="panel panel-primary mt-4">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <b>
+                <i class="fa fa-clock-o mr-2"></i>
+                <strong>Time and Date Settings</strong>
+              </b>
+                        </h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Time Format</label>
+                                    <select class="form-control" formControlName="UP_TIME_FORMAT">
+                    <option value="" selected>Select Time Format</option>
+                    <option value="12">12 Hours</option>
+                    <option value="24">24 Hours</option>
+                  </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Date Type</label>
+                                    <select class="form-control" formControlName="UP_DATE_TYPE">
+                    <option value="" selected>Select Date Type</option>
+                    <option value="BS">Nepali Date</option>
+                    <option value="AD">English Date</option>
+                  </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Date Format</label>
+                                    <select class="form-control" formControlName="UP_DATE_FORMAT">
+                    <option value="" selected>Select Date Format</option>
+                    <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                    <option value="yyyy/mm/dd">YYYY/MM/DD</option>
+                  </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+
+            <ng-container *ngIf="
+  authService.currentUserRoleValue !=='HR'
+  && authService.currentUserRoleValue !=='staff'
+  ">
+                <tab id="tab" heading="Leave">
+                    <div class="panel panel-primary mt-4">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-hand-o-left mr-2"></i>
+                                <strong>Leave Settings</strong>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label>
+                    <input type="checkbox" formControlName="UP_LEAVE_EMAIL" />
+                    Leave Email
+                  </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label>
+                    <input type="checkbox" formControlName="UP_LEAVE_ALERT" />
+                    Leave Request Alert
+                  </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+            </ng-container>
+
+            <tab id="tab" heading="Attendance">
+                <div class="panel panel-primary mt-4">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa fa-clock-o mr-2"></i
+              ><strong>Attendance Settings</strong>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" formControlName="UP_ATT_SUMMARY" />
+                      Attendance Summary
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input
+                        type="checkbox"
+                        formControlName="UP_ATTENDANCE_EMAIL"
+                      />
+                      Attendance Email
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input
+                        type="checkbox"
+                        formControlName="UP_ATT_CORRECTION_EMAIL"
+                      />
+                      Attendance Correction Email
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab id="tab" heading="Notifications">
+        <div class="panel panel-primary mt-4">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <i class="fa fa-bell mr-2"> </i>
+                            <strong>Notification Setting</strong>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                      <input type="checkbox" formControlName="UP_DEPARTMENT" />
+                      Show Department
+                    </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                      <input type="checkbox" formControlName="UP_EEID" />
+                      Show EE ID
+                    </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                      <input type="checkbox" formControlName="UP_LUNCH" />
+                      Show Lunch
+                    </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                      <input type="checkbox" formControlName="UP_BIRTHDAY" />
+                      Birthday Alert
+                    </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <button (click)="onSave()" type="submit" class="btn btn-primary btn-oval">
+      <i class="fa fa-save mr-2"></i><b>Save</b>
+    </button>
+    </div>
+</div>

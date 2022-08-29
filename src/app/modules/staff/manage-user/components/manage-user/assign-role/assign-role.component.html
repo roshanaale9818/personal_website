@@ -1,0 +1,41 @@
+<div class="box box-default box-shadow">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <strong>
+          <i class="fa fa-user-plus" style="margin-right: 5px"></i>Role
+          Assignment
+        </strong>
+            </h3>
+            <!-- <div class="flex-container pull-right">
+        <div class="flex-item">
+          <ngx-avatar name="{{ userDetail?.first_name }}" size="30">
+          </ngx-avatar>
+        </div>
+        <div class="flex-item" style="margin-top: 8px; font-size: 14px">
+          <b
+            >{{ userDetail?.first_name }} {{ userDetail?.middle_name }}
+            {{ userDetail?.last_name }}</b
+          >
+        </div>
+      </div> -->
+        </div>
+
+        <div class="panel-body">
+            <div class="box-body">
+                <kendo-grid [data]="userRoleList" [resizable]="true" [pageSize]="15" [loading]="listLoading">
+                    <kendo-grid-column title="User Roles" field="name" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Description" field="description" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Assignment" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-index="index">
+                            <!-- ? true : false -->
+                            <kendo-switch [checked]="dataItem.roleAssigned == 'true'" [offLabel]="' '" [onLabel]="' '" (valueChange)="changeAssignment($event, dataItem)"></kendo-switch>
+                        </ng-template>
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+$green-color: #1cc457;
+$white-color: #ffffff;
+$red-color: #a52525;
+.flex-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+  .flex-item {
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+}
+
+.btn-success {
+  color: $green-color !important;
+  background-color: $white-color !important;
+  border-color: $green-color !important;
+  &:hover {
+    background-color: $green-color !important;
+    color: $white-color !important;
+  }
+}
+
+.btn-danger {
+  color: $red-color !important;
+  background-color: $white-color !important;
+  border-color: $red-color !important;
+  &:hover {
+    background-color: $red-color !important;
+    color: $white-color !important;
+  }
+}
+
+.block {
+  display: block;
+}
+
+.displayNone {
+  display: none;
+}

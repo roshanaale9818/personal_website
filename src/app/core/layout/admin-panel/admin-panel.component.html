@@ -1,0 +1,209 @@
+<body class="hold-transition skin-blue-light sidebar-mini">
+    <div class="wrapper">
+        <!-- Main Header -->
+        <app-topbar></app-topbar>
+        <!-- Left side column. contains the logo and sidebar -->
+
+        <app-sidebar></app-sidebar>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Begin Main content -->
+            <section class="content container-fluid">
+                <div>
+                    <div class="title-panel" [ngStyle]="{
+              'background-color': '#ecf0f5',
+              'box-shadow': 'inherit'
+            }">
+                        <section class="content-header no-padding">
+                            <div class="button-wrapper">
+                                <h1 class="m-0" style="font-size: 24px">
+                                    <!-- <b *ngIf="!titleHeading">TCA </b> -->
+
+                                    <b *ngIf="titleHeading">{{ titleHeading }}</b>
+                                    <b *ngIf="companyName" class="ml-3">({{companyName}})</b>
+                                    <!-- <i
+                    class="fa fa-question-circle"
+                    style="font-size: 18px; margin-left: 5px"
+                    tooltip="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+                    placement="right"
+                  ></i> -->
+                                    <br />
+                                    <small class="description">{{ titleDescription }}</small>
+                                </h1>
+
+                                <button class="btn btn-primary btn-xs ml-3" style="height: fit-content" (click)="goBack()">
+                  Back
+                </button>
+                            </div>
+
+                            <div class="content-breadcrumb">
+                                <breadcrumb [allowBootstrap]="true"></breadcrumb>
+                            </div>
+                        </section>
+                    </div>
+                    <section style="padding-top: 10px; border-top: 1px dotted #1976d2">
+                        <router-outlet></router-outlet>
+                    </section>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <button class="open-button btn btn-default" (click)="openChatPopup()">
+      <i class="fa fa-comments"></i>
+    </button>
+
+        <div class="chat-popup" id="myForm" [ngClass]="{
+        'show-chat-popup': chatOpened,
+        'hide-chat-popup': chatOpened
+      }">
+            <div class="form-container">
+                <div class="box box-primary direct-chat direct-chat-primary box-shadow" style="background-color: aliceblue">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            <i class="fa fa-comments"></i> <strong>Chat With Us</strong>
+                        </h3>
+                        <!-- data-widget="remove" -->
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" (click)="closeChatPopup()">
+                <i class="fa fa-times"></i>
+              </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <!-- Conversations are loaded here -->
+                        <div class="direct-chat-messages" #scrollMe>
+                            <!-- Message. Default to the left -->
+                            <div *ngFor="let item of allMessage">
+                                <div class="direct-chat-msg" [ngClass]="{
+                    left: item.user_name == 'bentray',
+                    right: item.user_name == 'user'
+                  }">
+                                    <div class="direct-chat-info clearfix">
+                                        <div class="direct-chat-name">
+                                            <span [ngClass]="
+                          item.user_name == 'bentray'
+                            ? 'pull-left'
+                            : 'pull-right'
+                        ">{{ item.user_name }}</span
+                      >
+                    </div>
+                    <div class="direct-chat-timestamp">
+                      <span
+                        [ngClass]="
+                          item.user_name == 'bentray'
+                            ? 'pull-right'
+                            : 'pull-left'
+                        "
+                        >23 Jan 2:00 pm</span
+                      >
+                    </div>
+                  </div>
+                  <!-- /.direct-chat-info -->
+                  <img
+                    class="direct-chat-img"
+                    src="../../../../assets/dist/img/user2-160x160.jpg"
+                    alt="Message User Image"
+                  /><!-- /.direct-chat-img -->
+                  <div class="direct-chat-text">
+                    {{ item.message }}
+                  </div>
+                  <!-- /.direct-chat-text -->
+                </div>
+              </div>
+              <!-- /.direct-chat-msg -->
+            </div>
+            <!--/.direct-chat-messages-->
+
+            <!-- /.direct-chat-pane -->
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer box-shadow">
+            <div class="flex-container">
+              <div *ngFor="let msg of quickMessages">
+                <div class="flex-item">
+                  <button class="quick-message" (click)="sendQuickmessage(msg)">
+                    {{ msg.message }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <form [formGroup]="chatForm">
+              <div class="input-group">
+                <input
+                  type="text"
+                  name="message"
+                  placeholder="Type Message ..."
+                  class="form-control"
+                  formControlName="chat_message"
+                />
+                <span class="input-group-btn">
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-flat"
+                    (click)="OnMessageSend()"
+                  >
+                    <i class="fa fa-paper-plane"></i>
+                  </button>
+                </span>
+                                        </div>
+                                        </form>
+                                    </div>
+                                    <!-- /.box-footer-->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <ng-template #chatButt>
+      chat body
+    </ng-template> -->
+
+                        <!-- Main Footer -->
+
+                        <div>
+                            <ng-container *ngComponentOutlet="entryComponent"></ng-container>
+                        </div>
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- right side toggle contents -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+                        <!-- Add the sidebar's background. This div must be placed
+      immediately after the control sidebar -->
+                        <div class="control-sidebar-bg"></div>
+                    </div>
+                    <!-- ./wrapper -->
+
+                    <!-- Logout Modal-->
+                    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="exampleModalLabel">Ready to Leave?</h4>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+                                </div>
+                                <div class="modal-body">
+                                    Select "Logout" below if you are ready to end your current session.
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger" type="button" data-dismiss="modal">
+            Cancel
+          </button>
+                                    <a class="btn btn-primary" data-dismiss="modal" (click)="logout()">Logout</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<ng-template #dateInBs>
+  <p>
+    Converted Date in BS is <strong>{{ convertedDateInBs }}</strong>
+  </p>
+</ng-template>

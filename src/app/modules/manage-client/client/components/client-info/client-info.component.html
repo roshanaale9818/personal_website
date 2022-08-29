@@ -1,0 +1,342 @@
+<div class="box-header with-border mt-4">
+  <h4 style="color: #1976d2">
+    <b
+      >{{ dateWithTimeZone | date: "MM/dd/yyyy" }} &nbsp;
+      {{ timeWithTimeZone }}</b
+    >
+
+    <p *ngIf="timeZone" class="pull-right">
+      <b>{{ timeZone }}</b>
+    </p>
+  </h4>
+</div>
+
+<!-- <div class="row">
+  <div class="col-md-12">
+    <div class="head mt-3"></div>
+  </div>
+</div> -->
+
+<div class="panel panel-primary mt-4">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <b>
+        <i class="fa fa-info-circle mr-3" aria-hidden="true"></i>Client Basic
+        Information</b
+      >
+    </h3>
+  </div>
+
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-4" style="margin-top: 10px">
+        <div class="box box-default box-shadow">
+          <div class="box-header with-border" style="background-color: #eee">
+            <h3 class="box-title" style="font-size: 14px">
+              <h3 class="box-title"><strong>Company Information</strong></h3>
+            </h3>
+            <button
+              style="float: right"
+              class="btn btn-success btn-xs btn-oval"
+              (click)="openEditModal(editClient)"
+            >
+              <i class="fa fa-edit"></i> Edit
+            </button>
+          </div>
+
+          <div class="box-body">
+            <div *ngIf="clientInformation">
+              <table class="table table-hover table-bordered">
+                <tbody>
+                  <tr>
+                    <th scope="row">Code</th>
+                    <td>{{ clientInformation.client_code }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Name</th>
+                    <td>{{ clientInformation.name }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Phone</th>
+                    <td>{{ clientInformation.phone }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">E-mail</th>
+                    <td>{{ clientInformation.email }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="!clientInformation">
+              <p>No Records Available...</p>
+            </div>
+          </div>
+          <div class="box-header with-border" style="background-color: #eee">
+            <h3 class="box-title"><strong>Address Details</strong></h3>
+            <button
+              style="float: right"
+              class="btn btn-success btn-xs btn-oval"
+              (click)="openEditModal(editAddress)"
+            >
+              <i class="fa fa-edit"></i> Edit
+            </button>
+          </div>
+          <div class="box-body">
+            <div *ngIf="clientInformation">
+              <table class="table table-hover table-bordered">
+                <tbody>
+                  <tr>
+                    <th scope="row">Address</th>
+                    <td>{{ clientInformation.address }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Post code</th>
+                    <td>{{ clientInformation.post_code }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">City</th>
+                    <td>{{ clientInformation.city }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">State</th>
+                    <td>{{ clientInformation.state }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Branch</th>
+                    <td>{{ clientInformation.branch_name }}</td>
+                  </tr>
+                  <!-- this.locationName = element.name; -->
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="!clientInformation">
+              <p>No Records Available...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div style="margin-top: 10px">
+          <app-client-contact
+            [branchName]="
+              clientInformation ? clientInformation.branch_name : null
+            "
+            [branchId]="
+              clientInformation ? clientInformation.client_branch_id : null
+            "
+          ></app-client-contact>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="clientCreateForm">
+  <ng-template #editClient>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">Edit Client's Information</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Client Code<sup>*</sup></label>
+            <input
+              class="form-control"
+              formControlName="client_code"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_name">Client Name <sup>*</sup></label>
+            <input
+              type="text"
+              id="client_name"
+              class="form-control"
+              formControlName="name"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="phone">Phone<sup>*</sup></label>
+            <input
+              type="text"
+              id="phone"
+              class="form-control"
+              formControlName="phone"
+              appFormControlValidationMsg
+              [textMask]="phoneMask"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="email">Email<sup>*</sup></label>
+            <input
+              type="text"
+              id="email"
+              class="form-control"
+              formControlName="email"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+        <button
+          class="btn btn-success"
+          type="submit"
+          (click)="onEditClient()"
+          appFormSubmitValidationMsg
+          [validationControl]="clientCreateForm"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</form>
+<form [formGroup]="clientCreateForm">
+  <ng-template #editAddress>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">Edit Client's Address Information</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="address">Address<sup>*</sup></label>
+            <input
+              type="text"
+              id="address"
+              class="form-control"
+              formControlName="address"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="city">City<sup>*</sup></label>
+            <input
+              type="text"
+              id="city"
+              class="form-control"
+              formControlName="city"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="state">State<sup>*</sup></label>
+            <input
+              type="text"
+              id="state"
+              class="form-control"
+              formControlName="state"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="post_code">Post Code</label>
+            <input
+              type="text"
+              id="post_code"
+              class="form-control"
+              formControlName="post_code"
+              appFormControlValidationMsg
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="branch">Branch<sup>*</sup></label>
+            <select
+              id="branch"
+              class="form-control"
+              formControlName="client_branch_id"
+              appFormControlValidationMsg
+              (change)="onChange($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option
+                *ngFor="let branch of clientBranchList"
+                value="{{ branch.client_branch_id }}"
+              >
+                {{ branch.title }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="location">Location<sup>*</sup></label>
+            <select
+              id="location"
+              class="form-control"
+              formControlName="client_location_id"
+              appFormControlValidationMsg
+            >
+              <option value="">Select Location after branch</option>
+              <option
+                *ngFor="let location of clientBranchLocation"
+                value="{{ location.client_location_id }}"
+              >
+                {{ location.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+        <button
+          class="btn btn-success"
+          type="submit"
+          (click)="onEditClient()"
+          appFormSubmitValidationMsg
+          [validationControl]="clientCreateForm"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</form>

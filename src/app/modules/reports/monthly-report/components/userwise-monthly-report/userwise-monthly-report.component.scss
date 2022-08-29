@@ -1,0 +1,17 @@
+.k-grid tr.weekend {
+  background-color: #9bc4db !important;
+}
+.k-grid tr.absent {
+  background-color: rgb(253, 210, 207) !important;
+}
+.k-grid tr.present {
+  background-color: rgba(151, 233, 173, 0.68) !important;
+}
+.k-grid tr.checkout {
+  background-color: rgb(248 219 112 / 75%) !important;
+}
+
+.flex-button {
+  display: flex;
+  justify-content: flex-start;
+}

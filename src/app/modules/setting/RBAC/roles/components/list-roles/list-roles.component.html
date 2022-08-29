@@ -1,0 +1,70 @@
+<div class="box box-default box-shadow">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <i class="fa fa-user-circle-o mr-2"></i><strong>Roles</strong>
+            </h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="box-header with-border">
+                <flexyear-add-modal [buttonName]="'Create Role'" [modalTitle]="'Create Role'" [formValid]="rolesForm.valid" (click)="clearModal()" (onSubmit)="addRole()">
+                    <ng-template [ngTemplateOutlet]="RolesRef"></ng-template>
+                </flexyear-add-modal>
+            </div>
+            <div class="box-body mt-2">
+                <kendo-grid [data]="gridView" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="rolesList.length > state.take" [filterable]="true" [loading]="flexyearLoading" (dataStateChange)="dataStateChange($event)">
+                    <kendo-grid-column title="#" [width]="60">
+                        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                            <p>{{ rowIndex + 1 }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column field="name" title="Name"></kendo-grid-column>
+
+                    <kendo-grid-column field="description" title="Description"></kendo-grid-column>
+
+                    <kendo-grid-command-column title="Action" [width]="150">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <!-- View Roles button -->
+                            <a class="btn" tooltip="View" (click)="navigateToViewRoles(dataItem)">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <!-- edit role  -->
+                            <flexyear-add-modal [formValid]="rolesForm.valid" [type]="'edit'" [modalTitle]="'Update Role'" (click)="openModal(dataItem)" (onSubmit)="updateRole()">
+                                <ng-template [ngTemplateOutlet]="RolesRef"></ng-template>
+                            </flexyear-add-modal>
+
+                            <!-- Delete button -->
+                            <flexyear-delete-confirmation-modal [data]="dataItem" [title]="dataItem.name" [action]="'delete'" (onConfirm)="deleteRoles(dataItem)">
+                            </flexyear-delete-confirmation-modal>
+                        </ng-template>
+                    </kendo-grid-command-column>
+                    <div class="k-i-loading" *ngIf="flexyearLoading"></div>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal part -->
+<ng-template #RolesRef>
+    <form [formGroup]="rolesForm">
+        <div class="form-group">
+            <label for="name">Role Name <sup>*</sup></label>
+            <!-- appFormControlValidationMsg -->
+            <input class="form-control" id="name" formControlName="name" [readonly]="isEdit" />
+            <div class="form-error-msg" *ngIf="
+               ( rolesForm.controls?.name?.invalid &&
+               rolesForm.controls?.name?.touched) || (submitted &&rolesForm.controls?.name?.invalid)
+              ">
+                Name is required.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" formControlName="description"></textarea>
+        </div>
+    </form>
+</ng-template>

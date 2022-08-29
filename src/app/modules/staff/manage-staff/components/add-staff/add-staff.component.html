@@ -1,0 +1,1852 @@
+<div class="box box-default">
+    <div class="box-body">
+        <form [formGroup]="staffForm">
+            <div class="row">
+                <form [formGroup]="profilePictureForm">
+                    <div class="col-sm-3">
+                        <div *ngIf="staffDetail?.staff?.staff_photo && !url">
+                            <img src="{{ imageUrl }}/{{ staffDetail.staff.staff_photo }}" width="200" height="200" />
+                        </div>
+                        <img *ngIf="!staffDetail?.staff?.staff_photo || url" [src]="
+                url ? url : '../../../../../../assets/images/profile_img.jpg'
+              " width="200" height="200" />
+
+                        <br />
+                        <input style="display: none" #fileInput type="file" (change)="onFileSelect($event)" />
+
+                        <div style="margin-left: 50px">
+                            <button class="btn btn-success btn-xs" (click)="fileInput.click()" style="margin-top: 10px; border-radius: 20px; padding: 5px 10px">
+                Upload Image
+              </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- form start -->
+                            <div class="form-horizontal">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">First Name<sup>*</sup></label
+                    >
+
+                    <div class="col-sm-8">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="First Name"
+                        formControlName="first_name"
+                        autocomplete="off"
+                      />
+
+                      <div class="form-error-msg" *ngIf="formErrors.first_name">
+                        {{ formErrors.first_name }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-4 control-label"
+                      >Last Name<sup>*</sup></label
+                    >
+
+                    <div class="col-sm-8">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Last Name"
+                        formControlName="last_name"
+                      />
+                      <div class="form-error-msg" *ngIf="formErrors.last_name">
+                        {{ formErrors.last_name }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-4 control-label">Mobile</label>
+
+                                        <!-- <div class="col-sm-3">
+                      <select
+                        class="form-control"
+                        (change)="onSelection($event.target.value)"
+                        formControlName="mobile_code"
+                      >
+                        <option
+                          *ngFor="let country of countryList"
+                          [value]="country.phone_code"
+                        >
+                          {{ country.country_name }}
+                        </option>
+                      </select>
+                    </div> -->
+
+                                        <div class="col-sm-8">
+                                            <input type="text" placeholder="Mobile No." class="form-control" formControlName="mobile" [textMask]="phoneMask" />
+
+                                            <div class="form-error-msg" *ngIf="formErrors.mobile">
+                                                {{ formErrors.mobile }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <!-- form start -->
+                            <div class="form-horizontal">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Middle Name</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Middle Name" formControlName="middle_name" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Email Address<sup>*</sup></label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Valid Email" formControlName="email_address" />
+                                            <div class="form-error-msg" *ngIf="formErrors.email_address">
+                                                {{ formErrors.email_address }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="form-group">
+                    <label class="col-sm-4 control-label">Phone</label>
+
+                    <div class="col-sm-3">
+                      <select
+                        class="form-control"
+                        (change)="phoneCountrySelection($event.target.value)"
+                        formControlName="phone_code"
+                      >
+                        <option
+                          *ngFor="let country of countryList"
+                          [value]="country.phone_code"
+                        >
+                          {{ country.country_name }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="col-sm-5">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="phone"
+                      />
+                      <div class="form-error-msg" *ngIf="formErrors.phone">
+                        {{ formErrors.phone }}
+                      </div>
+                    </div>
+                  </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="tab-container">
+                            <!-- Tabs Heading -->
+                            <ul class="nav nav-tabs">
+                                <li class="active" [ngClass]="{
+                    'error-tab': isGeneralInformationFormInvalid && submitted
+                  }">
+                                    <a data-toggle="tab" href="#home">
+                                        <i class="fa fa-info-circle"></i> General Information
+                                    </a>
+                                </li>
+
+                                <li [ngClass]="{
+                    'error-tab': isOfficialInformationFormInvalid && submitted
+                  }">
+                                    <a data-toggle="tab" href="#menu1">
+                                        <i class="fa fa-university"></i> Official Information
+                                    </a>
+                                </li>
+
+                                <!-- <li>
+                  <a data-toggle="tab" href="#menu2">
+                    <i class="fa fa-wrench"></i>
+                    Work Experience
+                  </a>
+                </li> -->
+
+                                <li>
+                                    <!-- <a data-toggle="tab" href="#menu3">
+                    <i class="fa fa-graduation-cap"></i>
+                    Academic Qualification
+                  </a>
+                </li> -->
+                                </li>
+                                <!-- fund type tab starts here  -->
+                                <ng-container *ngIf="!this.router.url.includes('add')">
+                                    <li>
+                                        <a data-toggle="tab" href="#menu8">
+                                            <i class="fa fa-file-pdf-o"></i> Fund Type
+                                        </a>
+                                    </li>
+                                </ng-container>
+                                <!-- fund type tab ends here  -->
+
+                                <ng-container *ngIf="!this.router.url.includes('add')">
+                                    <li>
+                                        <a data-toggle="tab" href="#menu4">
+                                            <i class="fa fa-file-pdf-o"></i> Attachment
+                                        </a>
+                                    </li>
+                                </ng-container>
+
+
+                                <li>
+                                    <a data-toggle="tab" href="#menu7">
+                                        <i class="fa fa-user"></i> User Credentials
+                                    </a>
+                                </li>
+
+                                <!-- <li>
+                  <a data-toggle="tab" href="#menu5">
+                    <i class="fa fa-language"></i>
+                    Language
+                  </a>
+                </li> -->
+                            </ul>
+
+                            <!-- Tabs Content -->
+                            <div class="tab-content">
+                                <!-- General Information Tab -->
+                                <div id="home" class="tab-pane fade in active">
+                                    <div class="row">
+                                        <form formGroupName="generalInformation" class="form-horizontal" action="#" autocomplete="off">
+                                            <div class="col-sm-6">
+                                                <div class="box-body">
+                                                    <div class="panel panel-primary">
+                                                        <div class="panel-heading">
+                                                            <h3 class="panel-title">
+                                                                <b>
+                                  <i
+                                    class="fa fa-address-card mr-2"
+                                    aria-hidden="true"
+                                  ></i>
+
+                                  Address</b
+                                >
+                              </h3>
+                            </div>
+                            <div class="panel-body">
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >Address Line1</label
+                                >
+
+                                <div class="col-sm-8">
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Permanent Address Line 1"
+                                    formControlName="address_line1"
+                                  />
+
+                                  <!-- <span
+                                    class="form-error-msg"
+                                    *ngIf="formErrors.address_line1"
+                                  >
+                                    {{ formErrors.address_line1 }}
+                                  </span> -->
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >Address Line2</label
+                                >
+
+                                <div class="col-sm-8">
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Permanent Address Line 2"
+                                    formControlName="address_line2"
+                                  />
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >City</label
+                                >
+
+                                <div class="col-sm-8">
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="City"
+                                    formControlName="city"
+                                    aria-autocomplete="none"
+                                  />
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label
+                                  for="state"
+                                  class="col-sm-4 control-label"
+                                  >State</label
+                                >
+
+                                <div class="col-sm-8">
+                                  <!-- <select
+                                    class="form-control"
+                                    style="width: 100%;"
+                                    formControlName="state"
+                                    [value]=""
+                                  >
+                                    <option value="" selected disabled
+                                      >Select State
+                                    </option>
+                                    <option
+                                      *ngFor="let state of stateList"
+                                      [value]="state.name"
+                                    >
+                                      {{ state.name }}</option
+                                    >
+                                  </select> -->
+                                  <!-- <kendo-combobox
+                                    [data]="stateList"
+                                    [textField]="'name'"
+                                    [valueField]="'name'"
+                                    [placeholder]="'Search State'"
+                                    formControlName="state"
+                                    [valuePrimitive]="true"
+                                    style="width: 100%"
+                                  ></kendo-combobox> -->
+                                  <input
+                                    class="form-control"
+                                    placeholder="State"
+                                    formControlName="state"
+                                    id="state"
+                                  />
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >Zip Code</label
+                                >
+
+                                <div class="col-sm-8">
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Zip Code"
+                                    formControlName="zip_code"
+                                    [textMask]="zipMask"
+                                  />
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label
+                                  for="country"
+                                  class="col-sm-4 control-label"
+                                  >Country</label
+                                >
+
+                                <div class="col-sm-8">
+                                  <!-- <select
+                                    class="form-control"
+                                    formControlName="country_id"
+                                    [value]=""
+                                  >
+                                    <option value="" selected disabled
+                                      >Select Country
+                                    </option>
+                                    <option
+                                      *ngFor="let country of countryList"
+                                      [value]="country.country_id"
+                                    >
+                                      {{ country.country_name }}
+                                    </option>
+                                  </select> -->
+                                  <ng-select
+                                    appearance="outline"
+                                    labelForId="country"
+                                    [searchable]="true"
+                                    formControlName="country_id"
+                                    placeholder="Select Country"
+                                  >
+                                    <ng-option disabled value=""
+                                      >Select Country</ng-option
+                                    >
+                                    <ng-option
+                                      *ngFor="let list of countryList"
+                                      [value]="list.country_id"
+                                      >{{ list.country_name }}</ng-option
+                                    >
+                                  </ng-select>
+                                  <!-- <kendo-combobox
+                                    [data]="countryList"
+                                    [textField]="'country_name'"
+                                    [valueField]="'country_id'"
+                                    [placeholder]="'Search..'"
+                                    formControlName="country_id"
+                                    [valuePrimitive]="true"
+                                    style="width: 100%"
+                                  ></kendo-combobox> -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- end of permanent address -->
+
+                      <!-- <div class="col-sm-6">
+                        <div class="temp-flex-container">
+                          <div class="temp-flex-item">
+                            <h4>
+                              <strong> Temporary Address </strong>
+                            </h4>
+                          </div>
+                          <div class="temp-flex-item">
+                            <h4>
+                              <button
+                                class="btn btn-primary btn-xs"
+                                (click)="setSameAsPermanent()"
+                              >
+                                Same as permanent
+                              </button>
+                            </h4>
+                          </div>
+                        </div>
+                        <div class="box-body">
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label"
+                              >Address Line1<sup>*</sup></label
+                            >
+
+                            <div class="col-sm-8">
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Permanent Address Line 1"
+                                formControlName="temp_address_line1"
+                              />
+
+                              <span
+                                class="form-error-msg"
+                                *ngIf="formErrors.temp_address_line1"
+                              >
+                                {{ formErrors.temp_address_line1 }}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label"
+                              >Address Line2</label
+                            >
+
+                            <div class="col-sm-8">
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Permanent Address Line 2"
+                                formControlName="temp_address_line2"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label">City</label>
+
+                                                                <div class="col-sm-8">
+                                                                    <input type="text" class="form-control" placeholder="City" formControlName="temp_city" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-sm-4 control-label">State</label>
+
+                                                                <div class="col-sm-8">
+                                                                    <kendo-combobox [data]="stateList" [textField]="'name'" [valueField]="'name'" [placeholder]="'Search..'" formControlName="temp_state" [valuePrimitive]="true" style="width: 100%"></kendo-combobox>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-sm-4 control-label">Zip Code</label
+                            >
+
+                            <div class="col-sm-8">
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Zip Code"
+                                formControlName="temp_zip_code"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label"
+                              >Country</label
+                            >
+
+                            <div class="col-sm-8">
+                              <!-- <select
+                                class="form-control"
+                                [value]=""
+                                formControlName="temp_country_id"
+                              >
+                                <option value="" selected disabled
+                                  >Select Country
+                                </option>
+                                <option
+                                  *ngFor="let country of countryList"
+                                  [value]="country.country_id"
+                                >
+                                  {{ country.country_name }}
+                                </option>
+                              </select> -->
+
+                      <!-- <kendo-combobox
+                                [data]="countryList"
+                                [textField]="'country_name'"
+                                [valueField]="'country_id'"
+                                [placeholder]="'Search..'"
+                                formControlName="temp_country_id"
+                                [valuePrimitive]="true"
+                                style="width: 100%"
+                              ></kendo-combobox>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+
+                      <!-- end of temporary address -->
+                    </form>
+
+                    <div class="col-sm-6">
+                      <div class="box-body">
+                        <div class="panel panel-primary">
+                          <div class="panel-heading">
+                            <h3 class="panel-title">
+                              <b>
+                                <i
+                                  class="fa fa-tasks mr-2"
+                                  aria-hidden="true"
+                                ></i>
+                                Company Assignment</b
+                              >
+                            </h3>
+                          </div>
+
+                          <div class="panel-body">
+                            <kendo-grid
+                              [data]="gridView"
+                              [pageSize]="state.take"
+                              [skip]="state.skip"
+                              [resizable]="true"
+                              [sort]="state.sort"
+                              [filter]="state.filter"
+                              [sortable]="true"
+                              [pageable]="
+                                clientEmployeeList.length > state.take
+                              "
+                              [filterable]="false"
+                              (dataStateChange)="dataStateChange($event)"
+                            >
+                              <kendo-grid-column
+                                title="Client Name"
+                                field="name"
+                                [width]="250"
+                              >
+                                <ng-template
+                                  kendoGridCellTemplate
+                                  let-dataItem="dataItem"
+                                >
+                                  <a
+                                    *ngIf="dataItem.status == '1'"
+                                    style="cursor: pointer; color: #1976d2"
+                                    (click)="navigateToClientView(dataItem)"
+                                  >
+                                    <div class="row">
+                                      <div class="col-md-3">
+                                        <ngx-avatar
+                                          name="{{ dataItem?.name }}"
+                                        ></ngx-avatar>
+                                      </div>
+                                      <div class="col-md-9">
+                                        <b>{{ dataItem.name }}</b>
+                                                        </div>
+                                                    </div>
+                                                    </a>
+                                                    <a *ngIf="dataItem.status == '0'" style="cursor: pointer; color: red" (click)="navigateToClientView(dataItem)">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <ngx-avatar name="{{ dataItem?.name }}"></ngx-avatar>
+                                                            </div>
+                                                            <div class="col-md-9">
+                                                                <b>{{ dataItem.name }}</b>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    </ng-template>
+                                                    </kendo-grid-column>
+                                                    <kendo-grid-column title="Date" field="created_date" [width]="100">
+                                                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                                            {{ dataItem.created_date | date: "mediumDate" }}
+                                                        </ng-template>
+                                                    </kendo-grid-column>
+                                                    <kendo-grid-column title="Status" field="status" [width]="100">
+                                                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                                            <a class="badge bg-green-gradient" *ngIf="dataItem.status == '1'">
+                                    Active
+                                  </a>
+                                                            <a class="badge bg-red" *ngIf="dataItem.status == '0'">
+                                    Inactive
+                                  </a>
+                                                        </ng-template>
+                                                    </kendo-grid-column>
+                                                    </kendo-grid>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <button
+                    class="btn btn-success btn-xs"
+                    tooltip="Change Tab"
+                    data-toggle="tab"
+                    href="#menu1"
+                  >
+                    <i class="fa fa-hand-o-right"></i>
+                    Next
+                  </button> -->
+                        </div>
+
+                        <!-- Official Information Tab -->
+                        <div id="menu1" class="tab-pane fade mt-3">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-horizontal box-body">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">
+                                                    <b>
+                                <i
+                                  class="fa fa-building-o mr-2"
+                                  aria-hidden="true"
+                                ></i>
+                                Employee</b
+                              >
+                            </h3>
+                          </div>
+
+                          <div class="panel-body">
+                            <form
+                              formGroupName="officialInformation"
+                              action="#"
+                              autocomplete="off"
+                            >
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >Hire Date</label
+                                >
+
+                                <div class="col-sm-8">
+                                  <div class="input-group">
+                                    <div class="input-group-addon">
+                                      <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <!-- <input
+                                      [placeholder]="
+                                        datePickerConfig.dateInputFormat
+                                      "
+                                      type="text"
+                                      class="form-control"
+                                      formControlName="hire_date"
+                                      bsDatepicker
+                                      autocomplete="off"
+                                      [bsConfig]="datePickerConfig"
+                                    /> -->
+                                    <ng-container *ngIf="datePickerFormat == 'E'">
+                                      <input [placeholder]="datePickerConfig.dateInputFormat" (ngModelChange)="onHireFromChange($event)" class="form-control" id="input1" [bsConfig]="datePickerConfig" formControlName="hire_date" bsDatepicker appFormControlValidationMsg />
+                                  </ng-container>
+                                  <ng-container *ngIf="datePickerFormat == 'N'">
+                                      <nepali-date-picker name="nepalidate" [id]="'nepaliHireDate'" [label]="'Nepali Date'" formControlName="hire_date" (change)="changeDate($event.detail.value, 'hireFrom')" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForHireFrom">
+                                    </nepali-date-picker>
+                                  </ng-container>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >End Date</label
+                                >
+
+                                <div class="col-sm-8">
+                                  <div class="input-group">
+                                    <div class="input-group-addon">
+                                      <i class="fa fa-calendar"></i>
+                                    </div>
+                                   <ng-container *ngIf="datePickerFormat == 'E'">
+                                    <input
+                                    [placeholder]="
+                                      datePickerConfig.dateInputFormat
+                                    "
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="expiry_date"
+                                    bsDatepicker
+                                    autocomplete="off"
+                                    [bsConfig]="datePickerConfig"
+                                  />
+                                   </ng-container>
+                                    <ng-container *ngIf="datePickerFormat == 'N'">
+                                      <nepali-date-picker name="nepalidate" [id]="'nepaliHireTo'" [label]="'Nepali Date'" formControlName="expiry_date" (change)="changeDate($event.detail.value, 'hireTo')" [disableBefore]="disableBefore" [nepaliDatePickerSettings]="nepaliDatePickerSettingsForHireTo">
+                                    </nepali-date-picker>
+                                  </ng-container>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >Employee Id<sup>*</sup></label
+                                >
+
+                                <div class="col-sm-8">
+                                  <!-- <input
+                                    type="text"
+                                    maxlength="6"
+                                    minlength="4"
+                                    class="form-control"
+                                    placeholder="Employee ID"
+                                    formControlName="emp_id"
+                                    autocomplete="false"
+                                  /> -->
+                                  <input
+                                  type="text"
+
+                                  class="form-control"
+                                  placeholder="Employee ID"
+                                  formControlName="emp_id"
+                                  autocomplete="false"
+                                />
+                                  <div
+                                    class="form-error-msg"
+                                    *ngIf="formErrors.emp_id"
+                                  >
+                                    {{ formErrors.emp_id }}
+                                  </div>
+                                </div>
+                              </div>
+                              <!--
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label"
+                              >Pin<sup *ngIf="!editStaffMode">*</sup></label
+                            >
+
+                            <div class="col-sm-8">
+                              <input
+                                type="password"
+                                id="pinAddStaff"
+                                name="pinAddStaff"
+                                maxlength="6"
+                                minlength="4"
+                                class="form-control"
+                                placeholder="Pin no."
+                                formControlName="pin"
+                                autocomplete="false"
+                              />
+                              <div
+                                class="form-error-msg"
+                                *ngIf="formErrors.pin"
+                              >
+                                {{ formErrors.pin }}
+                              </div>
+                            </div>
+                          </div> -->
+
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >Employee Type</label
+                                >
+                                <div class="col-sm-8">
+                                  <select
+                                    class="form-control"
+                                    formControlName="employee_type"
+                                  >
+                                    <option value="" selected>
+                                      Select Employee Type
+                                    </option>
+                                    <!-- <option value="0">Part Time</option>
+                                    <option value="1">Full Time</option> -->
+                                    <option *ngFor="let item of employeeTypeList" [value]="item.employee_type_id">
+                                      {{item.employee_type}}
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >Normal Salary Rate</label
+                                >
+                                <div class="col-sm-4">
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="0.00"
+                                    formControlName="normal_salary_rate"
+                                  />
+                                </div>
+                                <div class="col-sm-4">
+                                  <select
+                                    formControlName="salary_period"
+                                    class="form-control"
+                                  >
+                                    <option value="" selected>
+                                      Salary Period
+                                    </option>
+                                    <option
+                                      value="{{ salaryPeriod.value }}"
+                                      *ngFor="
+                                        let salaryPeriod of salaryPeriodList
+                                      "
+                                    >
+                                      {{ salaryPeriod.title }}
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                  >Employee Shift</label
+                                >
+                                <div class="col-sm-8">
+                                  <!-- <select
+                                    class="form-control"
+                                    formControlName="shift"
+                                  >
+                                    <option value="" selected>
+                                      Select Employee Shift
+                                    </option>
+                                    <option *ngFor="let item of shiftList" [value]="item.shift_id">
+                                      {{item.name}}
+                                    </option>
+                                  </select> -->
+                                  <ng-select
+                                  appearance="outline"
+                                  labelForId="shft"
+                                  [searchable]="true"
+                                  [multiple]="true"
+                                  formControlName="shift"
+                                  placeholder="Select Shift"
+                                >
+                                  <ng-option disabled value=""
+                                    >Select Shift</ng-option
+                                  >
+                                  <ng-option
+                                    *ngFor="let item of shiftList"
+                                    [value]="item.shift_id"
+                                    >{{ item.name }}</ng-option
+                                  >
+                                </ng-select>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                      <div class="box-body">
+                        <div class="panel panel-primary">
+                          <div class="panel-heading">
+                            <h3 class="panel-title">
+                              <b>
+                                <i
+                                  class="fa fa-hand-o-left mr-2"
+                                  aria-hidden="true"
+                                ></i>
+                                Leave Type</b
+                              >
+                            </h3>
+                          </div>
+
+                          <div class="panel-body">
+                            <div class="m-t-15" *ngIf="leaveTypeList">
+                              <div
+                                formArrayName="leaveTypeFormArray"
+                                *ngFor="
+                                  let leaveType of staffForm.get(
+                                    'leaveTypeFormArray'
+                                  )?.controls;
+                                  let i = index
+                                "
+                              >
+                                <div [formGroupName]="i">
+                                  <input
+                                    type="hidden"
+                                    formControlName="leave_type_id"
+                                  />
+                                  <div class="row">
+                                    <div class="col-md-4 m-b-15">
+                                      <input
+                                        type="checkbox"
+                                        (change)="
+                                          onCheck(
+                                            $event.target.checked,
+                                            leaveType
+                                          )
+                                        "
+                                        style="margin-right: 5px"
+                                        [checked]="LeaveTypeFormchecked[i]"
+                                      />
+                                      {{ leaveTypeList[i]?.title }}
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                      <input
+                                        class="form-control"
+                                        placeholder="No of leave days"
+                                        formControlName="no_of_leave"
+                                      />
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                      <select
+                                        class="form-control"
+                                        formControlName="duration"
+                                      >
+                                        <option>Yearly</option>
+                                        <option>Monthly</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                        <div class="row">
+                          <div class="col-sm-2 col-sm-offset-3">
+                            <h4>
+                              <strong>Leave</strong>
+                            </h4>
+                          </div>
+                        </div>
+
+                        <div
+                          formArrayName="leaveTypeFormArray"
+                          *ngFor="
+                            let leaveType of staffForm.get('leaveTypeFormArray')
+                              ?.controls;
+                            let i = index
+                          "
+                        >
+                          <div class="form-group" [formGroupName]="i">
+                            <input
+                              type="hidden"
+                              formControlName="leave_type_id"
+                            />
+                            <div
+                              class="col-sm-2 col-sm-offset-4 m-b-15"
+                              style="display: flex"
+                            >
+                              <input
+                                type="checkbox"
+                                (change)="onCheck($event.target.checked)"
+                              />{{ leaveTypeList[i]?.title }}
+                            </div>
+
+                            <div class="col-sm-3 m-b-15">
+                              <input
+                                class="form-control"
+                                placeholder="No of leave days"
+                                formControlName="no_of_leave"
+                              />
+                            </div>
+
+                            <div class="col-sm-3 m-b-15">
+                              <select
+                                class="form-control"
+                                formControlName="duration"
+                              >
+                                <option [value]="Y">Yearly</option>
+                                <option>Monthly</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+
+                        <!-- end of leave Type form array -->
+
+                        <!-- <div *ngIf="allowanceList">
+                        <fieldset>
+                          <legend>Allowance</legend>
+                          <div
+                            formArrayName="allowanceFormArray"
+                            *ngFor="
+                              let allowance of staffForm.get(
+                                'allowanceFormArray'
+                              )?.controls;
+                              let i = index
+                            "
+                          >
+                            <div [formGroupName]="i">
+                              <input
+                                type="hidden"
+                                formControlName="allowance_id"
+                              />
+                              <div class="row">
+                                <div class="col-md-4 m-b-15">
+                                  <input
+                                    type="checkbox"
+                                    (change)="
+                                      onCheck($event.target.checked, allowance)
+                                    "
+                                    style="margin-right: 5px"
+                                    [checked]="AllowanceFormchecked[i]"
+                                  />
+                                  {{ allowanceList[i]?.title }}
+                                </div>
+                                <div class="col-md-4 m-b-15">
+                                  <input
+                                    class="form-control"
+                                    placeholder="Amount"
+                                    formControlName="amount"
+                                  />
+                                </div>
+                                <div class="col-md-4 m-b-15">
+                                  <select
+                                    class="form-control"
+                                    formControlName="duration"
+                                  >
+                                    <option>Yearly</option>
+                                    <option>Monthly</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div> -->
+                    </div>
+                    <div>
+
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                                            <!-- added starts here  -->
+                <div class="form-horizontal box-body">
+                  <div class="panel panel-primary">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">
+                              <b>
+          <i
+            class="fa fa-building-o mr-2"
+            aria-hidden="true"
+          ></i>
+          Tax Type</b
+        >
+      </h3>
+    </div>
+
+    <div class="panel-body">
+      <form
+        formGroupName="officialInformation"
+        action="#"
+        autocomplete="off"
+      >
+
+        <div class="form-group">
+          <label class="col-sm-4 control-label"
+            >Group Type</label
+          >
+          <div class="col-sm-8">
+            <select
+              class="form-control"
+              formControlName="tax_type_id"
+            >
+              <option value="" selected>
+                Select Tax Group
+              </option>
+              <option *ngFor="let item of taxTypeList" [value]="item.employee_group_id">
+                {{item.title}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+</div>
+                  <!-- //added ends here  -->
+                      </div>
+                      <!-- <div class="col-md-7">
+                        <div class="box-body">
+                        <div class="panel panel-primary">
+                          <div class="panel-heading">
+                            <h3 class="panel-title">
+                              <b>
+                                <i
+                                  class="fa fa-hand-o-left mr-2"
+                                  aria-hidden="true"
+                                ></i>
+                                Fund Type</b
+                              >
+                            </h3>
+                          </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <app-fund-type></app-fund-type>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                        <!-- <button
+                    aria-expanded="true"
+                    class="btn btn-success btn-xs"
+                    tooltip="Change Tab"
+                    data-toggle="tab"
+                    href="#menu4"
+                  >
+                    <i class="fa fa-hand-o-right"></i>
+                    Next
+                  </button> -->
+                    </div>
+
+                    <!-- Working Experience Tab -->
+                    <div id="menu2" class="tab-pane fade">
+                        <div class="box-body">
+                            <button class="btn btn-primary" (click)="openModal(addExperience, 'experience')">
+                      Add Experience
+                    </button>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Designation</th>
+                                            <th>Company Name</th>
+                                            <th>Worked From</th>
+                                            <th>Worked To</th>
+                                            <th>Experience Year</th>
+                                            <th>Work Description</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="
+                              let experience of experiences;
+                              let index = index
+                            ">
+                                            <td>{{ experience.designation }}</td>
+                                            <td>{{ experience.company_name }}</td>
+                                            <td>{{ experience.worked_from }}</td>
+                                            <td>{{ experience.worked_to }}</td>
+                                            <td>{{ experience.exp_year }}</td>
+                                            <td>{{ experience.work_des }}</td>
+                                            <td>
+                                                <a tooltip="Edit" (click)="
+                                  openModal(
+                                    addExperience,
+                                    'experience',
+                                    experience,
+                                    index
+                                  )
+                                ">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                </a>
+                                                <a tooltip="Delete" (click)="
+                                  openDeleteExperienceConfirmation(
+                                    index,
+                                    experience
+                                  )
+                                ">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="experiences.length === 0">
+                                            <td colspan="7" style="text-align: center">
+                                                No results.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Academic Qualification Tab -->
+                    <!-- <div id="menu3" class="tab-pane fade">
+                  <div class="box-body">
+                    <button
+                      class="btn btn-primary"
+                      (click)="openModal(addQualification, 'academic')"
+                    >
+                      Add Qualification
+                    </button>
+
+                    <div class="table-responsive">
+                      <table
+                        class="table table-striped table-bordered table-hover"
+                      >
+                        <thead>
+                          <tr>
+                            <th>Qualification</th>
+                            <th>Passing Year</th>
+                            <th>Institute Name</th>
+                            <th>Result</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            *ngFor="
+                              let academic of academics;
+                              let index = index
+                            "
+                          >
+                            <td>{{ academic.qualification }}</td>
+                            <td>{{ academic.passing_year }}</td>
+                            <td>{{ academic.institute_name }}</td>
+                            <td>{{ academic.result }}</td>
+                            <td>
+                              <a
+                                ><span
+                                  class="glyphicon glyphicon-pencil"
+                                  (click)="
+                                    openModal(
+                                      addQualification,
+                                      'academic',
+                                      academic,
+                                      index
+                                    )
+                                  "
+                                ></span
+                              ></a>
+                              <a
+                                tooltip="Delete"
+                                (click)="
+                                  openDeleteQualificationConfirmation(academic)
+                                "
+                              >
+                                <span class="glyphicon glyphicon-trash"></span>
+                              </a>
+                            </td>
+                          </tr>
+
+                          <tr *ngIf="academics.length === 0">
+                            <td colspan="5" style="text-align: center">
+                              No results.
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div> -->
+
+                    <!-- Attachment Tab -->
+                    <div id="menu4" class="tab-pane fade">
+                        <div class="box-body mt-3">
+                            <div class="box-header with-border">
+                                <button class="btn btn-success btn-oval" (click)="openModal(addAttachmentModal, 'attachment')">
+                        <b>
+                          <i class="fa fa-plus-circle"></i> Add Attachment
+                        </b>
+                                                    </button>
+                                            </div>
+
+                                            <div class="mt-4">
+                                                <kendo-grid [data]="attachments" [loading]="loading">
+                                                    <kendo-grid-column title="Attachment Name">
+                                                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                                            {{ dataItem.attachment_name }}
+                                                        </ng-template>
+                                                    </kendo-grid-column>
+                                                    <kendo-grid-column title="Description">
+                                                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                                            {{ dataItem.description }}
+                                                        </ng-template>
+                                                    </kendo-grid-column>
+                                                    <kendo-grid-column title="Action">
+                                                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                                            <!-- <a
+                                  tooltip="View"
+                                  class="btn"
+                                  (click)="navigateToStaffDetail(dataItem)"
+                                >
+                                  <i class="fa fa-eye"></i
+                                ></a> -->
+                                                            <!-- (click)="gotoEditStaff(dataItem)" -->
+                                                            <a class="btn" tooltip="Update" (click)="
+                                openModal(
+                                  addAttachmentModal,
+                                  'attachment',
+                                  dataItem
+                                )
+                              "><i class="fa fa-edit"></i
+                            ></a>
+                                                            <!-- (onConfirm)="deleteStaff(dataItem)" -->
+                                                            <flexyear-delete-confirmation-modal [data]="dataItem" [title]="dataItem.attachment_name" [action]="'delete'" (onConfirm)="deleteAttachment(dataItem)"></flexyear-delete-confirmation-modal>
+                                                        </ng-template>
+                                                    </kendo-grid-column>
+                                                </kendo-grid>
+                                            </div>
+
+                                            <!-- <div class="table-responsive mt-4">
+                      <table
+                        class="table table-striped table-bordered table-hover"
+                      >
+                        <thead>
+                          <tr>
+                            <th>Attachment Name</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            *ngFor="
+                              let attachment of attachments;
+                              let index = index
+                            "
+                          >
+                            <td>{{ attachment.attachment_name }}</td>
+                            <td>{{ attachment.description }}</td>
+                            <td>
+                              <a tooltip="Edit"
+                                ><span
+                                  class="glyphicon glyphicon-pencil"
+                                  style="cursor: pointer"
+                                  (click)="
+                                    openModal(
+                                      addAttachmentModal,
+                                      'attachment',
+                                      attachment,
+                                      index
+                                    )
+                                  "
+                                ></span
+                              ></a>
+                              <a
+                                tooltip="Delete"
+                                style="cursor: pointer"
+                                (click)="
+                                  openDeleteAttachmentConfirmation(attachment)
+                                "
+                              >
+                                <span class="glyphicon glyphicon-trash"></span>
+                              </a>
+                            </td>
+                          </tr>
+
+                          <tr *ngIf="attachments.length === 0">
+                            <td colspan="4" style="text-align: center">
+                              No results.
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div> -->
+                                        </div>
+                                    </div>
+
+                                    <!-- fund type starts here  -->
+                                    <div id="menu8" class="tab-pane fade">
+                                        <div class="box-body">
+                                            <div class="col-md-12">
+                                                <div class="box-body">
+                                                    <div class="panel panel-primary">
+                                                        <div class="panel-heading">
+                                                            <h3 class="panel-title">
+                                                                <b>
+                                  <i
+                                    class="fa fa-hand-o-left mr-2"
+                                    aria-hidden="true"
+                                  ></i>
+                                  Fund Type</b
+                                >
+                              </h3>
+                            </div>
+                                          <div class="row">
+                                              <div class="col-md-12">
+                                                  <app-fund-type [details]="staffDetail"></app-fund-type>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                      </div>
+                  </div>
+                   <!-- fund type ends here  -->
+
+                    <!-- Language Tab -->
+                    <div id="menu5" class="tab-pane fade">
+                        <div class="box-body">
+                            <button class="btn btn-primary" (click)="openModal(addLanguageModal, 'language')">
+                      Add Language
+                    </button>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Language</th>
+                                            <th>Level</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="
+                              let language of languages;
+                              let index = index
+                            ">
+                                            <td>{{ language.language_name }}</td>
+                                            <td>{{ language.level }}</td>
+                                            <td>
+                                                <a tooltip="Edit">
+                                                    <span class="glyphicon glyphicon-pencil" (click)="
+                                    openModal(
+                                      addLanguageModal,
+                                      'language',
+                                      language,
+                                      index
+                                    )
+                                  ">
+                                </span>
+                                                </a>
+                                                <a tooltip="Delete" (click)="
+                                  openDeleteLanguageConfirmation(
+                                    language,
+                                    index
+                                  )
+                                ">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="languages.length === 0">
+                                            <td colspan="3" style="text-align: center">
+                                                No results.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="menu7" class="tab-pane fade">
+                        <div class="box-body">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        <b>
+                            <i class="fa fa-key mr-2" aria-hidden="true"></i>
+                            User Credentials</b
+                          >
+                        </h3>
+                      </div>
+
+                      <div class="panel-body">
+                        <div class="row">
+                          <form
+                            formGroupName="user_info"
+                            class="form-horizontal"
+                            action="#"
+                            autocomplete="off"
+                          >
+                            <div class="col-sm-6">
+                              <div class="box-body">
+                                <div class="form-group">
+                                  <label class="col-sm-4 control-label"
+                                    >Username</label
+                                  >
+
+                                  <div class="col-sm-8">
+                                    <span *ngIf="!editStaffMode">
+                                      <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Username"
+                                        formControlName="username"
+                                      />
+                                    </span>
+                                    <span *ngIf="editStaffMode">
+                                      <input
+                                        disabled
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Username"
+                                        formControlName="username"
+                                      />
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="col-sm-4 control-label"
+                                    >Password</label
+                                  >
+
+                                  <div class="col-sm-8">
+                                    <input
+                                      type="password"
+                                      class="form-control"
+                                      placeholder="Click here to change password"
+                                      formControlName="password"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="col-sm-4 control-label"
+                                    >Verify Password</label
+                                  >
+
+                                  <div class="col-sm-8">
+                                    <input
+                                      type="password"
+                                      class="form-control"
+                                      placeholder="Verify Password"
+                                      formControlName="verify_password"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-1"></div>
+                          </form>
+
+                          <div class="col-sm-4">
+                            <label
+                              >Pin
+                              <a style="color: red"
+                                >(Please note the pin in safe place)</a
+                              >
+                            </label>
+                            <input type="hidden" class="form-control" />
+                            <h3>
+                              {{ randomNumber }}
+                            </h3>
+
+                            <a
+                              class="badge bg-blue-gradient"
+                              (click)="returnRandomNmber()"
+                              ><i
+                                class="fa fa-refresh"
+                                style="margin-right: 5px"
+                              ></i
+                              >Generate</a
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <button
+      *ngIf="!editStaffMode"
+      class="btn btn-primary btn-oval"
+      appSingleClick
+      (onClick)="onSubmit('add')"
+    >
+      <i class="fa fa-save"></i>&nbsp;<b>Save</b>
+                                                                </button>
+
+                                                                <button *ngIf="editStaffMode" class="btn btn-primary btn-oval" (click)="onSubmit('update')">
+      <i class="fa fa-save"></i>&nbsp;<b>Save</b>
+    </button>
+
+                                                                <button (click)="onCancelEmployee()" class="btn btn-danger ml-3">
+      <i class="fa fa-close mr-2"></i> <strong>Cancel</strong>
+    </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Add Experience Modal -->
+                                                    <ng-template #addExperience>
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title pull-left">Add Experience</h4>
+                                                            <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form [formGroup]="workExperienceForm">
+                                                                <div class="row">
+                                                                    <div class="col-sm-6">
+                                                                        <div class="form-group">
+                                                                            <label>Designation<sup>*</sup></label>
+                                                                            <input class="form-control" formControlName="designation" />
+                                                                            <div class="form-error-msg" *ngIf="workExperienceFormErrors.designation">
+                                                                                {{ workExperienceFormErrors.designation }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-6">
+                                                                        <div class="form-group">
+                                                                            <label>Company Name<sup>*</sup></label>
+                                                                            <input class="form-control" formControlName="company_name" />
+                                                                            <div class="form-error-msg" *ngIf="workExperienceFormErrors.company_name">
+                                                                                {{ workExperienceFormErrors.company_name }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-4">
+                                                                        <div class="form-group">
+                                                                            <label>Worked From<sup>*</sup></label>
+                                                                            <input type="text" class="form-control" formControlName="worked_from" bsDatepicker autocomplete="off" [ [bsConfig]="{ containerClass: 'theme-default' }" ]="{ dateInputFormat: 'YYYY-MM-DD' }" />
+                                                                            <div class="form-error-msg" *ngIf="workExperienceFormErrors.worked_from">
+                                                                                {{ workExperienceFormErrors.worked_from }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-4">
+                                                                        <div class="form-group">
+                                                                            <label>Worked To<sup>*</sup></label>
+                                                                            <input type="text" class="form-control" formControlName="worked_to" bsDatepicker autocomplete="off" [ [bsConfig]="{ containerClass: 'theme-default' }" ]="{ dateInputFormat: 'YYYY-MM-DD' }" />
+                                                                            <div class="form-error-msg" *ngIf="workExperienceFormErrors.worked_to">
+                                                                                {{ workExperienceFormErrors.worked_to }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-4">
+                                                                        <div class="form-group">
+                                                                            <label>Experience Year<sup>*</sup></label>
+                                                                            <input class="form-control" formControlName="exp_year" />
+                                                                            <div class="form-error-msg" *ngIf="workExperienceFormErrors.exp_year">
+                                                                                {{ workExperienceFormErrors.exp_year }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Work Description</label>
+                                                                            <textarea class="form-control" formControlName="work_des"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-primary" class="btn btn-primary" (click)="addWorkExperience()">
+      Save
+    </button>
+                                                            <button class="btn btn-danger" type="button" (click)="closeModal()">
+      Cancel
+    </button>
+                                                        </div>
+                                                    </ng-template>
+
+                                                    <!-- Add Academic Qualification Modal -->
+                                                    <ng-template #addQualification>
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title pull-left">
+                                                                {{ selectedAcademic ? "Edit" : "Add" }} Qualification
+                                                            </h4>
+                                                            <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form [formGroup]="academicQualificationForm">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Qualification<sup>*</sup></label>
+                                                                            <input class="form-control" formControlName="qualification" />
+                                                                            <div class="form-error-msg" *ngIf="academicQualificationFormErrors.qualification">
+                                                                                {{ academicQualificationFormErrors.qualification }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Passing Year<sup>*</sup></label>
+                                                                            <input class="form-control" formControlName="passing_year" />
+                                                                            <div class="form-error-msg" *ngIf="academicQualificationFormErrors.passing_year">
+                                                                                {{ academicQualificationFormErrors.passing_year }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Institute Name<sup>*</sup></label>
+                                                                            <input class="form-control" formControlName="institute_name" />
+                                                                            <div class="form-error-msg" *ngIf="academicQualificationFormErrors.institute_name">
+                                                                                {{ academicQualificationFormErrors.institute_name }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Result<sup>*</sup></label>
+                                                                            <input class="form-control" formControlName="result" />
+                                                                            <div class="form-error-msg" *ngIf="academicQualificationFormErrors.result">
+                                                                                {{ academicQualificationFormErrors.result }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-primary" (click)="addAcademicQualification()">
+      Save
+    </button>
+                                                            <button class="btn btn-danger" type="button" (click)="closeModal()">
+      Cancel
+    </button>
+                                                        </div>
+                                                    </ng-template>
+
+                                                    <!-- Add Attachment Modal -->
+                                                    <ng-template #addAttachmentModal>
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title pull-left">
+                                                                {{ selectedAttachment ? "Edit" : "Add" }} Attachment
+                                                            </h4>
+                                                            <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form [formGroup]="attachmentForm">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Attachment<sup>*</sup></label>
+                                                                            <!-- formControlName="attachment_name" -->
+                                                                            <input type="file" #attachmentFile class="form-control" (change)="onAttachmentFileSelect($event)" />
+                                                                            <div style="margin-top: 7px" *ngIf="selectedAttachment && selectedAttachment.attachment_name">
+                                                                                {{ selectedAttachment.attachment_name }}
+                                                                            </div>
+                                                                            <div class="form-error-msg" *ngIf="attachmentFormErrors.attachment_name">
+                                                                                {{ attachmentFormErrors.attachment_name }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Description</label>
+                                                                            <textarea rows="2" class="form-control" formControlName="description"></textarea>
+                                                                            <div class="form-error-msg" *ngIf="attachmentFormErrors?.description">
+                                                                                {{ attachmentFormErrors.description }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+
+                                                            <button class="btn btn-danger" type="button" (click)="closeModal()">
+      Cancel
+    </button>
+                                                            <button *ngIf="!selectedAttachment" class="btn btn-primary" class="btn btn-primary" appSingleClick (onClick)="addAttachment()">
+      Save
+    </button>
+                                                            <button *ngIf="selectedAttachment" class="btn btn-primary" class="btn btn-primary" appSingleClick (onClick)="updateAttachment(selectedAttachment.attachment_id)">
+      Save
+    </button>
+                                                        </div>
+                                                    </ng-template>
+
+                                                    <!-- Add Language Modal -->
+                                                    <ng-template #addLanguageModal>
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title pull-left">
+                                                                {{ selectedLanguage ? "Edit" : "Add" }} Language
+                                                            </h4>
+                                                            <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form [formGroup]="languageForm">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Language Name</label>
+                                                                            <input class="form-control" formControlName="language_name" />
+                                                                            <div class="form-error-msg" *ngIf="languageFormErrors.language_name">
+                                                                                {{ languageFormErrors.language_name }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Level<sup>*</sup></label>
+                                                                            <select class="form-control" formControlName="level" [value]="">
+              <option value="" selected disabled>Select Language</option>
+              <option value="normal">Normal</option>
+              <option value="good">Good</option>
+              <option value="excellent">Excellent</option>
+            </select>
+                                                                            <div class="form-error-msg" *ngIf="languageFormErrors.level">
+                                                                                {{ languageFormErrors.level }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-primary" class="btn btn-primary" (click)="addLanguage()">
+      Save
+    </button>
+                                                            <button class="btn btn-danger" type="button" (click)="closeModal()">
+      Cancel
+    </button>
+                                                        </div>
+                                                    </ng-template>

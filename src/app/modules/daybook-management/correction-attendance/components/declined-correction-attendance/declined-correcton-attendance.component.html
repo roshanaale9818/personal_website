@@ -1,0 +1,729 @@
+<div class="panel panel-primary mt-4">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <b>
+        <i class="fa fa-ban mr-2"></i>
+
+        Declined Correction Attendance</b
+      >
+    </h3>
+  </div>
+
+  <div class="panel-body">
+    <div class="box-body">
+      <kendo-grid
+        [data]="gridViewDeclined"
+        [resizable]="true"
+        [loading]="listLoading"
+        [pageSize]="state.take"
+        [skip]="state.skip"
+        [sort]="state.sort"
+        [filter]="state.filter"
+        [sortable]="true"
+        [pageable]="declinedAttendanceList.length > state.take"
+        [filterable]="false"
+        (dataStateChange)="dataStateChangeDeclined($event)"
+      >
+        <kendo-grid-column
+          title="S.N"
+          [filterable]="false"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          [width]="50"
+          [minResizableWidth]="30"
+        >
+          <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+            <p>{{ rowIndex + 1 }}</p>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          title="User Staff"
+          [filterable]="false"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          [width]="240"
+        >
+          <ng-template
+            kendoGridCellTemplate
+            let-dataItem="dataItem"
+            let-rowIndex="rowIndex"
+          >
+            <a
+              (mouseover)="viewStaffButtons(dataItem, rowIndex)"
+              (mouseout)="pointedStaff = null; activeIndex = null"
+            >
+              <strong>
+                <!-- {{ dataItem.last_name }}&nbsp;{{ dataItem.first_name }}&nbsp;{{
+                  dataItem.middle_name
+                }} -->
+                {{dataItem.first_name|name:dataItem.last_name:dataItem.middle_name}}
+              </strong>
+              <div class="flex-container">
+                <div class="flex-item">
+                  <span
+                    class="badge bg-red-gradient"
+                    *ngIf="dataItem.correction_status == 'D'"
+                  >
+                    Declined
+                  </span>
+                </div>
+
+                <div class="flex-item"
+                *ngIf="this.authService.currentUserRoleValue !=='staff'
+                        ">
+                  <a
+                    (click)="openActivateConfirmationDialogue(dataItem)"
+                    [ngClass]="
+                      pointedStaff == dataItem && activeIndex == rowIndex
+                        ? 'block'
+                        : 'displayNone'
+                    "
+                    class="btn btn-xs btn-success"
+                  >
+                    <i class="fa fa-check"></i>Approve
+                  </a>
+                </div>
+
+                <div class="flex-item" *ngIf="this.authService.currentUserRoleValue !== 'staff'">
+                  <a
+                    disabled
+                    [ngClass]="
+                      pointedStaff == dataItem && activeIndex == rowIndex
+                        ? 'block'
+                        : 'displayNone'
+                    "
+                    class="btn btn-xs btn-danger"
+                  >
+                    <i class="fa fa-check"></i>Decline
+                  </a>
+                </div>
+              </div>
+            </a>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          title="CheckIn DateTime"
+          field="checkin_datetime"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          [width]="160"
+        >
+          <ng-template
+            kendoGridCellTemplate
+            let-dataItem="dataItem"
+            let-rowIndex="rowIndex"
+          >
+            <ng-container
+              *ngIf="dataItem.checkin_datetime !== '0000-00-00 00:00:00'"
+            >
+              <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+                {{ dataItem.checkin_datetime | date: "MM/dd/yyyy" }}
+              </span>
+              <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+                {{ dataItem.checkin_datetime | date: "yyyy/MM/dd" }}
+              </span>
+            </ng-container>
+
+            <ng-container
+              *ngIf="dataItem.checkin_datetime == '0000-00-00 00:00:00'"
+            >
+              00:00:00
+            </ng-container>
+
+            <br />
+            <ng-container
+              *ngIf="dataItem.checkin_datetime !== '0000-00-00 00:00:00'"
+            >
+              <span *ngIf="timeFormat == '12'">{{
+                dataItem.checkin_datetime !== null
+                  ? (dataItem.date + " " + dataItem.checkin_datetime
+                    | date: "shortTime")
+                  : null
+              }}</span>
+              <span *ngIf="timeFormat == '24'">{{
+                dataItem.checkin_datetime !== null
+                  ? (dataItem.date + " " + dataItem.checkin_datetime
+                    | date: "HH:mm")
+                  : null
+              }}</span>
+            </ng-container>
+
+            <ng-container
+              *ngIf="dataItem.checkin_datetime == '0000-00-00 00:00:00'"
+            >
+              00:00:00
+            </ng-container>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          title="CheckOut DateTime"
+          field="checkout_datetime"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          [width]="160"
+        >
+          <ng-template
+            kendoGridCellTemplate
+            let-dataItem="dataItem"
+            let-rowIndex="rowIndex"
+          >
+            <ng-container
+              *ngIf="dataItem.checkout_datetime !== '0000-00-00 00:00:00'"
+            >
+              <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+                {{ dataItem.checkout_datetime | date: "MM/dd/yyyy" }}
+              </span>
+              <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+                {{ dataItem.checkout_datetime | date: "yyyy/MM/dd" }}
+              </span>
+            </ng-container>
+
+            <ng-container
+              *ngIf="dataItem.checkout_datetime == '0000-00-00 00:00:00'"
+            >
+              00:00:00
+            </ng-container>
+
+            <br />
+            <ng-container
+              *ngIf="dataItem.checkout_datetime !== '0000-00-00 00:00:00'"
+            >
+              <span *ngIf="timeFormat == '12'">{{
+                dataItem.checkout_datetime !== null
+                  ? (dataItem.date + " " + dataItem.checkout_datetime
+                    | date: "shortTime")
+                  : null
+              }}</span>
+              <span *ngIf="timeFormat == '24'">{{
+                dataItem.checkout_datetime !== null
+                  ? (dataItem.date + " " + dataItem.checkout_datetime
+                    | date: "HH:mm")
+                  : null
+              }}</span>
+            </ng-container>
+
+            <ng-container
+              *ngIf="dataItem.checkout_datetime == '0000-00-00 00:00:00'"
+            >
+              00:00:00
+            </ng-container>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          title="CheckIn  Request"
+          field="checkin_datetime_request"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          [width]="160"
+        >
+          <ng-template
+            kendoGridCellTemplate
+            let-dataItem="dataItem"
+            let-rowIndex="rowIndex"
+          >
+            <ng-container
+              *ngIf="
+                dataItem.checkin_datetime_request !== '0000-00-00 00:00:00'
+              "
+            >
+              <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+                {{ dataItem.checkin_datetime_request | date: "MM/dd/yyyy" }}
+              </span>
+              <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+                {{ dataItem.checkin_datetime_request | date: "yyyy/MM/dd" }}
+              </span>
+            </ng-container>
+
+            <ng-container
+              *ngIf="dataItem.checkin_datetime_request == '0000-00-00 00:00:00'"
+            >
+              00:00:00
+            </ng-container>
+
+            <br />
+            <ng-container
+              *ngIf="
+                dataItem.checkin_datetime_request !== '0000-00-00 00:00:00'
+              "
+            >
+              <span *ngIf="timeFormat == '12'">{{
+                dataItem.checkin_datetime_request !== null
+                  ? (dataItem.date + " " + dataItem.checkin_datetime_request
+                    | date: "shortTime")
+                  : null
+              }}</span>
+              <span *ngIf="timeFormat == '24'">{{
+                dataItem.checkin_datetime_request !== null
+                  ? (dataItem.date + " " + dataItem.checkin_datetime_request
+                    | date: "HH:mm")
+                  : null
+              }}</span>
+            </ng-container>
+
+            <ng-container
+              *ngIf="dataItem.checkin_datetime_request == '0000-00-00 00:00:00'"
+            >
+              00:00:00
+            </ng-container>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          title="CheckOut  Request"
+          field="checkout_datetime_request"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          [width]="160"
+        >
+          <!-- <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <span>
+              {{ dataItem.checkout_datetime_request | date: "MM/dd/yyyy" }}
+              {{ dataItem.checkout_datetime_request | date: "HH:mm:ss" }}
+            </span>
+          </ng-template> -->
+          <ng-template
+            kendoGridCellTemplate
+            let-dataItem="dataItem"
+            let-rowIndex="rowIndex"
+          >
+            <ng-container
+              *ngIf="
+                dataItem.checkout_datetime_request !== '0000-00-00 00:00:00'
+              "
+            >
+              <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+                {{ dataItem.checkout_datetime_request | date: "MM/dd/yyyy" }}
+              </span>
+              <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+                {{ dataItem.checkout_datetime_request | date: "yyyy/MM/dd" }}
+              </span>
+            </ng-container>
+
+            <ng-container
+              *ngIf="
+                dataItem.checkout_datetime_request == '0000-00-00 00:00:00'
+              "
+            >
+              00:00:00
+            </ng-container>
+
+            <br />
+            <ng-container
+              *ngIf="
+                dataItem.checkout_datetime_request !== '0000-00-00 00:00:00'
+              "
+            >
+              <span *ngIf="timeFormat == '12'">{{
+                dataItem.checkout_datetime_request !== null
+                  ? (dataItem.date + " " + dataItem.checkout_datetime_request
+                    | date: "shortTime")
+                  : null
+              }}</span>
+              <span *ngIf="timeFormat == '24'">{{
+                dataItem.checkout_datetime_request !== null
+                  ? (dataItem.date + " " + dataItem.checkout_datetime_request
+                    | date: "HH:mm")
+                  : null
+              }}</span>
+            </ng-container>
+
+            <ng-container
+              *ngIf="
+                dataItem.checkout_datetime_request == '0000-00-00 00:00:00'
+              "
+            >
+              00:00:00
+            </ng-container>
+          </ng-template>
+        </kendo-grid-column>
+
+        <!-- <kendo-grid-column
+          title="Message"
+          field="correction_request_message"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          [width]="180"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <p>{{ dataItem.correction_request_message }}</p>
+          </ng-template>
+        </kendo-grid-column> -->
+
+        <kendo-grid-column
+          title="Action"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+          [width]="150"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <a
+              tooltip="View"
+              class="btn"
+              (click)="openViewModal(correctionViewRef, dataItem)"
+            >
+              <i class="fa fa-eye"></i
+            ></a>
+
+            <!-- Start of Edit Correction Attendance -->
+
+            <ng-container *ngIf="authService.currentUserRoleValue !=='staff'">
+              <a
+              (click)="
+                updateCorrectionAttendanceStatus(
+                  AttendanceCorrectionRef,
+                  dataItem
+                )
+              "
+              tooltip="Update"
+              class="btn"
+              *ngIf="
+                dataItem.correction_status == 'P' ||
+                dataItem.correction_status == 'D'
+              "
+            >
+              <i class="fa fa-edit"></i>
+            </a>
+            </ng-container>
+
+            <a class="btn" *ngIf="dataItem.correction_status == 'A'" disabled
+              ><i class="fa fa-edit"></i
+            ></a>
+
+            <!-- Start of Delete Correction button -->
+            <ng-container *ngIf="authService.currentUserRoleValue !=='staff'">
+              <flexyear-delete-confirmation-modal
+              [data]="dataItem"
+              [title]="dataItem.name"
+              [action]="'delete'"
+              (onConfirm)="deleteCorrectionAttendance(dataItem)"
+            >
+            </flexyear-delete-confirmation-modal>
+            </ng-container>
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<!-- correction attendance view modal -->
+<ng-template #correctionViewRef>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Attendance Correction Detail</h4>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">Name</th>
+          <td>{{ correctionAttendanceLists.username }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Checkin Datetime</th>
+          <td>
+         <ng-container *ngIf="correctionAttendanceLists.checkin_datetime !=='0000-00-00 00:00:00'">
+          <span
+          *ngIf="correctionAttendanceLists.checkin_datetime == 'null'"
+          style="color: red; font-style: italic"
+        >
+          (not set)
+        </span>
+        <!-- {{
+          correctionAttendanceLists.checkin_datetime | date: "MM/dd/yyyy"
+        }}
+        {{ correctionAttendanceLists.checkin_datetime | date: "HH:mm:ss" }} -->
+        <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+          {{
+            correctionAttendanceLists.checkin_datetime | date: "MM/dd/yyyy"
+          }}
+        </span>
+        <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+          {{
+            correctionAttendanceLists.checkin_datetime | date: "yyyy/MM/dd"
+          }}
+        </span>
+        <span *ngIf="timeFormat == '24'">
+          {{
+            correctionAttendanceLists.checkin_datetime | date: "HH:mm:ss"
+          }}
+        </span>
+        <span *ngIf="timeFormat == '12'">
+          {{
+            correctionAttendanceLists.checkin_datetime | date: "shortTime"
+          }}
+        </span>
+         </ng-container>
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row">Checkin Message</th>
+          <td>
+            <span
+              *ngIf="correctionAttendanceLists.checkin_msg == 'null'"
+              style="color: red; font-style: italic"
+            >
+              (not set)
+            </span>
+            <span>
+              {{ correctionAttendanceLists.checkin_message }}
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row">Checkin Ip</th>
+          <td>{{ correctionAttendanceLists.checkin_ip }}</td>
+        </tr>
+
+        <tr>
+          <th scope="row">Checkout Datetime</th>
+          <td>
+            <span
+              *ngIf="correctionAttendanceLists.checkout_datetime == 'null'"
+              style="color: red; font-style: italic"
+            >
+              (not set)
+            </span>
+            <!-- {{
+              correctionAttendanceLists.checkout_datetime | date: "MM/dd/yyyy"
+            }}
+            {{ correctionAttendanceLists.checkout_datetime | date: "HH:mm:ss" }} -->
+            <span *ngIf="dateFormat == 'MM/DD/YYYY' && correctionAttendanceLists.checkout_datetime !=='0000-00-00 00:00:00'">
+              {{
+                correctionAttendanceLists.checkout_datetime | date: "MM/dd/yyyy"
+              }}
+            </span>
+            <span *ngIf="dateFormat == 'YYYY/MM/DD'&& correctionAttendanceLists.checkout_datetime !=='0000-00-00 00:00:00'">
+              {{
+                correctionAttendanceLists.checkout_datetime | date: "yyyy/MM/dd"
+              }}
+            </span>
+            <br />
+            <ng-container
+              *ngIf="correctionAttendanceLists.checkout_datetime !== '00:00:00'"
+            >
+              <span *ngIf="timeFormat == '12'&& correctionAttendanceLists.checkout_datetime !=='0000-00-00 00:00:00'">{{
+                correctionAttendanceLists.checkout_datetime !== null
+                  ? (correctionAttendanceLists.date +
+                      " " +
+                      correctionAttendanceLists.checkout_datetime
+                    | date: "shortTime")
+                  : null
+              }}</span>
+              <span *ngIf="timeFormat == '24' && correctionAttendanceLists.checkout_datetime !=='0000-00-00 00:00:00'">{{
+                correctionAttendanceLists.checkout_datetime !== null
+                  ? (correctionAttendanceLists.date +
+                      " " +
+                      correctionAttendanceLists.checkout_datetime
+                    | date: "HH:mm")
+                  : null
+              }}</span>
+            </ng-container>
+            <ng-container
+              *ngIf="correctionAttendanceLists.checkout_datetime == '0000-00-00 00:00:00'"
+            >
+              <p>
+                {{ correctionAttendanceLists.checkout_datetime }}
+              </p>
+            </ng-container>
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row">Checkout Message</th>
+          <td>{{ correctionAttendanceLists.checkout_message }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Checkout Ip</th>
+          <td>{{ correctionAttendanceLists.checkout_ip }}</td>
+        </tr>
+
+        <tr>
+          <th scope="row">Checkin Datetime Request</th>
+          <td>
+            <!-- {{
+              correctionAttendanceLists.checkin_datetime_request
+                | date: "MM/dd/yyyy"
+            }}
+            {{
+              correctionAttendanceLists.checkin_datetime_request
+                | date: "HH:mm:ss"
+            }} -->
+            <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+              {{
+                correctionAttendanceLists.checkin_datetime_request
+                  | date: "MM/dd/yyyy"
+              }}
+            </span>
+            <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+              {{
+                correctionAttendanceLists.checkin_datetime_request
+                  | date: "yyyy/MM/dd"
+              }}
+            </span>
+            <ng-container
+              *ngIf="
+                correctionAttendanceLists.checkin_datetime_request !==  '0000-00-00 00:00:00'
+              "
+            >
+              <span *ngIf="timeFormat == '12'">{{
+                correctionAttendanceLists.checkin_datetime_request !== null
+                  ? (correctionAttendanceLists.date +
+                      " " +
+                      correctionAttendanceLists.checkin_datetime_request
+                    | date: "shortTime")
+                  : null
+              }}</span>
+              <span *ngIf="timeFormat == '24'">{{
+                correctionAttendanceLists.checkin_datetime_request !== null
+                  ? (correctionAttendanceLists.date +
+                      " " +
+                      correctionAttendanceLists.checkin_datetime_request
+                    | date: "HH:mm")
+                  : null
+              }}</span>
+            </ng-container>
+            <ng-container
+              *ngIf="
+                correctionAttendanceLists.checkin_datetime_request ==  '0000-00-00 00:00:00'
+              "
+            >
+              <p>
+                {{ correctionAttendanceLists.checkin_datetime_request }}
+              </p>
+            </ng-container>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Checkout Datetime Request</th>
+          <td>
+            <span
+              *ngIf="correctionAttendanceLists.checkin_datetime == 'null'"
+              style="color: red; font-style: italic"
+            >
+              (not set)
+            </span>
+            <!-- {{
+              correctionAttendanceLists.checkout_datetime_request
+                | date: "MM/dd/yyyy"
+            }}
+            {{
+              correctionAttendanceLists.checkout_datetime_request
+                | date: "HH:mm:ss"
+            }} -->
+            <span *ngIf="dateFormat == 'MM/DD/YYYY' && correctionAttendanceLists.checkout_datetime_request !== '0000-00-00 00:00:00'">
+              {{
+                correctionAttendanceLists.checkout_datetime_request
+                  | date: "MM/dd/yyyy"
+              }}
+            </span>
+            <span *ngIf="dateFormat == 'YYYY/MM/DD' && correctionAttendanceLists.checkout_datetime_request !== '0000-00-00 00:00:00'">
+              {{
+                correctionAttendanceLists.checkout_datetime_request
+                  | date: "yyyy/MM/dd"
+              }}
+            </span>
+            <ng-container *ngIf="correctionAttendanceLists.checkout_datetime_request !== '0000-00-00 00:00:00';else nullTemplate">
+              <span *ngIf="timeFormat == '24'">
+                {{
+                  correctionAttendanceLists.checkout_datetime_request
+                    | date: "HH:mm:ss"
+                }}
+              </span>
+              <span *ngIf="timeFormat == '12'">
+                {{
+                  correctionAttendanceLists.checkout_datetime_request
+                    | date: "shortTime"
+                }}
+              </span>
+            </ng-container>
+            <ng-template #nullTemplate>
+              {{correctionAttendanceLists.checkout_datetime_request}}
+            </ng-template>
+
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Message</th>
+          <td>{{ correctionAttendanceLists.checkout_message }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Correction Status</th>
+          <td *ngIf="correctionAttendanceLists.correction_status == 'P'">
+            Pending
+          </td>
+          <td *ngIf="correctionAttendanceLists.correction_status == 'A'">
+            Approved
+          </td>
+          <td *ngIf="correctionAttendanceLists.correction_status == 'D'">
+            Declined
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>
+
+<!-- Attendance Correction Modal -->
+<ng-template #AttendanceCorrectionRef>
+  <form [formGroup]="declinedAttendanceForm">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Update Attendance Correction</h4>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Checkin Datetime</label>
+            <!-- <input
+              type="datetime-local"
+              class="form-control"
+              formControlName="checkin_datetime"
+            /> -->
+            <app-custom-datetimelocal-picker [controlName]="'checkin_datetime'"  [formGroup]="declinedAttendanceForm"  [datepickerSetting]="customDateLocalSettingsForCheckIn" (valueOnChanges)="onCheckInValue($event)"></app-custom-datetimelocal-picker>
+
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Checkout Datetime</label>
+            <!-- <input
+              type="datetime-local"
+              class="form-control"
+              formControlName="checkout_datetime"
+            /> -->
+            <app-custom-datetimelocal-picker [controlName]="'checkout_datetime'"  [formGroup]="declinedAttendanceForm"  [datepickerSetting]="customDateLocalSettingsForCheckOut" (valueOnChanges)="onCheckOutValue($event)"></app-custom-datetimelocal-picker>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+        Cancel
+      </button>
+      <button class="btn btn-success" (click)="onSave()">Submit</button>
+    </div>
+  </form>
+</ng-template>

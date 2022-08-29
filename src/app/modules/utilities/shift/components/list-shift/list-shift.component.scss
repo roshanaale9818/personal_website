@@ -1,0 +1,19 @@
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+
+  label {
+    margin-right: 8px;
+  }
+}
+
+#kendo-time-picker {
+  margin-bottom: 10px;
+}
+
+table {
+  th {
+    font-weight: bold;
+  }
+}

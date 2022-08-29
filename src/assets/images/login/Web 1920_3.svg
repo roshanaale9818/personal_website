@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <clipPath id="clip-Web_1920_3">
+      <rect width="1920" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="Web_1920_3" data-name="Web 1920 – 3" clip-path="url(#clip-Web_1920_3)">
+    <rect width="1920" height="1080" fill="#fff"/>
+    <g id="Group_12" data-name="Group 12" transform="translate(262.874 -607.458) rotate(2)">
+      <path id="Path_6" data-name="Path 6" d="M1516.1,1118.5,1287,1204.3l38.92,21.229,2.654,61.033,26.536-30.074,40.689,21.229" transform="translate(13.565)" fill="#c4fc4b"/>
+      <path id="Path_7" data-name="Path 7" d="M1491.92,1121.318l-183.42,101.16,3.538,61.917,23-35.381Z" transform="translate(30.1 2.167)" fill="#67bd00"/>
+      <path id="Path_8" data-name="Path 8" stroke="#67bd00" d="M1318.885,1229.584a123.976,123.976,0,0,0-38.8,47.478,112.485,112.485,0,0,0-9.27,65.536,108.256,108.256,0,0,0,27.228,55.5,96.407,96.407,0,0,0,52.243,28.79c20.971,4.014,43.735,1.307,62.641-8.847,8.885-4.771,17.454-11.418,22.416-20.375,4.49-8.106,5.505-18.726.111-26.674-5.263-7.756-15.419-9.645-23.654-5.665-8.762,4.237-14.814,12.877-18.084,21.818-3.618,9.894-4.147,21.385,1.447,30.671,4.966,8.244,13.741,13.245,22.552,16.452,21.146,7.7,44.543,8.787,66.653,5.368a148.393,148.393,0,0,0,59.814-23.15,120.769,120.769,0,0,0,11.755-9.021" fill="none" transform="translate(0 85.432)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" stroke-dasharray="12"/>
+    </g>
+  </g>
+</svg>

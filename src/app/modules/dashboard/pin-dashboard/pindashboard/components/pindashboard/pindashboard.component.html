@@ -1,0 +1,452 @@
+<ng-template #dateInBs>
+    <p>
+        Converted Date in BS is <strong>{{ convertedDateInBs }}</strong>
+    </p>
+</ng-template>
+
+<header class="main-header skin-black-light">
+    <!-- Logo -->
+    <!-- (click)="navigateToDashboard()" -->
+    <a class="logo" style="cursor: pointer">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"> <b>Flex</b>Year</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><img style="width: 150%" src="{{ imageUrl }}{{ detail?.company_logo }}"
+    /></span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <!-- <a class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a> -->
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu" style="margin-top: 13px;margin-right: 10px;cursor: pointer;">
+            <a style="color: #fff;" (click)="openModalForLogout(logoutTemplate)">
+                <i class="fa fa-sign-out" aria-hidden="true"></i> LogOut
+            </a>
+        </div>
+    </nav>
+</header>
+
+<!-- Content Wrapper. Contains page content -->
+<!-- Begin Main content -->
+<div class="row ml-3">
+    <section class="content container-fluid">
+        <div>
+            <div class="title-panel" [ngStyle]="{
+          'background-color': '#ecf0f5',
+          'box-shadow': 'inherit'
+        }">
+                <section class="content-header no-padding">
+                    <div class="button-wrapper">
+                        <h1 class="m-0" style="font-size: 24px; padding: 10px">
+                            <!-- <b *ngIf="!titleHeading">TCA </b> -->
+
+                            <b>Pin Dashboard</b>
+                            <!-- <i
+                    class="fa fa-question-circle"
+                    style="font-size: 18px; margin-left: 5px"
+                    tooltip="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+                    placement="right"
+                  ></i> -->
+                            <br />
+                        </h1>
+                    </div>
+                </section>
+            </div>
+            <section style="padding-top: 10px; border-top: 1px dotted #1976d2">
+                <div *ngIf="forgetToCheckout.status">
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+              &times;
+            </button>
+                        <h5>
+                            <i class="icon fa fa-warning"></i>
+                            <strong>You forgot to checkout in {{ forgetToCheckout.forgottenDate }}.
+                You cannot checkout until you request for previous checkout
+                review</strong
+              >
+            </h5>
+          </div>
+        </div>
+
+        <!-- warning section ends here -->
+        <div class="box box-default box-shadow mt-3">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <b
+                  ><i class="glyphicon glyphicon-check mr-2"></i>
+                  <strong
+                    >Welcome {{ staffName.first_name }}
+                    <span *ngIf="staffName.middle_name !== null">
+                      {{ staffName.middle_name }}
+                    </span>
+
+                    {{ staffName.last_name }}
+                  </strong></b>
+                            </h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-2"></div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-8">
+                                    <div class="box box-default box-shadow timeDate-display-box">
+                                        <div class="box-header with-border" style="background-color: #eceff3">
+                                            <h3 class="box-title">
+                                                <strong>Welcome {{ staffName.first_name }}
+                            <span *ngIf="staffName.middle_name !== null">
+                              {{ staffName.middle_name }}
+                            </span>
+
+                            {{ staffName.last_name }}
+                          </strong>
+                                            </h3>
+                                        </div>
+                                        <!-- /.box-header -->
+                                        <div class="box-body bg-blue" style="font-size: large; font-weight: 700">
+                                            <span #time></span>
+                                        </div>
+                                        <div class="box-footer" style="font-size: medium; background-color: #eceff3">
+                                            <p *ngIf="dateSetting.GS_DATE == 'E'">
+                                                {{ todaysDateInEnglish | date }}
+                                            </p>
+                                            <p *ngIf="dateSetting.GS_DATE == 'N'">
+                                                {{ currentNepaliDate }}
+                                            </p>
+                                        </div>
+                                        <!-- /.box-body -->
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-2"></div>
+                            </div>
+                            <!-- collaspe section -->
+                            <div style="padding: 10px">
+                                <button type="button" class="btn btn-primary btn-oval" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseEvent">
+                    {{ collapseButton }}
+                  </button>
+                                <div id="collapseEvent" [isAnimated]="true" [collapse]="isCollapsed" (collapsed)="collapsed()" (expanded)="expanded()">
+                                    <div class="well well-lg card card-block card-header">
+                                        <div *ngIf="attendanceHistory.length">
+                                            <div *ngFor="let item of attendanceHistory">
+                                                <ul class="list-inline">
+                                                    <li>
+                                                        <strong>{{ item.status }} :- </strong> {{ item.checkin_datetime }}
+                                                        <small *ngIf="item.status == 'Check In'" class="label label-primary" style="cursor: pointer" (click)="
+                                  openModal(
+                                    requestReviewModal,
+                                    item.status,
+                                    2,
+                                    item
+                                  )
+                                ">Request Review</small
+                              >
+
+                              <strong *ngIf="item.checkout_status == 1">
+                                / {{ item.status_out }} :- </strong
+                              >{{ item.checkout_datetime }}
+                              <small
+                                *ngIf="item.status_out == 'Check Out'"
+                                class="label label-primary"
+                                style="cursor: pointer"
+                                (click)="
+                                  openModal(
+                                    requestReviewModal,
+                                    item.status_out,
+                                    2,
+                                    item
+                                  )
+                                "
+                                >Request Review</small
+                              >
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- collaspse section ends here -->
+                <form [formGroup]="attendanceMessageForm">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div
+                        style="margin-left: 20px"
+                        class="form-group"
+                        *ngIf="showClient"
+                      >
+                        <label>Client</label>
+
+                        <ng-select
+                          appearance="outline"
+                          [multiple]="false"
+                          #agreeSelect
+                          labelForId="status"
+                          [searchable]="true"
+                          placeholder="Select Client"
+                          formControlName="clientId"
+                          (change)="getButtonStatusChange($event)"
+                          appFormControlValidationMsg
+                        >
+                          <ng-option
+                            *ngFor="let item of clientList"
+                            [value]="item.client_id"
+                          >
+                            {{ item.name }}
+                          </ng-option>
+                        </ng-select>
+                        <!-- <ng-template ng-header-tmp>
+                          <button
+                            class="btn btn-sm btn-primary mr-3"
+                            (click)="onSelectedAll()"
+                          >
+                            Select All
+                          </button>
+                          <button
+                            class="btn btn-sm btn-danger"
+                            (click)="onClearableAll()"
+                          >
+                            Clear All
+                          </button>
+                        </ng-template> -->
+                        <!-- <select class="form-control" formControlName="">
+                          <option></option>
+                        </select> -->
+                      </div>
+                    </div>
+                  </div>
+                </form>
+
+                <div class="box-footer">
+                  <!-- check buttons -->
+                  <div class="row">
+                    <div class="col-md-6 col-xs-12 col-lg-12">
+                      <div class="row check-btns btn-oval">
+                        <div class="col-md-4 col-xs-6">
+                          <button
+                            class="btn btn-success btn-oval"
+                            (click)="onAttendanceClick('checkin')"
+                            [disabled]="
+                              buttonStatus?.checkin == 0 ||
+                              buttonStatus == undefined
+                            "
+                          >
+                            <i class="fa fa-clock-o"></i>&nbsp;<b>Clock In</b>
+                          </button>
+                          <button
+                            class="btn btn-danger check-out-btns btn-oval"
+                            (click)="onAttendanceClick('checkout')"
+                            [disabled]="
+                              buttonStatus?.checkout == 0 ||
+                              buttonStatus == undefined
+                            "
+                          >
+                            <i class="fa fa-clock-o"></i>&nbsp;<b>Clock Out</b>
+                          </button>
+                        </div>
+                        <div class="col-md-4 col-xs-6">
+                          <button
+                            class="btn btn-success btn-oval"
+                            (click)="onAttendanceClick('lunchin')"
+                            [disabled]="
+                              buttonStatus?.lunchin == 0 ||
+                              buttonStatus == undefined
+                            "
+                          >
+                            <i class="fa fa-cutlery"></i>&nbsp;<b>In Lunch</b>
+                          </button>
+                          <button
+                            class="btn btn-danger check-out-btns btn-oval"
+                            (click)="onAttendanceClick('lunchout')"
+                            [disabled]="
+                              buttonStatus?.lunchout == 0 ||
+                              buttonStatus == undefined
+                            "
+                          >
+                            <i class="fa fa-cutlery"></i>&nbsp;<b>Out Lunch</b>
+                          </button>
+                        </div>
+                        <!-- <div class="col-md-4 col-xs-12">
+                            <button
+                              class="btn btn-success"
+                              (click)="onAttendanceClick('breakin')"
+                              [disabled]="
+                                buttonStatus?.breakin == 0 || buttonStatus == undefined
+                              "
+                            >
+                              <i class="fa fa-bicycle"></i> In Break
+                            </button>
+
+                            <button
+                              class="btn btn-danger check-out-btns out-break-btn"
+                              (click)="onAttendanceClick('breakout')"
+                              [disabled]="
+                                buttonStatus?.breakout == 0 || buttonStatus == undefined
+                              "
+                            >
+                              <i class="fa fa-bicycle"></i> Out Break
+                            </button>
+                          </div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end of check buttons -->
+                  <div class="row" style="margin-top: 10px">
+                    <div class="col-md-5 col-xs-12">
+                      <form [formGroup]="attendanceMessageForm">
+                        <div class="form-group">
+                          <label for="exampleFormControlTextarea1"
+                            >Check In Message</label
+                          >
+                          <textarea
+                            class="form-control"
+                            id="exampleFormControlTextarea1"
+                            rows="5"
+                            formControlName="message"
+                          ></textarea>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <!-- end of text area... -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="box-header with-border" style="background-color: #eceff3">
+                <h4 class="box-title flex-container">
+                  <div class="flex-item">
+
+                  </div>
+
+                  <div *ngIf="forgetToCheckout.status" class="flex-item">
+                    <button
+                      class="btn-xs btn-warning"
+                      (click)="openModal(requestReviewModal, 'Check Out', 1)"
+                    >
+                      Request Review for {{ forgetToCheckout.forgottenDate }} checkout
+                    </button>
+                  </div>
+                </h4>
+              </div> -->
+
+          <!-- attendance review modal -->
+          <ng-template #requestReviewModal>
+            <div class="modal-header">
+              <h3 class="modal-title pull-left">Request Review</h3>
+
+              <button
+                type="button"
+                class="close pull-right"
+                aria-label="Close"
+                (click)="modalRef.hide()"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="requestReviewForm">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="status">Status</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="status"
+                        name="status"
+                        value="{{ requestReviewStatus }}"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <label for="status"
+                      >{{ requestReviewStatus }} DateTime Request
+                    </label>
+                  </div>
+                  <div class="col-md-12">
+                    <kendo-timepicker
+                      [format]="'HH:mm:ss'"
+                      [value]="currentDate"
+                      id="kendo-time-picker"
+                      formControlName="checkinTime"
+                    ></kendo-timepicker>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Message</label>
+                      <textarea
+                        class="form-control"
+                        id="exampleFormControlTextarea1"
+                        rows="3"
+                        formControlName="message"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+              <!-- modal body -->
+            </div>
+            <div class="modal-footer">
+              <button
+                class="btn btn-danger"
+                type="button"
+                (click)="modalRef.hide()"
+              >
+                Cancel
+              </button>
+              <button
+                class="btn btn-success"
+                (click)="onSubmitRequestReview()"
+                type="submit"
+              >
+                Submit
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </section>
+    </div>
+  </section>
+</div>
+
+<!-- /.content -->
+
+<!-- /.content-wrapper -->
+
+<ng-template #logoutTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+     Confirmation
+    </h4>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="closeModal()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Are you sure you want to logout?
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-danger"
+      (click)="onLogout()"
+    >
+      Logout
+    </button>
+    <button class="btn btn-primary" type="button" (click)="closeModal()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

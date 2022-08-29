@@ -1,0 +1,124 @@
+<div class="box box-default box-shadow">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <i class="fa fa-university mr-3"></i> <b>Division</b>
+            </h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="box-header with-border" style="background-color: #eee">
+                <button class="btn btn-success btn-oval" (click)="openAddModal(addDivision)">
+          <i class="fa fa-plus-circle mr-2"></i> <b>Add Division</b>
+        </button>
+            </div>
+            <div class="box-body mt-3">
+                <kendo-grid [data]="gridView" [resizable]="true" [pageSize]="limit" [skip]="skip" [pageable]="
+            gridView ? (gridView.total <= pageLimit ? false : true) : false
+          " [filterable]="true" [filter]="state.filter" [sortable]="true" [sort]="sort" [loading]="listLoading" (dataStateChange)="dataStateChange($event)">
+                    <kendo-grid-column title="Name" field="name" [width]="110" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column [filterable]="false" title="Detail" field="details" [width]="150" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template let-dataItem="dataItem">
+                            {{dataItem.details}}
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Status" field="status" [filterable]="false" [width]="150" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span *ngIf="dataItem.status == '1'" class="badge bg-green-gradient">Active</span
+              >
+              <span *ngIf="dataItem.status == '0'" class="badge bg-red"
+                >InActive</span
+              >
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Action"
+            width="70"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <!-- <a class="btn" (click)="openViewModal(dataItem)">
+              <i class="fa fa-eye"></i
+            ></a> -->
+              <a
+                class="btn"
+                tooltip="Update"
+                (click)="openEditModal(dataItem, addDivision)"
+                ><i class="fa fa-edit"></i
+              ></a>
+
+              <a
+                class="btn"
+                tooltip="Delete"
+                (click)="openConfirmationDialogue(dataItem)"
+                ><i class="fa fa-trash"></i
+              ></a>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- add division modal -->
+
+<form [formGroup]="clientDivisionForm">
+  <ng-template #addDivision>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">{{ modalTitle }}</h3>
+
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+                            </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Division Name <sup>*</sup></label>
+                            <input type="text" id="name" class="form-control" formControlName="name" appFormControlValidationMsg />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email">Details<sup>*</sup></label>
+                            <input type="text" id="email" class="form-control" formControlName="details" appFormControlValidationMsg />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select id="status" class="form-control" formControlName="status">
+              <option value="" selected>Select Status...</option>
+              <option value="1">Active</option>
+              <option value="0">InActive</option>
+            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+          Cancel
+        </button>
+                    <button class="btn btn-success" type="submit" (click)="onSubmit()" appFormSubmitValidationMsg [validationControl]="clientDivisionForm">
+          Submit
+        </button>
+                </div>
+            </div>
+            </ng-template>
+            </form>

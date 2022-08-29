@@ -1,0 +1,123 @@
+<div class="box box-default box-shadow">
+  <div class="box-header">
+    <div class="row">
+      <form [formGroup]="searchSalaryForm">
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <div class="form-group">
+            <label for="user1">User</label>
+            <select class="form-control" id="user1" formControlName="user_id">
+              <option
+                *ngFor="let staff of staffList"
+                value="{{ staff.user_id }}"
+              >
+                {{ staff.first_name }}
+                {{ staff.middle_name ? staff.middle_name : "" }}
+                {{ staff.last_name }} ({{ staff.username }})</option
+              >
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <div class="form-group">
+            <div class="form-group">
+              <label for="month1">Month</label>
+              <select
+                class="form-control"
+                id="month1"
+                formControlName="month"
+                appFormControlValidationMsg
+              >
+                <option value="">Select Month</option>
+                <option
+                  *ngFor="let month of monthList"
+                  value="{{ month.value }}"
+                  >{{ month.month }}</option
+                >
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <div class="form-group">
+            <label for="year">Year</label>
+            <select
+              class="form-control"
+              id="year"
+              formControlName="year"
+              appFormControlValidationMsg
+            >
+              <option value="">Select Year</option>
+              <option *ngFor="let year of yearList" value="{{ year }}">{{
+                year
+              }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-6">
+          <button
+            class="btn btn-success"
+            (click)="onSearchPayroll()"
+            appFormSubmitValidationMsg
+            [validationControl]="searchSalaryForm"
+          >
+            <i class="fa fa-search"></i> Search
+          </button>
+        </div>
+      </form>
+    </div>
+    <button class="btn btn-default" (click)="navigateToGenerateSalary()">
+      <i class="fa fa-plus-square"></i> Generate Salary
+    </button>
+  </div>
+  <div class="box-body">
+    <kendo-grid [data]="payrollList" [loading]="loading" [resizable]="true">
+      <kendo-grid-column
+        title="S.N"
+        width="50"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+          <p>{{ rowIndex + 1 }}</p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="PaySlip Id"
+        width="80"
+        field="payslip_id"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Full Name"
+        width="200"
+        field="staff_id"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Salary"
+        width="150"
+        field="salary"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+          <p>{{ dataItem.salary }} / {{ dataItem.salary_period }}</p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Bonus"
+        width="150"
+        field="bonus"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        title="Working Salary"
+        width="100"
+        field="working_salary"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>

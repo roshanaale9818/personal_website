@@ -1,0 +1,93 @@
+<!-- user credentials modal -->
+<div class="box box-default box-shadow">
+    <div class="head">
+        <h3><b>Add Company User</b></h3>
+    </div>
+    <form [formGroup]="userCredentialsForm">
+        <!-- <div class="row">
+                <div *ngIf="!editMode">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="user1">Staff Name</label>
+                   <select
+                      class="form-control"
+                      id="user1"
+                      formControlName="staff_id"
+                      appFormControlValidationMsg
+                    >
+                      <option
+                        *ngFor="let staff of staffList"
+                        value="{{ staff.staff_id }}"
+                      >
+                        {{ getStaffFullNameWithEmpId(staff) }}
+
+                      </option>
+                    </select> -->
+        <!-- <kendo-combobox
+                        [data]="staffList"
+                        [textField]="'first_name'"
+                        [valueField]="'staff_id'"
+                        [placeholder]="'Search Staff'"
+                        formControlName="staff_id"
+                        appFormControlValidationMsg
+                        [valuePrimitive]="true"
+                        style="width: 100%"
+                      >
+                        <ng-template kendoComboBoxItemTemplate let-dataItem>
+                          <span class="template">
+                            <div class="row">
+                              <div class="col-md-3">
+                                <ngx-avatar
+                                  name="{{ dataItem?.first_name }}"
+                                  size="30"
+                                ></ngx-avatar>
+                              </div>
+                              <div class="col-md-9">
+                                {{ getStaffFullNameWithEmpId(dataItem) }}
+                              </div>
+                            </div>
+                          </span>
+                        </ng-template>
+                      </kendo-combobox> -->
+
+        <!-- <div *ngIf="editMode">
+                  <div class="col-md-12">
+                    <h4>{{ selectedUserFullName }}</h4>
+                  </div>
+                </div> -->
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" formControlName="username" appFormControlValidationMsg />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" formControlName="password" appFormControlValidationMsg />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="password">Confirm Password</label>
+                    <input type="password" id="password" class="form-control" formControlName="verify_password" appFormControlValidationMsg />
+                    <!-- // SHOW ERROR IF MISMATCH -->
+                    <!-- <span *ngIf="confirm_password.hasError('mismatch')"
+            >Password do not match.</span
+          > -->
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<button (click)="registerUser()" class="btn btn-primary" appFormSubmitValidationMsg [validationControl]="userCredentialsForm">
+  Save
+</button>

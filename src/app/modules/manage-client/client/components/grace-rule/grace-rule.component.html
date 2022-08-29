@@ -1,0 +1,287 @@
+<form [formGroup]="graceRuleForm">
+  <div class="box box-default box-shadow">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <b> <i class="fa fa-clock-o mr-3"></i> Grace Rule</b>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <div class="box-header with-border" style="background-color: #eee">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-group">
+                <label>Shift</label>
+                <ng-select
+                  formControlName="status"
+                  appearance="outline"
+                  #agreeSelect
+                  labelForId="status"
+                  [searchable]="true"
+                  placeholder="Select Shift"
+                  (change)="changeShift($event)"
+                >
+                  <ng-option value="" selected>Select Shift...</ng-option>
+                  <ng-option
+                    *ngFor="let shift of clientShiftList"
+                    [value]="shift.client_shift_id"
+                    >{{ shift.name }} ({{ shift.shift_from }} -
+                    {{ shift.shift_to }})</ng-option
+                  >
+                </ng-select>
+              </div>
+            </div>
+
+            <div class="col-md-5" *ngIf="addMode">
+              <div class="form-group">
+                <label>Copy Shift From</label>
+                <ng-select
+                  appearance="outline"
+                  #agreeSelect
+                  labelForId="status"
+                  [searchable]="true"
+                  placeholder="Select Shift"
+                  (change)="changeCopyShift($event)"
+                >
+                  <ng-option
+                    *ngFor="let shift of companyShiftList"
+                    [value]="shift.client_shift_id"
+                    >{{ shift.client_name }} - {{ shift.name }}&nbsp;({{
+                      shift.shift_from
+                    }}
+                    - {{ shift.shift_to }})</ng-option
+                  >
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4"></div>
+          <div class="col-md-4"></div>
+        </div>
+
+        <!-- If Rule Start -->
+        <div class="box-body mt-3">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="flex-group">
+                    <div class="flex-item">
+                      <h3 class="panel-title"><label>Start If Rule</label></h3>
+                    </div>
+                    <div class="flex-item">
+                      <button
+                        (click)="addNewStartIfRule('if_rule')"
+                        class="btn btn-success btn-oval"
+                      >
+                        <i class="fa fa-plus mr-2"></i> <strong>Add New</strong>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="row mt-3">
+                    <div class="col-md-12 col-sm-12">
+                      <table class="table table-bordered table-grace">
+                        <tbody formArrayName="ifRuleStart">
+                          <tr
+                            *ngFor="
+                              let grace of graceRuleForm.get('ifRuleStart')[
+                                'controls'
+                              ];
+                              let i = index
+                            "
+                            [formGroupName]="i"
+                          >
+                            <td>{{ i + 1 }}</td>
+                            <td>If start time is&nbsp;&nbsp;</td>
+
+                            <td>
+                              <input
+                                type="text"
+                                class="form-control"
+                                [textMask]="mask"
+                                formControlName="threshold_time"
+                                (blur)="
+                                  inputIfStartOnBlur(
+                                    graceRuleForm
+                                      .get('ifRuleStart')
+                                      ['controls'][i].get('threshold_time')
+                                      .value,
+                                    i
+                                  )
+                                "
+                              />
+                            </td>
+                            <td>
+                              <select
+                                formControlName="status"
+                                class="form-control"
+                              >
+                                <option value="">Select</option>
+                                <option value="Early">Early</option>
+                                <option value="Late">Late</option>
+                              </select>
+                            </td>
+                            <td>make it</td>
+                            <td>
+                              <input
+                                type="time"
+                                class="form-control"
+                                formControlName="rounded_time"
+                              />
+                            </td>
+
+                            <td>
+                              <i
+                                class="fa fa-trash btn btn-danger btn-xs mt-3"
+                                (click)="removeIfRuleStart(i, grace)"
+                                tooltip="Remove"
+                              ></i>
+                            </td>
+                          </tr>
+                          <tr
+                            *ngIf="
+                              graceRuleForm.get('ifRuleStart')['controls']
+                                .length == 0
+                            "
+                          >
+                            No records are available
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="flex-group">
+                    <div class="flex-item">
+                      <h3 class="panel-title">
+                        <label><strong>End If Rule</strong> </label>
+                      </h3>
+                    </div>
+                    <div class="flex-item">
+                      <button
+                        (click)="addNewEndIfRule('if_rule')"
+                        class="btn btn-success btn-oval"
+                      >
+                        <i class="fa fa-plus mr-2"></i> <strong>Add New</strong>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <!-- If Rule End -->
+                  <!-- *ngIf="ifRulesEnd" -->
+
+                  <div class="row mt-3">
+                    <div class="col-md-12 col-sm-12 col-12">
+                      <table class="table table-bordered table-grace">
+                        <tbody formArrayName="ifRuleEnd">
+                          <tr
+                            *ngFor="
+                              let grace of graceRuleForm.get('ifRuleEnd')[
+                                'controls'
+                              ];
+                              let i = index
+                            "
+                            [formGroupName]="i"
+                          >
+                            <td>{{ i + 1 }}</td>
+                            <td>If end time is&nbsp;&nbsp;</td>
+
+                            <td>
+                              <input
+                                type="text"
+                                class="form-control"
+                                [textMask]="mask"
+                                formControlName="threshold_time"
+                                (blur)="
+                                  inputIfEndOnBlur(
+                                    graceRuleForm
+                                      .get('ifRuleEnd')
+                                      ['controls'][i].get('threshold_time')
+                                      .value,
+                                    i
+                                  )
+                                "
+                              />
+                            </td>
+                            <td>
+                              <select
+                                formControlName="status"
+                                class="form-control"
+                              >
+                                <option value="">Select</option>
+                                <option value="Early">Early</option>
+                                <option value="Late">Late</option>
+                              </select>
+                            </td>
+                            <td>make it</td>
+                            <td>
+                              <input
+                                type="time"
+                                class="form-control"
+                                formControlName="rounded_time"
+                              />
+                            </td>
+
+                            <td>
+                              <i
+                                class="fa fa-trash btn btn-danger btn-xs mt-3"
+                                (click)="removeIfRulesEnd(i, grace)"
+                                tooltip="Remove"
+                              ></i>
+                            </td>
+                          </tr>
+                          <tr
+                            *ngIf="
+                              graceRuleForm.get('ifRuleEnd')['controls']
+                                .length == 0
+                            "
+                          >
+                            No records are available
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box-footer">
+        <div class="row">
+          <div class="col-md-12">
+            <button
+              type="submit"
+              *ngIf="addMode"
+              class="btn btn-success"
+              (click)="addShift()"
+            >
+              Add Shift
+            </button>
+            <button
+              type="submit"
+              *ngIf="editMode"
+              class="btn btn-success"
+              (click)="updateShift()"
+            >
+              Update Shift
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

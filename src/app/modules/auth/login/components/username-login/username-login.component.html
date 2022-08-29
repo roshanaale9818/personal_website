@@ -1,0 +1,45 @@
+<div style="margin-top: 30px">
+  <form id="main-form " style="padding: 10px" [formGroup]="loginForm">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Username or Email</label>
+
+      <div class="icon-wrapper">
+        <img src="/assets/images/login/user.svg" alt="" />
+        <input
+          type="email"
+          id="loginform-username"
+          class="form-control credential-field"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          name="loginform-username"
+          placeholder="Username"
+          formControlName="username"
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <div class="icon-wrapper">
+        <img src="/assets/images/login/padlock.svg" alt="" />
+        <input
+          type="password"
+          id="loginform-password"
+          class="form-control credential-field"
+          name="LoginForm-password"
+          placeholder="Password"
+          formControlName="pin"
+          (keyup.enter)="login()"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+
+<button
+  class="btn btn-primary btn-block btn-login"
+  [disabled]="loginButtonClick"
+  style="text-align: center"
+  (click)="login()"
+>
+  Submit
+</button>

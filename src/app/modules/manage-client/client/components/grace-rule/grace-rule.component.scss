@@ -1,0 +1,139 @@
+tr,
+td {
+  padding: 5px;
+}
+
+.pull-right {
+  float: right;
+}
+
+// .table-grace td:nth-child(2) {
+//   width: 17% !important;
+// }
+// .table-grace td:nth-child(3) {
+//   width: 15% !important;
+// }
+
+// .table-grace-dont td:nth-child(1) {
+//   width: 2% !important;
+// }
+
+// .table-grace-dont td:nth-child(2) {
+//   width: 20% !important;
+// }
+
+// .table-grace-dont td:nth-child(3) {
+//   width: 25% !important;
+// }
+
+.table-grace tr td:nth-child(4) {
+  width: 100px;
+}
+
+.table-grace tr td:nth-child(3) {
+  width: 110px;
+}
+
+.table-grace tr td:nth-child(2) {
+  width: 115px;
+}
+
+.table-grace tr td:nth-child(1) {
+  width: 30px;
+}
+// .table-grace tr td:nth-child(3) select:last-child {
+//   position: relative;
+//   left: 0.5rem;
+// }
+
+.table-grace tr td:nth-child(5) {
+  width: 70px;
+}
+
+.table-grace tr td:nth-child(6) {
+  width: 120px;
+}
+
+.table-grace tr td:nth-child(7) {
+  width: 50px;
+}
+
+.table-grace tr td input {
+  width: 100%;
+}
+
+.custom__table-grace tr td:nth-child(1) {
+  width: 30px;
+}
+
+.custom__table-grace tr td:nth-child(4) {
+  width: 50px;
+  text-align: center;
+}
+
+.custom__table-grace tr td:nth-child(5) {
+  max-width: 70px;
+}
+
+.custom__table-grace tr td:nth-child(6) {
+  width: 70px;
+}
+
+.custom__table-grace tr td input {
+  width: 100%;
+}
+
+.table-grace-dont tr td:nth-child(2) {
+  width: 220px;
+}
+
+.table-grace-dont tr td:nth-child(3) {
+  width: 70px;
+}
+
+// .time-picker {
+//   display: flex;
+//   align-items: center;
+//   width: 115px;
+//   .hours,
+//   .minutes {
+//     display: flex;
+//     flex-direction: column;
+//     width: 50px;
+//     align-items: center;
+//     .input {
+//       height: 30px;
+//       width: 50px;
+//       font-size: 16px;
+//       text-align: center;
+//       padding: 0;
+//       border: 1px solid rgba(0, 0, 0, 0.12);
+//     }
+//   }
+//   .separator {
+//     margin: 5px;
+//   }
+// }
+
+.hours {
+  width: 60px !important;
+  padding: 5px !important;
+  display: inline-block;
+}
+
+.mins {
+  width: 60px !important;
+  padding: 5px !important;
+  position: absolute;
+  display: inline-block;
+}
+
+.flex-group {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row wrap;
+  .flex-item {
+    margin-right: 5px;
+    margin-top: 5px;
+  }
+}

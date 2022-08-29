@@ -1,0 +1,275 @@
+<div class="box box-default box-shadow">
+    <div class="panel panel-primary mt-4">
+        <div class="panel-heading">
+            <h3 class="panel-title"><b>Declined Request</b></h3>
+        </div>
+        <div class="panel-body">
+            <div class="box-body">
+                <kendo-grid [data]="gridViewDeclined" [resizable]="true" [pageSize]="pageLimit" [skip]="skip" [pageable]="
+            gridViewDeclined
+              ? gridViewDeclined.total <= pageLimit
+                ? false
+                : true
+              : false
+          " [filter]="state.filter" [sortable]="true" [sort]="sort" [loading]="declineLoading" [filterable]="false" (dataStateChange)="dataStateChangeDeclined($event)">
+                    <kendo-grid-column title="S.N" width="50" [minResizableWidth]="30" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+                            <p>{{ rowIndex + 1 }}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Staff" field="staffname" [width]="220" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                            <a (mouseover)="viewStaffButtons(dataItem, rowIndex)" (mouseout)="pointedStaff = null; activeIndex = null">
+                                <strong>{{ dataItem.staffname }}</strong> <br />
+
+                                <div *ngIf="dataItem.is_approved == '2'">
+                                    <div class="flex-container">
+                                        <div class="flex-item">
+                                            <span *ngIf="dataItem.is_approved == '1'" class="badge bg-green-gradient">Approved</span
+                      >
+                      <span
+                        *ngIf="dataItem.is_approved == '2'"
+                        class="badge bg-red-gradient"
+                        >Declined</span
+                      >
+                      <span
+                        *ngIf="dataItem.is_approved == '0'"
+                        class="badge bg-yellow-gradient"
+                        >Pending</span
+                      >
+                    </div>
+                    <ng-container *ngIf="authService.currentUserRoleValue !== 'staff'">
+                      <div
+                      class="flex-item"
+                      [ngClass]="
+                        pointedStaff == dataItem.staffname &&
+                        activeIndex == rowIndex
+                          ? 'block'
+                          : 'displayNone'
+                      "
+                    >
+                      <a
+                        (click)="openApprovalConfirmation(dataItem)"
+                        class="btn btn-xs btn-success"
+                      >
+                        <i class="fa fa-check"></i> Approve</a
+                      >
+                    </div>
+                    <div class="flex-item">
+                      <a
+                        [ngClass]="
+                          pointedStaff == dataItem.staffname &&
+                          activeIndex == rowIndex
+                            ? 'block'
+                            : 'displayNone'
+                        "
+                        disabled
+                        class="btn btn-xs btn-danger"
+                      >
+                        <i class="fa fa-close"></i> Decline</a
+                      >
+                    </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </a>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            title="Date From"
+            [width]="100"
+            field="date_from"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template
+              kendoGridCellTemplate
+              let-dataItem="dataItem"
+              let-rowIndex="rowIndex"
+            >
+            <ng-container *ngIf="this.datePickerFormat == 'E'">
+              <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+        {{ dataItem.date_from | date: "MM/dd/yyyy" }}
+      </span>
+                                            <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+        {{ dataItem.date_from | date: "yyyy/MM/dd" }}
+      </span>
+                                            </ng-container>
+                                            <ng-container *ngIf="this.datePickerFormat == 'N'">
+                                                <span>
+        {{ dataItem.date_to | nepaliDatePipe: this.dateFormat }}
+      </span>
+                                            </ng-container>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Date to" field="date_to" [width]="100" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+                            <ng-container *ngIf="this.datePickerFormat == 'E'">
+                                <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+                      {{ dataItem.date_to | date: "MM/dd/yyyy" }}
+                    </span>
+                                <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+                      {{ dataItem.date_to | date: "yyyy/MM/dd" }}
+                    </span>
+                            </ng-container>
+                            <ng-container *ngIf="this.datePickerFormat == 'N'">
+                                <span>
+                      {{ dataItem.date_to | nepaliDatePipe: this.dateFormat }}
+                    </span>
+                            </ng-container>
+                            <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+                {{ dataItem.date_to | date: "yyyy/MM/dd" }}
+              </span>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="No of days" [width]="98" field="no_of_days" [width]="60" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Leave Type" [width]="100" field="title" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="Checked By" [width]="100" field="checked_by_name" [headerStyle]="{ 'font-weight': 'bold' }">
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Action" [width]="110" [headerStyle]="{ 'font-weight': 'bold' }">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem" class="action-btn">
+                            <div class="flex-container">
+                                <a tooltip="View" class="btn">
+                                    <i class="fa fa-eye" (click)="viewRequestModal(dataItem, viewModal)"></i
+                ></a>
+
+                <ng-container *ngIf="this.authService.currentUserRoleValue !=='staff'">
+                  <a
+                  tooltip="Update"
+                  class="btn"
+                  (click)="NavigatetoEdit(dataItem)"
+                  *ngIf="
+                    dataItem.is_approved == '2' || dataItem.is_approved == '0'
+                  "
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <a
+                  tooltip="Update"
+                  class="btn"
+                  *ngIf="dataItem.is_approved == '1'"
+                  disabled
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <a
+                  tooltip="Delete"
+                  class="btn"
+                  (click)="openConfirmationDialogue(dataItem)"
+                  ><i class="fa fa-trash"></i
+                ></a>
+                </ng-container>
+
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #viewModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">View Request</h4>
+
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th scope="row">Staff</th>
+          <td>{{ requestDetail.staffname }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Date From</th>
+          <!-- <td>
+                                                  {{ requestDetail.date_from }}
+                                                </td> -->
+          <td>
+            <!-- {{ requestDetail.date_from }} -->
+            <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+              {{ requestDetail.date_from | date: "MM/dd/yyyy" }}
+            </span>
+            <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+              {{ requestDetail.date_from | date: "yyyy/MM/dd" }}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">From time</th>
+          <!-- <td>
+                                                  {{ requestDetail.from_time }}
+                                                </td> -->
+          <td>
+            <span *ngIf="timeFormat == '12'">{{
+              requestDetail.from_time !== null
+                ? (requestDetail.date_from + " " + requestDetail.from_time
+                  | date: "shortTime")
+                : null
+            }}</span>
+            <span *ngIf="timeFormat == '24'">{{
+              requestDetail.from_time !== null
+                ? (requestDetail.date_from + " " + requestDetail.from_time
+                  | date: "HH:mm")
+                : null
+            }}</span>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Date to</th>
+          <!-- <td>{{ requestDetail.date_to }}</td> -->
+          <td>
+            <!-- {{ requestDetail.date_to }} -->
+            <span *ngIf="dateFormat == 'MM/DD/YYYY'">
+              {{ requestDetail.date_to | date: "MM/dd/yyyy" }}
+            </span>
+            <span *ngIf="dateFormat == 'YYYY/MM/DD'">
+              {{ requestDetail.date_to | date: "yyyy/MM/dd" }}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">To time</th>
+          <!-- <td>{{ requestDetail.to_time }}</td> -->
+          <td>
+            <span *ngIf="timeFormat == '12'">{{
+              requestDetail.to_time !== null
+                ? (requestDetail.date_to + " " + requestDetail.to_time
+                  | date: "shortTime")
+                : null
+            }}</span>
+            <span *ngIf="timeFormat == '24'">{{
+              requestDetail.to_time !== null
+                ? (requestDetail.date_to + " " + requestDetail.to_time
+                  | date: "HH:mm")
+                : null
+            }}</span>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Leave Type</th>
+          <td>{{ requestDetail.title }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="modalRef.hide()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex-flow: row wrap;
+  padding-left: 0px;
+  margin-top: 10px;
+  .flex-item {
+    justify-content: flex-start;
+    margin-right: 10px;
+  }
+}
+@media screen and (max-width: 348px) {
+  .container {
+    .flex-item {
+      margin-top: 10px;
+    }
+  }
+}
+
+.contacts-list-name {
+  color: black !important;
+}
+.direct-chat-messages{
+  .sender-message-body{
+    background-color:  cornflowerblue;
+  }
+}

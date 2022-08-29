@@ -1,0 +1,88 @@
+<button class="btn btn-primary btn-oval" (click)="navigateToAddPermission()">
+  Create Permission<i class="fa fa-plus-circle ml-2"></i>
+</button>
+
+<div class="box box-default box-shadow mt-4 grid-wrapper">
+  <kendo-grid
+    [data]="gridView"
+    [pageSize]="state.take"
+    [skip]="state.skip"
+    [sort]="state.sort"
+    [filter]="state.filter"
+    [sortable]="true"
+    [pageable]="permissionList.length > state.take"
+    [filterable]="true"
+    (dataStateChange)="dataStateChange($event)"
+  >
+    <kendo-grid-column title="#" [width]="60">
+      <ng-template kendoGridCellTemplate let-rowIndex="rowIndex">
+        <p>{{ rowIndex + 1 }}</p>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="name" title="Name"></kendo-grid-column>
+
+    <kendo-grid-column
+      field="description"
+      title="Description"
+    ></kendo-grid-column>
+
+    <kendo-grid-command-column title="Action" [width]="150">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        <!-- View Permission button -->
+        <a
+          class="btn"
+          tooltip="View"
+          (click)="navigateToViewPermission(dataItem)"
+        >
+          <i class="fa fa-eye"></i>
+        </a>
+
+        <!-- Edit Permission button -->
+        <a class="btn" (click)="navigateToUpdatePermission(dataItem)">
+          <i class="fa fa-edit"></i>
+        </a>
+
+        <!-- Delete button -->
+        <flexyear-delete-confirmation-modal
+          [data]="dataItem"
+          [title]="dataItem.Permission"
+          [action]="'delete'"
+          (onConfirm)="deletePermission(dataItem)"
+        >
+        </flexyear-delete-confirmation-modal>
+      </ng-template>
+    </kendo-grid-command-column>
+    <div class="k-i-loading" *ngIf="flexyearLoading"></div>
+  </kendo-grid>
+</div>
+
+<!-- Modal part -->
+<ng-template #PermissionRef>
+  <form [formGroup]="permissionForm">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input class="form-control" id="name" formControlName="name" />
+    </div>
+    <div class="form-group">
+      <label for="ruleName">Rule Name</label>
+      <input class="form-control" id="ruleName" formControlName="rule_name" />
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        formControlName="description"
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label for="data">Data</label>
+      <textarea
+        class="form-control"
+        id="data"
+        formControlName="data"
+      ></textarea>
+    </div>
+  </form>
+</ng-template>
